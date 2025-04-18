@@ -12,6 +12,8 @@ jobs:
     steps:
       - name: Checkout dev branch
         uses: actions/checkout@v4
+        with:
+          persist-credentials: true
 
       - name: Set up JDK 17
         uses: actions/setup-java@v3
@@ -19,21 +21,22 @@ jobs:
           java-version: '17'
           distribution: 'temurin'
 
-      - name: Build API Docs
+      - name: Grant execute permission to Gradlew
+        run: chmod +x ./gradlew
+
+      - name: Build with asciidoctor
         run: ./gradlew clean build asciidoctor
 
-      - name: Copy asciidoctor output
-        run: |
-          mkdir docs-folder
-          cp -r build/docs/asciidoc/* docs-folder/
+      - name: Ensure docs directory exists
+        run: mkdir -p docs
 
-      - name: Commit and Push API Docs
+      - name: Copy asciidoc output to docs folder
+        run: cp -r build/docs/asciidoc/* docs/
+
+      - name: Commit and push updated docs
         run: |
-          cp -r docs-folder/* docs/  # 기존 docs 폴더에 덮어쓰기
-          git config --global user.name "GitHub Actions"
           git config --global user.email "github-actions@example.com"
-          git add docs
-          git commit -m "Update API Docs"
-          git push
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          git config --global user.name "GitHub Actions"
+          git add docs/
+          git commit -m "Update API Docs [skip ci]" || echo "No changes to commit"
+          git push origin dev
