@@ -38,6 +38,7 @@ out/
 .vscode/
 
 src/main/resources/application-local.yml
+src/main/resources/application-prod.yml
 src/main/java/com/auta/server/security/CurrentUser.java
 src/main/java/com/auta/server/security/CurrentUserArgumentResolver.java
 src/main/java/com/auta/server/security/CurrentUserType.java

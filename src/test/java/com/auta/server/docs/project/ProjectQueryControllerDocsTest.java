@@ -16,13 +16,13 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import com.auta.server.api.controller.project.ProjectQueryController;
-import com.auta.server.api.service.project.ProjectQueryService;
+import com.auta.server.adapter.in.project.ProjectQueryController;
 import com.auta.server.api.service.project.response.PageTestResponse;
 import com.auta.server.api.service.project.response.ProjectDetailResponse;
 import com.auta.server.api.service.project.response.ProjectSummariesResponse;
 import com.auta.server.api.service.project.response.ProjectTestDetailResponse;
 import com.auta.server.api.service.project.response.ProjectTestSummariesResponse;
+import com.auta.server.application.service.ProjectQueryService;
 import com.auta.server.docs.RestDocsSupport;
 import com.auta.server.domain.project.ProjectStatus;
 import java.time.LocalDate;

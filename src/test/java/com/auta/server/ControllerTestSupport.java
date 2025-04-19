@@ -3,23 +3,25 @@ package com.auta.server;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;
 
-import com.auta.server.api.controller.auth.AuthController;
-import com.auta.server.api.controller.health.HealthCheckController;
-import com.auta.server.api.controller.main.DashBoardController;
-import com.auta.server.api.controller.project.ProjectController;
-import com.auta.server.api.controller.project.ProjectQueryController;
-import com.auta.server.api.controller.user.UserController;
-import com.auta.server.api.service.auth.AuthService;
-import com.auta.server.api.service.main.DashBoardService;
-import com.auta.server.api.service.project.ProjectQueryService;
-import com.auta.server.api.service.project.ProjectService;
-import com.auta.server.api.service.user.UserService;
+import com.auta.server.adapter.in.auth.AuthController;
+import com.auta.server.adapter.in.dashboard.DashBoardController;
+import com.auta.server.adapter.in.health.HealthCheckController;
+import com.auta.server.adapter.in.project.ProjectController;
+import com.auta.server.adapter.in.project.ProjectQueryController;
+import com.auta.server.adapter.in.user.UserController;
+import com.auta.server.adapter.out.web.CookieManager;
+import com.auta.server.application.port.in.auth.AuthUseCase;
+import com.auta.server.application.port.in.user.UserUseCase;
+import com.auta.server.application.service.DashBoardService;
+import com.auta.server.application.service.ProjectQueryService;
+import com.auta.server.application.service.ProjectService;
 import com.auta.server.common.token.TokenGenerator;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.AfterEach;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.context.annotation.Import;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -34,6 +36,7 @@ import org.springframework.test.web.servlet.MockMvc;
         DashBoardController.class,
         ProjectController.class,
         ProjectQueryController.class})
+@Import(CookieManager.class)
 public abstract class ControllerTestSupport {
     @Autowired
     protected MockMvc mockMvc;
@@ -42,10 +45,10 @@ public abstract class ControllerTestSupport {
     protected ObjectMapper objectMapper;
 
     @MockitoBean
-    protected UserService userService;
+    protected UserUseCase userUseCase;
 
     @MockitoBean
-    protected AuthService authService;
+    protected AuthUseCase authUseCase;
 
     @MockitoBean
     protected DashBoardService dashBoardService;

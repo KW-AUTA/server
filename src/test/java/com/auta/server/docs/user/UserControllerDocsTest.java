@@ -19,13 +19,13 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import com.auta.server.api.controller.user.UserController;
-import com.auta.server.api.controller.user.request.UserCreateRequest;
-import com.auta.server.api.controller.user.request.UserUpdateRequest;
-import com.auta.server.api.service.user.UserService;
-import com.auta.server.api.service.user.request.UserCreateServiceRequest;
-import com.auta.server.api.service.user.request.UserUpdateServiceRequest;
+import com.auta.server.adapter.in.user.UserController;
+import com.auta.server.adapter.in.user.request.UserCreateRequest;
+import com.auta.server.adapter.in.user.request.UserUpdateRequest;
 import com.auta.server.api.service.user.response.UserResponse;
+import com.auta.server.application.port.in.user.UserCreateCommand;
+import com.auta.server.application.port.in.user.UserUpdateCommand;
+import com.auta.server.application.port.in.user.UserUseCase;
 import com.auta.server.docs.RestDocsSupport;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -34,11 +34,11 @@ import org.springframework.restdocs.payload.JsonFieldType;
 
 public class UserControllerDocsTest extends RestDocsSupport {
 
-    private final UserService userService = mock(UserService.class);
+    private final UserUseCase userUseCase = mock(UserUseCase.class);
 
     @Override
     protected Object initController() {
-        return new UserController(userService);
+        return new UserController(userUseCase);
     }
 
     @DisplayName("회원가입")
@@ -50,7 +50,7 @@ public class UserControllerDocsTest extends RestDocsSupport {
                 .username("exampleUser")
                 .build();
 
-        given(userService.createUser(any(UserCreateServiceRequest.class)))
+        given(userUseCase.createUser(any(UserCreateCommand.class)))
                 .willReturn(UserResponse.builder()
                         .id(1L)
                         .email("example@example.com")
@@ -105,7 +105,7 @@ public class UserControllerDocsTest extends RestDocsSupport {
         //given
         setMockSecurityContext();
 
-        given(userService.getUser(anyString()))
+        given(userUseCase.getUser(anyString()))
                 .willReturn(UserResponse.builder()
                         .id(1L)
                         .email("example@example.com")
@@ -158,7 +158,7 @@ public class UserControllerDocsTest extends RestDocsSupport {
 
         setMockSecurityContext();
 
-        given(userService.updateUser(any(UserUpdateServiceRequest.class), anyString()))
+        given(userUseCase.updateUser(any(UserUpdateCommand.class), anyString()))
                 .willReturn(UserResponse.builder()
                         .id(1L)
                         .email("example@example.com")
@@ -217,7 +217,7 @@ public class UserControllerDocsTest extends RestDocsSupport {
         //given
         setMockSecurityContext();
 
-        doNothing().when(userService).deleteUser(anyString());
+        doNothing().when(userUseCase).deleteUser(anyString());
 
         //when //then
         mockMvc.perform(
