@@ -1,10 +1,10 @@
 package com.auta.server.application.service.user;
 
-import com.auta.server.api.service.user.response.UserResponse;
+import com.auta.server.adapter.in.user.response.UserResponse;
 import com.auta.server.application.port.in.user.UserCreateCommand;
 import com.auta.server.application.port.in.user.UserUpdateCommand;
 import com.auta.server.application.port.in.user.UserUseCase;
-import com.auta.server.application.port.out.UserPort;
+import com.auta.server.application.port.out.user.UserPort;
 import com.auta.server.domain.user.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -18,7 +18,7 @@ public class UserServiceImpl implements UserUseCase {
     private final PasswordEncoder passwordEncoder;
 
     @Override
-    public UserResponse createUser(UserCreateCommand command) {
+    public User createUser(UserCreateCommand command) {
         String encodedPassword = passwordEncoder.encode(command.getPassword());
 
         User user = User.builder()
@@ -26,9 +26,7 @@ public class UserServiceImpl implements UserUseCase {
                 .password(encodedPassword)
                 .username(command.getUsername())
                 .build();
-        User savedUser = userPort.save(user);
-
-        return UserResponse.from(savedUser);
+        return userPort.save(user);
     }
 
     @Override

@@ -1,4 +1,4 @@
-package com.auta.server.api.service.auth.response;
+package com.auta.server.application.service.auth.response;
 
 import lombok.Builder;
 import lombok.Getter;

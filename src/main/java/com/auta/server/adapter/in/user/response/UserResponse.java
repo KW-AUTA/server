@@ -1,4 +1,4 @@
-package com.auta.server.api.service.user.response;
+package com.auta.server.application.service.user.response;
 
 import com.auta.server.domain.user.User;
 import lombok.Builder;

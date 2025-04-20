@@ -1,5 +1,7 @@
 package com.auta.server.adapter.in.user;
 
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -11,6 +13,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import com.auta.server.ControllerTestSupport;
 import com.auta.server.adapter.in.user.request.UserUpdateRequest;
 import com.auta.server.application.port.in.user.UserCreateCommand;
+import com.auta.server.domain.user.User;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
@@ -26,6 +29,15 @@ class UserControllerTest extends ControllerTestSupport {
                 .password("examplePassword")
                 .username("example_user")
                 .build();
+
+        given(userUseCase.createUser(any(UserCreateCommand.class)))
+                .willReturn(User.builder()
+                        .id(1L)
+                        .email("example@example.com")
+                        .username("exampleUser")
+                        .address(null)
+                        .phoneNumber(null)
+                        .build());
 
         //when //then
         mockMvc.perform(

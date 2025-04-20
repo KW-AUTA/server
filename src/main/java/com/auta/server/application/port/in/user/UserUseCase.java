@@ -1,9 +1,10 @@
 package com.auta.server.application.port.in.user;
 
-import com.auta.server.api.service.user.response.UserResponse;
+import com.auta.server.adapter.in.user.response.UserResponse;
+import com.auta.server.domain.user.User;
 
 public interface UserUseCase {
-    UserResponse createUser(UserCreateCommand command);
+    User createUser(UserCreateCommand command);
 
     UserResponse getUser(String email);
 
