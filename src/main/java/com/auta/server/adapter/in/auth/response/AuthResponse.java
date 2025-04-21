@@ -1,5 +1,6 @@
-package com.auta.server.application.service.auth.response;
+package com.auta.server.adapter.in.auth.response;
 
+import com.auta.server.domain.auth.AuthTokens;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -12,5 +13,11 @@ public class AuthResponse {
     @Builder
     public AuthResponse(String accessToken) {
         this.accessToken = accessToken;
+    }
+
+    public static AuthResponse from(AuthTokens tokens) {
+        return AuthResponse.builder()
+                .accessToken(tokens.accessToken())
+                .build();
     }
 }

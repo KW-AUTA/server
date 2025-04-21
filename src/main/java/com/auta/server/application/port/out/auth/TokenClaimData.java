@@ -1,4 +1,10 @@
-package com.auta.server.common.token;
+package com.auta.server.application.port.out.auth;
 
-public record TokenClaimData(String email) {
+import java.util.Map;
+
+public record TokenClaimData(Map<String, Object> claims) {
+
+    public static TokenClaimData fromEmail(String email) {
+        return new TokenClaimData(Map.of("email", email));
+    }
 }
