@@ -13,7 +13,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 @ExtendWith(MockitoExtension.class)
-class UserPersistenceAdapterTest2 {
+class UserPersistenceAdapterMockTest {
 
     @Mock
     private UserRepository userRepository;
