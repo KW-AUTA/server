@@ -1,0 +1,18 @@
+ifndef::snippets[]
+:snippets: ../../build/generated-snippets
+endif::[]
+= AUTA REST API 문서
+:doctype: book
+:icons: font
+:source-highlighter: highlightjs
+:toc: left
+:toclevels: 2
+:sectlinks:
+
+[[User-API]]
+== User API
+
+include::api/user/user-create.adoc[]
+include::api/user/user-get.adoc[]
+include::api/user/user-update.adoc[]
+include::api/user/user-delete.adoc[]
