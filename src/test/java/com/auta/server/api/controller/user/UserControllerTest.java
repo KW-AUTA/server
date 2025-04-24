@@ -12,7 +12,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import com.auta.server.ControllerTestSupport;
 import com.auta.server.api.controller.user.request.UserCreateRequest;
 import com.auta.server.api.controller.user.request.UserUpdateRequest;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
@@ -21,11 +20,6 @@ import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 
 class UserControllerTest extends ControllerTestSupport {
-
-    @AfterEach
-    void clearSecurityContext() {
-        SecurityContextHolder.clearContext();
-    }
 
     @DisplayName("신규 유저를 생성한다.")
     @Test

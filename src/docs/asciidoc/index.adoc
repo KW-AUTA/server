@@ -16,3 +16,15 @@ include::api/user/user-create.adoc[]
 include::api/user/user-get.adoc[]
 include::api/user/user-update.adoc[]
 include::api/user/user-delete.adoc[]
+
+[[Auth-API]]
+== Auth API
+
+include::api/auth/auth-login.adoc[]
+include::api/auth/auth-logout.adoc[]
+include::api/auth/auth-reissue.adoc[]
+
+[[Health-API]]
+== Health API
+
+include::api/health/health-check.adoc[]
