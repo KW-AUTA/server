@@ -28,3 +28,13 @@ include::api/auth/auth-reissue.adoc[]
 == Health API
 
 include::api/health/health-check.adoc[]
+
+[[Dashboard-API]]
+== Dashboard API
+
+include::api/main/home.adoc[]
+
+[[Pages-API]]
+== Pages API
+
+include::api/page/page-read.adoc[]

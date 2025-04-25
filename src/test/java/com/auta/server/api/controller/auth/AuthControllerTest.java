@@ -2,7 +2,6 @@ package com.auta.server.api.controller.auth;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.mock;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
@@ -16,9 +15,6 @@ import org.hamcrest.Matchers;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContext;
-import org.springframework.security.core.context.SecurityContextHolder;
 
 class AuthControllerTest extends ControllerTestSupport {
 
@@ -44,13 +40,7 @@ class AuthControllerTest extends ControllerTestSupport {
     @Test
     void logout() throws Exception {
         //given
-        Authentication authentication = mock(Authentication.class);
-        given(authentication.getPrincipal()).willReturn("test@example.com");
-
-        SecurityContext securityContext = mock(SecurityContext.class);
-        given(securityContext.getAuthentication()).willReturn(authentication);
-
-        SecurityContextHolder.setContext(securityContext);
+        setMockSecurityContext();
 
         //when    //then
         mockMvc.perform(

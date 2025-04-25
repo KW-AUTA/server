@@ -26,10 +26,11 @@ public class ApiResponse<T> {
         return of(httpStatus, httpStatus.name(), data);
     }
 
-    public static <T> ApiResponse<T> ok(T data) {
-        return of(HttpStatus.OK, data);
+    public static <T> ApiResponse<T> ok(String message, T data) {
+        return of(HttpStatus.OK, message, data);
     }
-    public static <T> ApiResponse<T> ok() {
-        return of(HttpStatus.OK, null);
+
+    public static <T> ApiResponse<T> ok(String message) {
+        return of(HttpStatus.OK, message, null);
     }
 }

@@ -26,7 +26,7 @@ public class AuthController {
         AuthTokens tokens = authService.login(request.toServiceRequest());
         ResponseCookie refreshCookie = CookieUtil.createRefreshCookie(tokens.refreshToken());
         response.addHeader("Set-Cookie", refreshCookie.toString());
-        return ApiResponse.ok(AuthResponse.from(tokens));
+        return ApiResponse.ok("로그인이 완료되었습니다.", AuthResponse.from(tokens));
     }
 
     @PostMapping("/api/v1/auth/logout")
@@ -37,7 +37,7 @@ public class AuthController {
         ResponseCookie refreshCookieForDelete = CookieUtil.deleteRefreshCookie();
         response.addHeader("Set-Cookie", refreshCookieForDelete.toString());
 
-        return ApiResponse.ok();
+        return ApiResponse.ok("로그아웃이 완료되었습니다.");
     }
 
     @PostMapping("/api/v1/auth/reissue")
@@ -46,6 +46,6 @@ public class AuthController {
         AuthTokens tokens = authService.reIssue(token);
         ResponseCookie refreshCookie = CookieUtil.createRefreshCookie(tokens.refreshToken());
         response.addHeader("Set-Cookie", refreshCookie.toString());
-        return ApiResponse.ok(AuthResponse.from(tokens));
+        return ApiResponse.ok("토큰 재발급이 완료되었습니다.", AuthResponse.from(tokens));
     }
 }

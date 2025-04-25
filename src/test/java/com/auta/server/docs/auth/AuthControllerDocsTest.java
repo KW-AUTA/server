@@ -26,9 +26,6 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
 import org.springframework.restdocs.payload.JsonFieldType;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContext;
-import org.springframework.security.core.context.SecurityContextHolder;
 
 public class AuthControllerDocsTest extends RestDocsSupport {
 
@@ -81,13 +78,7 @@ public class AuthControllerDocsTest extends RestDocsSupport {
     @Test
     void logout() throws Exception {
         //given
-        Authentication authentication = mock(Authentication.class);
-        given(authentication.getPrincipal()).willReturn("test@example.com");
-
-        SecurityContext securityContext = mock(SecurityContext.class);
-        given(securityContext.getAuthentication()).willReturn(authentication);
-
-        SecurityContextHolder.setContext(securityContext);
+        setMockSecurityContext();
 
         //when    //then
         mockMvc.perform(

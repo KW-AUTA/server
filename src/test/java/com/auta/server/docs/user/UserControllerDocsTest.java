@@ -31,9 +31,6 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
 import org.springframework.restdocs.payload.JsonFieldType;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContext;
-import org.springframework.security.core.context.SecurityContextHolder;
 
 public class UserControllerDocsTest extends RestDocsSupport {
 
@@ -106,13 +103,7 @@ public class UserControllerDocsTest extends RestDocsSupport {
     @Test
     void getUser() throws Exception {
         //given
-        Authentication authentication = mock(Authentication.class);
-        given(authentication.getPrincipal()).willReturn("test@example.com");
-
-        SecurityContext securityContext = mock(SecurityContext.class);
-        given(securityContext.getAuthentication()).willReturn(authentication);
-
-        SecurityContextHolder.setContext(securityContext);
+        setMockSecurityContext();
 
         given(userService.getUser(anyString()))
                 .willReturn(UserResponse.builder()
@@ -165,13 +156,7 @@ public class UserControllerDocsTest extends RestDocsSupport {
                 .phoneNumber("010-1234-1234")
                 .build();
 
-        Authentication authentication = mock(Authentication.class);
-        given(authentication.getPrincipal()).willReturn("test@example.com");
-
-        SecurityContext securityContext = mock(SecurityContext.class);
-        given(securityContext.getAuthentication()).willReturn(authentication);
-
-        SecurityContextHolder.setContext(securityContext);
+        setMockSecurityContext();
 
         given(userService.updateUser(any(UserUpdateServiceRequest.class), anyString()))
                 .willReturn(UserResponse.builder()
@@ -230,13 +215,7 @@ public class UserControllerDocsTest extends RestDocsSupport {
     @Test
     void deleteUser() throws Exception {
         //given
-        Authentication authentication = mock(Authentication.class);
-        given(authentication.getPrincipal()).willReturn("test@example.com");
-
-        SecurityContext securityContext = mock(SecurityContext.class);
-        given(securityContext.getAuthentication()).willReturn(authentication);
-
-        SecurityContextHolder.setContext(securityContext);
+        setMockSecurityContext();
 
         doNothing().when(userService).deleteUser(anyString());
 
@@ -244,7 +223,7 @@ public class UserControllerDocsTest extends RestDocsSupport {
         mockMvc.perform(
                         delete("/api/v1/users")
                                 .header("Authorization", "Bearer JwtToken")
-                
+
                 ).andDo(print())
                 .andExpect(status().isOk())
                 .andDo(document("user-delete",

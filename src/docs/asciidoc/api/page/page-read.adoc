@@ -1,0 +1,11 @@
+[[pages-read]]
+=== 페이지 조회
+
+==== HTTP Request
+
+include::{snippets}/pages-read/http-request.adoc[]
+
+==== HTTP Response
+
+include::{snippets}/pages-read/http-response.adoc[]
+include::{snippets}/pages-read/response-fields.adoc[]

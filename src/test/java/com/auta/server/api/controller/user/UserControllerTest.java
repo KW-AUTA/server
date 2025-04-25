@@ -1,7 +1,5 @@
 package com.auta.server.api.controller.user;
 
-import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.mock;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -15,9 +13,6 @@ import com.auta.server.api.controller.user.request.UserUpdateRequest;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContext;
-import org.springframework.security.core.context.SecurityContextHolder;
 
 class UserControllerTest extends ControllerTestSupport {
 
@@ -44,13 +39,7 @@ class UserControllerTest extends ControllerTestSupport {
     @Test
     void getUser() throws Exception {
         //given
-        Authentication authentication = mock(Authentication.class);
-        given(authentication.getPrincipal()).willReturn("test@example.com");
-
-        SecurityContext securityContext = mock(SecurityContext.class);
-        given(securityContext.getAuthentication()).willReturn(authentication);
-
-        SecurityContextHolder.setContext(securityContext);
+        setMockSecurityContext();
         //when //then
         mockMvc.perform(
                         get("/api/v1/users/me")
@@ -67,13 +56,8 @@ class UserControllerTest extends ControllerTestSupport {
                 .address("example")
                 .phoneNumber("010-1234-1234")
                 .build();
-        Authentication authentication = mock(Authentication.class);
-        given(authentication.getPrincipal()).willReturn("test@example.com");
 
-        SecurityContext securityContext = mock(SecurityContext.class);
-        given(securityContext.getAuthentication()).willReturn(authentication);
-
-        SecurityContextHolder.setContext(securityContext);
+        setMockSecurityContext();
         //when //then
         mockMvc.perform(
                         put("/api/v1/users")
@@ -87,13 +71,7 @@ class UserControllerTest extends ControllerTestSupport {
     @Test
     void deleteUser() throws Exception {
         //given
-        Authentication authentication = mock(Authentication.class);
-        given(authentication.getPrincipal()).willReturn("test@example.com");
-
-        SecurityContext securityContext = mock(SecurityContext.class);
-        given(securityContext.getAuthentication()).willReturn(authentication);
-
-        SecurityContextHolder.setContext(securityContext);
+        setMockSecurityContext();
         //when //then
         mockMvc.perform(
                         delete("/api/v1/users")
