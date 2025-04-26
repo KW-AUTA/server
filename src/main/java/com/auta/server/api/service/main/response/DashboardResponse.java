@@ -34,7 +34,6 @@ public class DashboardResponse {
         @JsonFormat(pattern = "yyyy-MM-dd")
         private LocalDate projectEnd;
         private ProjectStatus projectStatus;
-        private Long testPassRate;
     }
 
     @Getter
@@ -44,6 +43,7 @@ public class DashboardResponse {
     public static class TestInfo {
         private Long testId;
         private String projectName;
+        private String pageName;
         private TestType testType;
         private TestStatus testStatus;
     }

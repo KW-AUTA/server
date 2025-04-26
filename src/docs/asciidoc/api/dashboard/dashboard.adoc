@@ -1,0 +1,11 @@
+[[dashboard]]
+=== 대시보드
+
+==== HTTP Request
+
+include::{snippets}/dashboard/http-request.adoc[]
+
+==== HTTP Response
+
+include::{snippets}/dashboard/http-response.adoc[]
+include::{snippets}/dashboard/response-fields.adoc[]

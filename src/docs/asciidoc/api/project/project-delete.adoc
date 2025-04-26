@@ -1,0 +1,11 @@
+[[project-delete]]
+=== 프로젝트 삭제
+
+==== HTTP Request
+
+include::{snippets}/project-delete/http-request.adoc[]
+
+==== HTTP Response
+
+include::{snippets}/project-delete/http-response.adoc[]
+include::{snippets}/project-delete/response-fields.adoc[]

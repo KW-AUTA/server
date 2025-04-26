@@ -1,4 +1,4 @@
-package com.auta.server.api.controller.page;
+package com.auta.server.api.controller.main;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -8,19 +8,17 @@ import com.auta.server.ControllerTestSupport;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-class PageControllerTest extends ControllerTestSupport {
-
-    @DisplayName("해당 프로젝트 아이디에 해당하는 페이지 리스트를 반환한다.")
+class DashBoardControllerTest extends ControllerTestSupport {
+    @DisplayName("대시보드 정보들을 조회한다.")
     @Test
-    void getPages() throws Exception {
+    void getDashboardData() throws Exception {
         //given
-
-        //when   //then
+        setMockSecurityContext();
+        //when //then
         mockMvc.perform(
-                        get("/api/v1/pages/{projectId}", 1)
+                        get("/api/v1/home")
+                                .header("Authorization", "Bearer JwtToken")
                 ).andDo(print())
                 .andExpect(status().isOk());
-
     }
-
 }

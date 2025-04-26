@@ -1,5 +1,5 @@
 [[user-update]]
-=== 회원가입
+=== 회원정보 수정
 
 ==== HTTP Request
 

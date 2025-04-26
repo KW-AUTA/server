@@ -1,0 +1,11 @@
+[[project-test-detail]]
+=== 프로젝트 테스트 세부 정보
+
+==== HTTP Request
+
+include::{snippets}/project-test-detail/http-request.adoc[]
+
+==== HTTP Response
+
+include::{snippets}/project-test-detail/http-response.adoc[]
+include::{snippets}/project-test-detail/response-fields.adoc[]

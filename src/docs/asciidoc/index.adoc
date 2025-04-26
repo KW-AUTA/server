@@ -32,9 +32,18 @@ include::api/health/health-check.adoc[]
 [[Dashboard-API]]
 == Dashboard API
 
-include::api/main/home.adoc[]
+include::api/dashboard/dashboard.adoc[]
 
-[[Pages-API]]
-== Pages API
+[[Project-API]]
+== Project API
 
-include::api/page/page-read.adoc[]
+include::api/project/project-create.adoc[]
+include::api/project/project-update.adoc[]
+include::api/project/project-delete.adoc[]
+
+include::api/project/project-summaries-read.adoc[]
+include::api/project/project-detail.adoc[]
+include::api/project/project-test-summaries-read.adoc[]
+include::api/project/project-test-detail.adoc[]
+include::api/project/page-test.adoc[]
+

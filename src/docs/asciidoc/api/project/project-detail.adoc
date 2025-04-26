@@ -1,0 +1,11 @@
+[[project-detail]]
+=== 프로젝트 세부 정보
+
+==== HTTP Request
+
+include::{snippets}/project-detail/http-request.adoc[]
+
+==== HTTP Response
+
+include::{snippets}/project-detail/http-response.adoc[]
+include::{snippets}/project-detail/response-fields.adoc[]

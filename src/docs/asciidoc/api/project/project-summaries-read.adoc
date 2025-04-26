@@ -1,0 +1,12 @@
+
+[[project-summaries-read]]
+=== 프로젝트 리스트
+
+==== HTTP Request
+
+include::{snippets}/project-summaries-read/http-request.adoc[]
+
+==== HTTP Response
+
+include::{snippets}/project-summaries-read/http-response.adoc[]
+include::{snippets}/project-summaries-read/response-fields.adoc[]

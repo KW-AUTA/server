@@ -5,12 +5,14 @@ import static org.mockito.Mockito.mock;
 
 import com.auta.server.api.controller.auth.AuthController;
 import com.auta.server.api.controller.health.HealthCheckController;
-import com.auta.server.api.controller.main.MainPageController;
-import com.auta.server.api.controller.page.PageController;
+import com.auta.server.api.controller.main.DashBoardController;
+import com.auta.server.api.controller.project.ProjectController;
+import com.auta.server.api.controller.project.ProjectQueryController;
 import com.auta.server.api.controller.user.UserController;
 import com.auta.server.api.service.auth.AuthService;
-import com.auta.server.api.service.main.MainPageService;
-import com.auta.server.api.service.page.PageService;
+import com.auta.server.api.service.main.DashBoardService;
+import com.auta.server.api.service.project.ProjectQueryService;
+import com.auta.server.api.service.project.ProjectService;
 import com.auta.server.api.service.user.UserService;
 import com.auta.server.common.token.TokenGenerator;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -29,8 +31,9 @@ import org.springframework.test.web.servlet.MockMvc;
         UserController.class,
         AuthController.class,
         HealthCheckController.class,
-        MainPageController.class,
-        PageController.class})
+        DashBoardController.class,
+        ProjectController.class,
+        ProjectQueryController.class})
 public abstract class ControllerTestSupport {
     @Autowired
     protected MockMvc mockMvc;
@@ -45,10 +48,13 @@ public abstract class ControllerTestSupport {
     protected AuthService authService;
 
     @MockitoBean
-    protected MainPageService mainPageService;
+    protected DashBoardService dashBoardService;
 
     @MockitoBean
-    protected PageService pageService;
+    protected ProjectQueryService projectQueryService;
+
+    @MockitoBean
+    protected ProjectService projectService;
 
     @MockitoBean
     protected TokenGenerator tokenGenerator;

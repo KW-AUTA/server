@@ -1,0 +1,12 @@
+[[project-create]]
+=== 프로젝트 생성
+
+==== HTTP Request
+
+include::{snippets}/project-create/http-request.adoc[]
+include::{snippets}/project-create/request-fields.adoc[]
+
+==== HTTP Response
+
+include::{snippets}/project-create/http-response.adoc[]
+include::{snippets}/project-create/response-fields.adoc[]

@@ -1,0 +1,12 @@
+[[project-update]]
+=== 프로젝트 수정
+
+==== HTTP Request
+
+include::{snippets}/project-update/http-request.adoc[]
+include::{snippets}/project-update/request-fields.adoc[]
+
+==== HTTP Response
+
+include::{snippets}/project-update/http-response.adoc[]
+include::{snippets}/project-update/response-fields.adoc[]
