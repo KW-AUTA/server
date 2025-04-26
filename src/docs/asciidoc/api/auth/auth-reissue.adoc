@@ -1,0 +1,11 @@
+[[auth-reissue]]
+=== 토큰 재발급
+
+==== HTTP Request
+
+include::{snippets}/auth-reissue/http-request.adoc[]
+
+==== HTTP Response
+
+include::{snippets}/auth-reissue/http-response.adoc[]
+include::{snippets}/auth-reissue/response-fields.adoc[]

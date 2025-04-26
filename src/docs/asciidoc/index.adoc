@@ -1,0 +1,49 @@
+ifndef::snippets[]
+:snippets: ../../build/generated-snippets
+endif::[]
+= AUTA REST API 문서
+:doctype: book
+:icons: font
+:source-highlighter: highlightjs
+:toc: left
+:toclevels: 2
+:sectlinks:
+
+[[User-API]]
+== User API
+
+include::api/user/user-create.adoc[]
+include::api/user/user-get.adoc[]
+include::api/user/user-update.adoc[]
+include::api/user/user-delete.adoc[]
+
+[[Auth-API]]
+== Auth API
+
+include::api/auth/auth-login.adoc[]
+include::api/auth/auth-logout.adoc[]
+include::api/auth/auth-reissue.adoc[]
+
+[[Health-API]]
+== Health API
+
+include::api/health/health-check.adoc[]
+
+[[Dashboard-API]]
+== Dashboard API
+
+include::api/dashboard/dashboard.adoc[]
+
+[[Project-API]]
+== Project API
+
+include::api/project/project-create.adoc[]
+include::api/project/project-update.adoc[]
+include::api/project/project-delete.adoc[]
+
+include::api/project/project-summaries-read.adoc[]
+include::api/project/project-detail.adoc[]
+include::api/project/project-test-summaries-read.adoc[]
+include::api/project/project-test-detail.adoc[]
+include::api/project/page-test.adoc[]
+

@@ -1,0 +1,11 @@
+
+[[user-delete]]
+=== 회원탈퇴
+
+==== HTTP Request
+
+include::{snippets}/user-delete/http-request.adoc[]
+
+==== HTTP Response
+
+include::{snippets}/user-delete/http-response.adoc[]

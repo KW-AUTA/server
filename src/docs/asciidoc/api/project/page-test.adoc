@@ -1,0 +1,11 @@
+[[page-test]]
+=== 페이지 테스트 세부 정보
+
+==== HTTP Request
+
+include::{snippets}/page-test/http-request.adoc[]
+
+==== HTTP Response
+
+include::{snippets}/page-test/http-response.adoc[]
+include::{snippets}/page-test/response-fields.adoc[]
