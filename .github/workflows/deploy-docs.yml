@@ -6,14 +6,12 @@ on:
       - dev
 
 jobs:
-  build-and-deploy-docs:
+  build-docs:
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout dev branch
         uses: actions/checkout@v4
-        with:
-          persist-credentials: false
 
       - name: Set up JDK 17
         uses: actions/setup-java@v3
@@ -24,24 +22,18 @@ jobs:
       - name: Build API Docs
         run: ./gradlew clean build asciidoctor
 
-      - name: Save generated docs
+      - name: Copy asciidoctor output
         run: |
-          mkdir -p tmp-docs
-          cp -r build/docs/asciidoc/* tmp-docs/
+          mkdir docs-folder
+          cp -r build/docs/asciidoc/* docs-folder/
 
-      - name: Checkout docs branch
+      - name: Commit and Push API Docs
         run: |
-          git fetch origin docs
-          git checkout docs
-
-      - name: Clear old docs and copy new docs
-        run: |
-          rm -rf *
-          cp -r ../tmp-docs/* .
-          git config --global user.email "github-actions@example.com"
+          cp -r docs-folder/* docs/  # 기존 docs 폴더에 덮어쓰기
           git config --global user.name "GitHub Actions"
-          git add .
-          git commit -m "Update API Docs from dev branch" || echo "No changes to commit"
-          git push origin docs
+          git config --global user.email "github-actions@example.com"
+          git add docs
+          git commit -m "Update API Docs"
+          git push
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
