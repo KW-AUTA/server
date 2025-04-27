@@ -1,0 +1,49 @@
+name: Build and Deploy API Docs
+
+on:
+  push:
+    branches:
+      - dev
+
+jobs:
+  build-docs:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout dev branch
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v3
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+
+      - name: Build asciidoctor
+        run: ./gradlew clean build asciidoctor
+
+      - name: Copy asciidoc output
+        run: |
+          mkdir docs-folder
+          cp -r build/docs/asciidoc/* docs-folder/
+
+      - name: Checkout docs branch
+        uses: actions/checkout@v4
+        with:
+          ref: docs
+          persist-credentials: false
+          clean: true
+
+      - name: Deploy to docs branch
+        run: |
+          rm -rf *
+          cp -r ../docs-folder/* .
+          git config --global user.email "github-actions@example.com"
+          git config --global user.name "GitHub Actions"
+          git add .
+          git commit -m "Update API Docs from dev branch" || echo "No changes to commit"
+          git push origin docs
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
