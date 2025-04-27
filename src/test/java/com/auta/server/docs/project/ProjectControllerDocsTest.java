@@ -21,11 +21,11 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import com.auta.server.api.controller.project.ProjectController;
-import com.auta.server.api.controller.project.request.ProjectRequest;
-import com.auta.server.api.service.project.ProjectService;
+import com.auta.server.adapter.in.project.ProjectController;
+import com.auta.server.adapter.in.project.request.ProjectRequest;
 import com.auta.server.api.service.project.request.ProjectServiceRequest;
 import com.auta.server.api.service.project.response.ProjectResponse;
+import com.auta.server.application.service.ProjectService;
 import com.auta.server.docs.RestDocsSupport;
 import java.time.LocalDate;
 import org.junit.jupiter.api.DisplayName;

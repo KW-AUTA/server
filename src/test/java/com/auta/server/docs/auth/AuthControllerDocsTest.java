@@ -15,11 +15,12 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import com.auta.server.api.controller.auth.AuthController;
-import com.auta.server.api.controller.auth.request.AuthRequest;
-import com.auta.server.api.service.auth.AuthService;
+import com.auta.server.adapter.in.auth.AuthController;
+import com.auta.server.adapter.in.auth.request.AuthRequest;
+import com.auta.server.adapter.out.web.CookieManager;
+import com.auta.server.application.port.in.auth.AuthUseCase;
 import com.auta.server.docs.RestDocsSupport;
-import com.auta.server.domain.auth.dto.AuthTokens;
+import com.auta.server.domain.auth.AuthTokens;
 import jakarta.servlet.http.Cookie;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.DisplayName;
@@ -29,11 +30,12 @@ import org.springframework.restdocs.payload.JsonFieldType;
 
 public class AuthControllerDocsTest extends RestDocsSupport {
 
-    private final AuthService authService = mock(AuthService.class);
+    private final AuthUseCase authUseCase = mock(AuthUseCase.class);
+    private final CookieManager cookieManager = new CookieManager();
 
     @Override
     protected Object initController() {
-        return new AuthController(authService);
+        return new AuthController(authUseCase, cookieManager);
     }
 
     @DisplayName("로그인")
@@ -41,7 +43,7 @@ public class AuthControllerDocsTest extends RestDocsSupport {
     void login() throws Exception {
         //given
         AuthRequest request = AuthRequest.builder().email("test@example.com").password("testPassword").build();
-        given(authService.login(any())).willReturn(new AuthTokens("access-token", "refresh-token"));
+        given(authUseCase.login(any())).willReturn(new AuthTokens("access-token", "refresh-token"));
 
         //when //then
         mockMvc.perform(
@@ -110,7 +112,7 @@ public class AuthControllerDocsTest extends RestDocsSupport {
     @Test
     void reIssue() throws Exception {
         //given
-        given(authService.reIssue(any())).willReturn(new AuthTokens("access-token", "refresh-token"));
+        given(authUseCase.reIssue(any())).willReturn(new AuthTokens("access-token", "refresh-token"));
 
         //when //then
         mockMvc.perform(

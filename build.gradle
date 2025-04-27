@@ -43,8 +43,8 @@ dependencies {
 
 ////    mysql
 //    runtimeOnly 'com.mysql:mysql-connector-j'
-//    serializable
 
+//    serializable
     implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310'
 //    test
     testImplementation 'org.springframework.boot:spring-boot-starter-test'

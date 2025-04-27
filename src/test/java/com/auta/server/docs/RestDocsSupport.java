@@ -7,7 +7,6 @@ import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.docu
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.restdocs.RestDocumentationContextProvider;
@@ -17,7 +16,6 @@ import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 
 @ExtendWith(RestDocumentationExtension.class)
 public abstract class RestDocsSupport {
@@ -31,17 +29,11 @@ public abstract class RestDocsSupport {
     @BeforeEach
     void setUp(RestDocumentationContextProvider provider) {
         this.mockMvc = MockMvcBuilders.standaloneSetup(initController())
-                .setCustomArgumentResolvers(
-                        getArgumentResolvers().toArray(new HandlerMethodArgumentResolver[0])) // ✅ 요기
                 .apply(documentationConfiguration(provider))
                 .build();
     }
 
     protected abstract Object initController();
-
-    protected List<HandlerMethodArgumentResolver> getArgumentResolvers() {
-        return List.of();
-    }
 
     protected void setMockSecurityContext() {
         Authentication authentication = mock(Authentication.class);

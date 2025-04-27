@@ -13,9 +13,9 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import com.auta.server.api.controller.main.DashBoardController;
-import com.auta.server.api.service.main.DashBoardService;
+import com.auta.server.adapter.in.dashboard.DashBoardController;
 import com.auta.server.api.service.main.response.DashboardResponse;
+import com.auta.server.application.service.DashBoardService;
 import com.auta.server.docs.RestDocsSupport;
 import com.auta.server.domain.project.ProjectStatus;
 import com.auta.server.domain.test.TestStatus;
