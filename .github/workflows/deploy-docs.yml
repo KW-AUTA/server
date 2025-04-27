@@ -6,7 +6,7 @@ on:
       - dev
 
 jobs:
-  build-docs:
+  build-and-deploy-docs:
     runs-on: ubuntu-latest
 
     steps:
@@ -21,25 +21,23 @@ jobs:
           java-version: '17'
           distribution: 'temurin'
 
-      - name: Build asciidoctor
+      - name: Build API Docs
         run: ./gradlew clean build asciidoctor
 
-      - name: Copy asciidoc output
+      - name: Save generated docs
         run: |
-          mkdir docs-folder
-          cp -r build/docs/asciidoc/* docs-folder/
+          mkdir -p tmp-docs
+          cp -r build/docs/asciidoc/* tmp-docs/
 
       - name: Checkout docs branch
-        uses: actions/checkout@v4
-        with:
-          ref: docs
-          persist-credentials: false
-          clean: true
+        run: |
+          git fetch origin docs
+          git checkout docs
 
-      - name: Deploy to docs branch
+      - name: Clear old docs and copy new docs
         run: |
           rm -rf *
-          cp -r ../docs-folder/* .
+          cp -r ../tmp-docs/* .
           git config --global user.email "github-actions@example.com"
           git config --global user.name "GitHub Actions"
           git add .
