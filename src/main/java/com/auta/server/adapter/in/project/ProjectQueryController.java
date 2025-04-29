@@ -1,12 +1,12 @@
 package com.auta.server.adapter.in.project;
 
+import com.auta.server.adapter.in.ApiResponse;
 import com.auta.server.api.service.project.response.PageTestResponse;
 import com.auta.server.api.service.project.response.ProjectDetailResponse;
 import com.auta.server.api.service.project.response.ProjectSummariesResponse;
 import com.auta.server.api.service.project.response.ProjectTestDetailResponse;
 import com.auta.server.api.service.project.response.ProjectTestSummariesResponse;
 import com.auta.server.application.service.ProjectQueryService;
-import com.auta.server.common.ApiResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;

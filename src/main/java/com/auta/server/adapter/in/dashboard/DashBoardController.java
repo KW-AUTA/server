@@ -1,8 +1,8 @@
 package com.auta.server.adapter.in.dashboard;
 
+import com.auta.server.adapter.in.ApiResponse;
 import com.auta.server.api.service.main.response.DashboardResponse;
 import com.auta.server.application.service.DashBoardService;
-import com.auta.server.common.ApiResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.GetMapping;

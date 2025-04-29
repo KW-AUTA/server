@@ -1,6 +1,6 @@
 package com.auta.server.adapter.in.health;
 
-import com.auta.server.common.ApiResponse;
+import com.auta.server.adapter.in.ApiResponse;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 

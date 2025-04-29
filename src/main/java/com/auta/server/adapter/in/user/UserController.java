@@ -1,10 +1,10 @@
 package com.auta.server.adapter.in.user;
 
+import com.auta.server.adapter.in.ApiResponse;
 import com.auta.server.adapter.in.user.request.UserCreateRequest;
 import com.auta.server.adapter.in.user.request.UserUpdateRequest;
-import com.auta.server.api.service.user.response.UserResponse;
+import com.auta.server.adapter.in.user.response.UserResponse;
 import com.auta.server.application.port.in.user.UserUseCase;
-import com.auta.server.common.ApiResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -23,7 +23,8 @@ public class UserController {
 
     @PostMapping("/api/v1/users")
     public ApiResponse<UserResponse> createUser(@Valid @RequestBody UserCreateRequest request) {
-        return ApiResponse.ok("회원 가입이 완료되었습니다", userUseCase.createUser(request.toCommand()));
+        return ApiResponse.ok("회원 가입이 완료되었습니다",
+                UserResponse.from(userUseCase.createUser(request.toCommand())));
     }
 
     @GetMapping("/api/v1/users/me")

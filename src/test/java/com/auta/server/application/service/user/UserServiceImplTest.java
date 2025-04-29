@@ -6,8 +6,9 @@ import static org.assertj.core.api.Assertions.assertThat;
 import com.auta.server.IntegrationTestSupport;
 import com.auta.server.adapter.out.persistence.user.UserEntity;
 import com.auta.server.adapter.out.persistence.user.UserRepository;
-import com.auta.server.api.service.user.response.UserResponse;
 import com.auta.server.application.port.in.user.UserCreateCommand;
+import com.auta.server.domain.user.User;
+import java.util.List;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -39,16 +40,15 @@ class UserServiceImplTest extends IntegrationTestSupport {
                 .username("testUser")
                 .build();
         //when
-        UserResponse response = userService.createUser(command);
+        User user = userService.createUser(command);
 
         //then
-        assertThat(response).extracting("email", "username")
+        assertThat(user).extracting("email", "username")
                 .contains("test@example.com", "testUser");
 
-        UserEntity user = userRepository.findByEmail(command.getEmail())
-                .orElseThrow();
-
-        assertThat(passwordEncoder.matches("testPassword", user.getPassword()))
+        List<UserEntity> userEntities = userRepository.findAllByEmail(command.getEmail());
+        
+        assertThat(passwordEncoder.matches("testPassword", userEntities.get(0).getPassword()))
                 .isTrue();
     }
 }

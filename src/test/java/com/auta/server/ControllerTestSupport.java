@@ -15,7 +15,6 @@ import com.auta.server.application.port.in.user.UserUseCase;
 import com.auta.server.application.service.DashBoardService;
 import com.auta.server.application.service.ProjectQueryService;
 import com.auta.server.application.service.ProjectService;
-import com.auta.server.common.token.TokenGenerator;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.AfterEach;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -58,9 +57,6 @@ public abstract class ControllerTestSupport {
 
     @MockitoBean
     protected ProjectService projectService;
-
-    @MockitoBean
-    protected TokenGenerator tokenGenerator;
 
     @AfterEach
     void clearSecurityContext() {

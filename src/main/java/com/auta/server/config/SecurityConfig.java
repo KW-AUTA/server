@@ -1,4 +1,4 @@
-package com.auta.server.security;
+package com.auta.server.config;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;

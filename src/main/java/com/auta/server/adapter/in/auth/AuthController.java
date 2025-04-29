@@ -1,11 +1,10 @@
 package com.auta.server.adapter.in.auth;
 
+import com.auta.server.adapter.in.ApiResponse;
 import com.auta.server.adapter.in.auth.request.AuthRequest;
-import com.auta.server.adapter.out.persistence.auth.AuthMapper;
+import com.auta.server.adapter.in.auth.response.AuthResponse;
 import com.auta.server.adapter.out.web.CookieManager;
-import com.auta.server.api.service.auth.response.AuthResponse;
 import com.auta.server.application.port.in.auth.AuthUseCase;
-import com.auta.server.common.ApiResponse;
 import com.auta.server.domain.auth.AuthTokens;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -26,7 +25,7 @@ public class AuthController {
     public ApiResponse<AuthResponse> login(@RequestBody AuthRequest request, HttpServletResponse response) {
         AuthTokens tokens = authUseCase.login(request.toCommand());
         cookieManager.addRefreshTokenCookie(response, tokens.refreshToken());
-        return ApiResponse.ok("로그인이 완료되었습니다.", AuthMapper.toAuthResponse(tokens));
+        return ApiResponse.ok("로그인이 완료되었습니다.", AuthResponse.from(tokens));
     }
 
     @PostMapping("/api/v1/auth/logout")
@@ -43,6 +42,6 @@ public class AuthController {
                                              HttpServletResponse response) {
         AuthTokens tokens = authUseCase.reIssue(token);
         cookieManager.addRefreshTokenCookie(response, tokens.refreshToken());
-        return ApiResponse.ok("토큰 재발급이 완료되었습니다.", AuthMapper.toAuthResponse(tokens));
+        return ApiResponse.ok("토큰 재발급이 완료되었습니다.", AuthResponse.from(tokens));
     }
 }

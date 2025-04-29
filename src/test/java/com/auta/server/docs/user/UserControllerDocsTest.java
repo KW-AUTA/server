@@ -22,11 +22,12 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import com.auta.server.adapter.in.user.UserController;
 import com.auta.server.adapter.in.user.request.UserCreateRequest;
 import com.auta.server.adapter.in.user.request.UserUpdateRequest;
-import com.auta.server.api.service.user.response.UserResponse;
+import com.auta.server.adapter.in.user.response.UserResponse;
 import com.auta.server.application.port.in.user.UserCreateCommand;
 import com.auta.server.application.port.in.user.UserUpdateCommand;
 import com.auta.server.application.port.in.user.UserUseCase;
 import com.auta.server.docs.RestDocsSupport;
+import com.auta.server.domain.user.User;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
@@ -51,7 +52,7 @@ public class UserControllerDocsTest extends RestDocsSupport {
                 .build();
 
         given(userUseCase.createUser(any(UserCreateCommand.class)))
-                .willReturn(UserResponse.builder()
+                .willReturn(User.builder()
                         .id(1L)
                         .email("example@example.com")
                         .username("exampleUser")
