@@ -7,4 +7,6 @@ public interface UserPort {
     User save(User user);
 
     Optional<User> findByEmail(String email);
+
+    void deleteByEmail(String email);
 }

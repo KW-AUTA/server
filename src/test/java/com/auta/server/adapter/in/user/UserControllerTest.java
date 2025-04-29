@@ -1,6 +1,7 @@
 package com.auta.server.adapter.in.user;
 
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -13,6 +14,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import com.auta.server.ControllerTestSupport;
 import com.auta.server.adapter.in.user.request.UserUpdateRequest;
 import com.auta.server.application.port.in.user.UserCreateCommand;
+import com.auta.server.application.port.in.user.UserUpdateCommand;
 import com.auta.server.domain.user.User;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -76,6 +78,15 @@ class UserControllerTest extends ControllerTestSupport {
     void getUser() throws Exception {
         //given
         setMockSecurityContext();
+
+        given(userUseCase.getUser(anyString()))
+                .willReturn(User.builder()
+                        .id(1L)
+                        .email("example@example.com")
+                        .username("exampleUser")
+                        .address(null)
+                        .phoneNumber(null)
+                        .build());
         //when //then
         mockMvc.perform(
                         get("/api/v1/users/me")
@@ -94,6 +105,15 @@ class UserControllerTest extends ControllerTestSupport {
                 .build();
 
         setMockSecurityContext();
+
+        given(userUseCase.updateUser(any(UserUpdateCommand.class), anyString()))
+                .willReturn(User.builder()
+                        .id(1L)
+                        .email("example@example.com")
+                        .username("exampleUser")
+                        .address(null)
+                        .phoneNumber(null)
+                        .build());
         //when //then
         mockMvc.perform(
                         put("/api/v1/users")

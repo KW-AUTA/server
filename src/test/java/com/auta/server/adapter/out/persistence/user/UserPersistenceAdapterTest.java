@@ -10,6 +10,7 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 
 class UserPersistenceAdapterTest extends IntegrationTestSupport {
 
@@ -87,5 +88,26 @@ class UserPersistenceAdapterTest extends IntegrationTestSupport {
         //then
         assertThat(users).isEmpty();
 
+    }
+
+    @DisplayName("유저를 받아서 삭제한다.")
+    @Transactional
+    @Test
+    void deleteUser() {
+        //given
+        User user = User.builder()
+                .email("test@example.com")
+                .password("securePassword")
+                .username("testUser")
+                .build();
+
+        userRepository.save(UserMapper.toEntity(user));
+
+        //when
+        userPersistenceAdapter.deleteByEmail("test@example.com");
+        //then
+        List<UserEntity> userEntities = userRepository.findAllByEmail("test@example.com");
+
+        assertThat(userEntities).isEmpty();
     }
 }

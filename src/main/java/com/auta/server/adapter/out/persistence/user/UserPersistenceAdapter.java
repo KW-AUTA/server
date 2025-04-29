@@ -34,20 +34,8 @@ public class UserPersistenceAdapter implements UserPort {
         return Optional.of(UserMapper.toDomain(userEntities.get(0)));
     }
 
-//    @Override
-//    public Optional<User> findByEmail(String email) {
-//        return userRepository.findByEmail(email)
-//                .map(UserMapper::toDomain);
-//    }
-//
-//    @Override
-//    public Optional<User> findById(Long id) {
-//        return userRepository.findById(id)
-//                .map(UserMapper::toDomain);
-//    }
-//
-//    @Override
-//    public void deleteByEmail(String email) {
-//        userRepository.deleteByEmail(email);
-//    }
+    @Override
+    public void deleteByEmail(String email) {
+        userRepository.deleteByEmail(email);
+    }
 }
