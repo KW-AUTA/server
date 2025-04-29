@@ -127,4 +127,18 @@ class AuthServiceImplTest extends IntegrationTestSupport {
                 .isInstanceOf(BusinessException.class)
                 .hasMessage("비밀번호가 틀렸습니다");
     }
+
+    @DisplayName("로그아웃 하면 리프레시 토큰을 지운다.")
+    @Test
+    void logOut() {
+        //given
+        String email = "testEmail";
+        String key = "refresh_token:" + email;
+        //when
+        authService.logout(email);
+
+        //then
+        String result = redisTemplate.opsForValue().get(key);
+        assertThat(result).isNull();
+    }
 }

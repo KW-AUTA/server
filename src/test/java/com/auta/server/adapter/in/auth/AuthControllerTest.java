@@ -23,7 +23,7 @@ class AuthControllerTest extends ControllerTestSupport {
         //given
         AuthRequest request = AuthRequest.builder().email("test@example.com").password("testPassword").build();
         given(authUseCase.login(any())).willReturn(new AuthTokens("access-token", "refresh-token"));
-        
+
         //when //then
         mockMvc.perform(
                         post("/api/v1/auth/login")
@@ -57,6 +57,7 @@ class AuthControllerTest extends ControllerTestSupport {
     @Test
     void reIssue() throws Exception {
         //given
+        setMockSecurityContext();
         given(authUseCase.reIssue(any())).willReturn(new AuthTokens("access-token", "refresh-token"));
 
         //when //then

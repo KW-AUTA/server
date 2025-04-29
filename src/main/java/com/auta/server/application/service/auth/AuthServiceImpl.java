@@ -46,12 +46,23 @@ public class AuthServiceImpl implements AuthUseCase {
 
     @Override
     public void logout(String email) {
-
+        refreshTokenStorePort.delete(buildRefreshTokenKey(email));
     }
 
     @Override
-    public AuthTokens reIssue(String token) {
-        return null;
+    public AuthTokens reIssue(String email) {
+        refreshTokenStorePort.delete(buildRefreshTokenKey(email));
+
+        TokenClaimData tokenClaimData = TokenClaimData.fromEmail(email);
+        Date createdTime = new Date();
+
+        String accessToken = generateAccessToken(tokenClaimData, createdTime);
+        String refreshToken = generateRefreshToken(tokenClaimData, createdTime);
+
+        storeRefreshToken(email, refreshToken);
+
+        return new AuthTokens(accessToken, refreshToken);
+
     }
 
     private User findUserByEmail(String email) {
@@ -76,6 +87,10 @@ public class AuthServiceImpl implements AuthUseCase {
     }
 
     private void storeRefreshToken(String email, String refreshToken) {
-        refreshTokenStorePort.store("refresh_token:" + email, refreshToken, TokenType.REFRESH.getExpirationMillis());
+        refreshTokenStorePort.store(buildRefreshTokenKey(email), refreshToken, TokenType.REFRESH.getExpirationMillis());
+    }
+
+    private String buildRefreshTokenKey(String email) {
+        return "refresh_token:" + email;
     }
 }

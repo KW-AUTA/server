@@ -112,6 +112,7 @@ public class AuthControllerDocsTest extends RestDocsSupport {
     @Test
     void reIssue() throws Exception {
         //given
+        setMockSecurityContext();
         given(authUseCase.reIssue(any())).willReturn(new AuthTokens("access-token", "refresh-token"));
 
         //when //then
