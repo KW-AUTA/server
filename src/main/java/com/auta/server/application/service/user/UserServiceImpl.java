@@ -24,13 +24,8 @@ public class UserServiceImpl implements UserUseCase {
     @Override
     @Transactional
     public User createUser(UserCreateCommand command) {
-        String encodedPassword = passwordEncoder.encode(command.getPassword());
-
-        User user = User.builder()
-                .email(command.getEmail())
-                .password(encodedPassword)
-                .username(command.getUsername())
-                .build();
+        String encodedPassword = encodePassWord(command);
+        User user = generateUser(command, encodedPassword);
         return userPort.save(user);
     }
 
@@ -45,17 +40,9 @@ public class UserServiceImpl implements UserUseCase {
     @Override
     @Transactional
     public User updateUser(UserUpdateCommand command, String email) {
-        Optional<User> optionalUser = userPort.findByEmail(email);
-        User user = optionalUser
-                .orElseThrow(() -> new BusinessException(ErrorCode.USER_NOT_FOUND));
+        User user = findUserBy(email);
 
-        user.update(
-                command.getEmail(),
-                command.getUsername(),
-                command.getPassword(),
-                command.getAddress(),
-                command.getPhoneNumber()
-        );
+        updateUser(command, user);
 
         return user;
     }
@@ -64,5 +51,33 @@ public class UserServiceImpl implements UserUseCase {
     @Transactional
     public void deleteUser(String email) {
         userPort.deleteByEmail(email);
+    }
+
+    private String encodePassWord(UserCreateCommand command) {
+        return passwordEncoder.encode(command.getPassword());
+    }
+
+    private User generateUser(UserCreateCommand command, String encodedPassword) {
+        return User.builder()
+                .email(command.getEmail())
+                .password(encodedPassword)
+                .username(command.getUsername())
+                .build();
+    }
+
+    private User findUserBy(String email) {
+        Optional<User> optionalUser = userPort.findByEmail(email);
+        return optionalUser
+                .orElseThrow(() -> new BusinessException(ErrorCode.USER_NOT_FOUND));
+    }
+
+    private void updateUser(UserUpdateCommand command, User user) {
+        user.update(
+                command.getEmail(),
+                command.getUsername(),
+                command.getPassword(),
+                command.getAddress(),
+                command.getPhoneNumber()
+        );
     }
 }
