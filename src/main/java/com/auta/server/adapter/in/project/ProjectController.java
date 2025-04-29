@@ -1,9 +1,9 @@
 package com.auta.server.adapter.in.project;
 
+import com.auta.server.adapter.in.ApiResponse;
 import com.auta.server.adapter.in.project.request.ProjectRequest;
 import com.auta.server.api.service.project.response.ProjectResponse;
 import com.auta.server.application.service.ProjectService;
-import com.auta.server.common.ApiResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.context.SecurityContextHolder;

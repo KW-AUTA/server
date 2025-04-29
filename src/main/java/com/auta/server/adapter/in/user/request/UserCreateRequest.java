@@ -1,6 +1,5 @@
 package com.auta.server.adapter.in.user.request;
 
-import com.auta.server.api.service.user.request.UserCreateServiceRequest;
 import com.auta.server.application.port.in.user.UserCreateCommand;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Builder;
@@ -33,9 +32,5 @@ public class UserCreateRequest {
                 .password(this.password)
                 .username(this.username)
                 .build();
-    }
-
-    public UserCreateServiceRequest toServiceRequest() {
-        return UserCreateServiceRequest.builder().email(email).password(password).username(username).build();
     }
 }

@@ -1,6 +1,5 @@
 package com.auta.server.adapter.in.user.request;
 
-import com.auta.server.api.service.user.request.UserUpdateServiceRequest;
 import com.auta.server.application.port.in.user.UserUpdateCommand;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
@@ -36,15 +35,6 @@ public class UserUpdateRequest {
 
     public UserUpdateCommand toCommand() {
         return UserUpdateCommand.builder()
-                .email(email)
-                .username(username)
-                .address(address)
-                .phoneNumber(phoneNumber)
-                .build();
-    }
-
-    public UserUpdateServiceRequest toServiceRequest() {
-        return UserUpdateServiceRequest.builder()
                 .email(email)
                 .username(username)
                 .address(address)

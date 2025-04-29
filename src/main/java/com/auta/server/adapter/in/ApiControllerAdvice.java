@@ -1,6 +1,5 @@
-package com.auta.server.common;
+package com.auta.server.adapter.in;
 
-import com.auta.server.adapter.in.ApiResponse;
 import com.auta.server.common.exception.BusinessException;
 import com.auta.server.common.exception.ErrorCode;
 import org.springframework.http.HttpStatus;
@@ -19,7 +18,7 @@ public class ApiControllerAdvice {
                 .body(ApiResponse.of(HttpStatus.BAD_REQUEST,
                         e.getBindingResult().getAllErrors().get(0).getDefaultMessage(), null));
     }
-    
+
     @ExceptionHandler(BusinessException.class)
     public ResponseEntity<ApiResponse<Object>> businessException(BusinessException e) {
         ErrorCode errorCode = e.getErrorCode();

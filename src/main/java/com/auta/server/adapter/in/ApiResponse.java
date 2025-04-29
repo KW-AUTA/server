@@ -1,4 +1,4 @@
-package com.auta.server.common;
+package com.auta.server.adapter.in;
 
 import lombok.Getter;
 import org.springframework.http.HttpStatus;
