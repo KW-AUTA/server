@@ -40,6 +40,7 @@ public class ProjectEntity {
     private LocalDate projectCreatedDate;
     private LocalDate projectEnd;
     private ProjectStatus projectStatus;
+    private Integer testExecuteTime;
 
     public void updateFromDomain(Project project) {
         this.projectName = project.getProjectName();

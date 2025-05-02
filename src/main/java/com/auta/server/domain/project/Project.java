@@ -26,6 +26,7 @@ public class Project {
     private LocalDate projectCreatedDate;
     private LocalDate projectEnd;
     private ProjectStatus projectStatus;
+    private Integer testExecuteTime;
 
     public void update(ProjectCommand command) {
         this.projectName = command.getProjectName();

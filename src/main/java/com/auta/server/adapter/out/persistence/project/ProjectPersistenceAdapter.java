@@ -37,4 +37,11 @@ public class ProjectPersistenceAdapter implements ProjectPort {
         projectEntity.updateFromDomain(project);
         return ProjectMapper.toDomain(projectEntity);
     }
+
+    @Override
+    public void delete(Project project) {
+        ProjectEntity projectEntity = projectRepository.findById(project.getId())
+                .orElseThrow(() -> new BusinessException(ErrorCode.PROJECT_NOT_FOUND));
+        projectRepository.delete(projectEntity);
+    }
 }

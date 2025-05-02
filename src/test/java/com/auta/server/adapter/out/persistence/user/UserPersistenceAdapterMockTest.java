@@ -34,6 +34,6 @@ class UserPersistenceAdapterMockTest {
         // when & then
         assertThatThrownBy(() -> userPersistenceAdapter.findByEmail("test@example.com"))
                 .isInstanceOf(BusinessException.class)
-                .hasMessage("db의 이메일이 중복되었습니다.");
+                .hasMessage("db의 유저 이메일이 중복됩니다.");
     }
 }

@@ -9,4 +9,6 @@ public interface ProjectPort {
     Optional<Project> findById(Long projectId);
 
     Project update(Project project);
+
+    void delete(Project project);
 }

@@ -38,6 +38,7 @@ public class ProjectServiceImpl implements ProjectUseCase {
                 .projectCreatedDate(registeredDate)
                 .projectEnd(command.getProjectEnd())
                 .projectStatus(ProjectStatus.NOT_STARTED)
+                .testExecuteTime(0)
                 .build();
 
         return projectPort.save(project);
@@ -54,7 +55,12 @@ public class ProjectServiceImpl implements ProjectUseCase {
         return projectPort.update(project);
     }
 
+    @Transactional
     @Override
     public void deleteProject(Long projectId) {
+        Project project = projectPort.findById(projectId)
+                .orElseThrow(() -> new BusinessException(ErrorCode.PROJECT_NOT_FOUND));
+
+        projectPort.delete(project);
     }
 }
