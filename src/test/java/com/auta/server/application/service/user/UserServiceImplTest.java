@@ -7,6 +7,7 @@ import com.auta.server.IntegrationTestSupport;
 import com.auta.server.adapter.out.persistence.user.UserEntity;
 import com.auta.server.adapter.out.persistence.user.UserRepository;
 import com.auta.server.application.port.in.user.UserCreateCommand;
+import com.auta.server.application.port.in.user.UserUpdateCommand;
 import com.auta.server.domain.user.User;
 import java.util.List;
 import org.junit.jupiter.api.AfterEach;
@@ -47,8 +48,85 @@ class UserServiceImplTest extends IntegrationTestSupport {
                 .contains("test@example.com", "testUser");
 
         List<UserEntity> userEntities = userRepository.findAllByEmail(command.getEmail());
-        
+
         assertThat(passwordEncoder.matches("testPassword", userEntities.get(0).getPassword()))
                 .isTrue();
+    }
+
+    @DisplayName("이메일로 유저를 조회한다.")
+    @Test
+    void getUser() {
+        //given
+        UserEntity userEntity1 = UserEntity.builder()
+                .email("test@example.com1").password("testPassword1").username("testUser1").build();
+        UserEntity userEntity2 = UserEntity.builder()
+                .email("test@example.com2").password("testPassword2").username("testUser2").build();
+        UserEntity userEntity3 = UserEntity.builder()
+                .email("test@example.com3").password("testPassword3").username("testUser3").build();
+        userRepository.saveAll(List.of(
+                userEntity1, userEntity2, userEntity3
+        ));
+
+        String email = "test@example.com1";
+
+        //when
+        User user = userService.getUser(email);
+        //then
+        assertThat(user).extracting("email", "password", "username")
+                .contains("test@example.com1", "testPassword1", "testUser1");
+    }
+
+    @DisplayName("이메일로 유저를 조회하고 command의 내용으로 수정한다..")
+    @Test
+    void updateUser() {
+        //given
+        UserEntity userEntity1 = UserEntity.builder()
+                .email("test@example.com1").password("testPassword1").username("testUser1").build();
+        UserEntity userEntity2 = UserEntity.builder()
+                .email("test@example.com2").password("testPassword2").username("testUser2").build();
+        UserEntity userEntity3 = UserEntity.builder()
+                .email("test@example.com3").password("testPassword3").username("testUser3").build();
+        userRepository.saveAll(List.of(
+                userEntity1, userEntity2, userEntity3
+        ));
+
+        String email = "test@example.com1";
+
+        UserUpdateCommand command = UserUpdateCommand.builder()
+                .email("test@example.com")
+                .username("testUser1")
+                .address("example")
+                .phoneNumber("010-1234-1234")
+                .build();
+
+        //when
+        User user = userService.updateUser(command, email);
+        //then
+        assertThat(user).extracting("email", "address", "username")
+                .contains("test@example.com", "example", "testUser1");
+    }
+
+    @DisplayName("이메일로 유저를 삭제한다.")
+    @Test
+    void deleteByEmail() {
+        //given
+        UserEntity userEntity1 = UserEntity.builder()
+                .email("test@example.com1").password("testPassword1").username("testUser1").build();
+        UserEntity userEntity2 = UserEntity.builder()
+                .email("test@example.com2").password("testPassword2").username("testUser2").build();
+        UserEntity userEntity3 = UserEntity.builder()
+                .email("test@example.com3").password("testPassword3").username("testUser3").build();
+        userRepository.saveAll(List.of(
+                userEntity1, userEntity2, userEntity3
+        ));
+
+        String email = "test@example.com1";
+
+        //when
+        userService.deleteUser(email);
+        //then
+        List<UserEntity> userEntities = userRepository.findAllByEmail(email);
+
+        assertThat(userEntities).isEmpty();
     }
 }

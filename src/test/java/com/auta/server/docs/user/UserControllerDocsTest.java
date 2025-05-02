@@ -22,7 +22,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import com.auta.server.adapter.in.user.UserController;
 import com.auta.server.adapter.in.user.request.UserCreateRequest;
 import com.auta.server.adapter.in.user.request.UserUpdateRequest;
-import com.auta.server.adapter.in.user.response.UserResponse;
 import com.auta.server.application.port.in.user.UserCreateCommand;
 import com.auta.server.application.port.in.user.UserUpdateCommand;
 import com.auta.server.application.port.in.user.UserUseCase;
@@ -107,7 +106,7 @@ public class UserControllerDocsTest extends RestDocsSupport {
         setMockSecurityContext();
 
         given(userUseCase.getUser(anyString()))
-                .willReturn(UserResponse.builder()
+                .willReturn(User.builder()
                         .id(1L)
                         .email("example@example.com")
                         .username("exampleUser")
@@ -160,7 +159,7 @@ public class UserControllerDocsTest extends RestDocsSupport {
         setMockSecurityContext();
 
         given(userUseCase.updateUser(any(UserUpdateCommand.class), anyString()))
-                .willReturn(UserResponse.builder()
+                .willReturn(User.builder()
                         .id(1L)
                         .email("example@example.com")
                         .username("exampleUser")

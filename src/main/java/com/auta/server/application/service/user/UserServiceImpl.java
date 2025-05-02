@@ -1,46 +1,83 @@
 package com.auta.server.application.service.user;
 
-import com.auta.server.adapter.in.user.response.UserResponse;
 import com.auta.server.application.port.in.user.UserCreateCommand;
 import com.auta.server.application.port.in.user.UserUpdateCommand;
 import com.auta.server.application.port.in.user.UserUseCase;
 import com.auta.server.application.port.out.user.UserPort;
+import com.auta.server.common.exception.BusinessException;
+import com.auta.server.common.exception.ErrorCode;
 import com.auta.server.domain.user.User;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class UserServiceImpl implements UserUseCase {
 
     private final UserPort userPort;
     private final PasswordEncoder passwordEncoder;
 
     @Override
+    @Transactional
     public User createUser(UserCreateCommand command) {
-        String encodedPassword = passwordEncoder.encode(command.getPassword());
-
-        User user = User.builder()
-                .email(command.getEmail())
-                .password(encodedPassword)
-                .username(command.getUsername())
-                .build();
+        String encodedPassword = encodePassWord(command);
+        User user = generateUser(command, encodedPassword);
         return userPort.save(user);
     }
 
     @Override
-    public UserResponse getUser(String email) {
-        return null;
+    public User getUser(String email) {
+        Optional<User> optionalUser = userPort.findByEmail(email);
+
+        return optionalUser
+                .orElseThrow(() -> new BusinessException(ErrorCode.USER_NOT_FOUND));
     }
 
     @Override
-    public UserResponse updateUser(UserUpdateCommand command, String email) {
-        return null;
+    @Transactional
+    public User updateUser(UserUpdateCommand command, String email) {
+        User user = findUserBy(email);
+
+        updateUser(command, user);
+
+        return user;
     }
 
     @Override
+    @Transactional
     public void deleteUser(String email) {
+        userPort.deleteByEmail(email);
+    }
 
+    private String encodePassWord(UserCreateCommand command) {
+        return passwordEncoder.encode(command.getPassword());
+    }
+
+    private User generateUser(UserCreateCommand command, String encodedPassword) {
+        return User.builder()
+                .email(command.getEmail())
+                .password(encodedPassword)
+                .username(command.getUsername())
+                .build();
+    }
+
+    private User findUserBy(String email) {
+        Optional<User> optionalUser = userPort.findByEmail(email);
+        return optionalUser
+                .orElseThrow(() -> new BusinessException(ErrorCode.USER_NOT_FOUND));
+    }
+
+    private void updateUser(UserUpdateCommand command, User user) {
+        user.update(
+                command.getEmail(),
+                command.getUsername(),
+                command.getPassword(),
+                command.getAddress(),
+                command.getPhoneNumber()
+        );
     }
 }

@@ -1,6 +1,5 @@
 package com.auta.server.domain.user;
 
-import java.time.LocalDateTime;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -17,5 +16,12 @@ public class User {
     private String username;
     private String address;
     private String phoneNumber;
-    private LocalDateTime createdAt;
+
+    public void update(String email, String username, String password, String address, String phoneNumber) {
+        this.email = email;
+        this.password = password;
+        this.username = username;
+        this.address = address;
+        this.phoneNumber = phoneNumber;
+    }
 }

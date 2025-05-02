@@ -7,5 +7,5 @@ public interface AuthUseCase {
 
     void logout(String email);
 
-    AuthTokens reIssue(String token);
+    AuthTokens reIssue(String email);
 }

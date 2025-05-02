@@ -3,6 +3,7 @@ package com.auta.server.adapter.out.redis;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import com.auta.server.IntegrationTestSupport;
+import java.util.concurrent.TimeUnit;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -35,5 +36,23 @@ class RedisAdapterTest extends IntegrationTestSupport {
         //then
         String storedToken = redisTemplate.opsForValue().get(key);
         assertThat(storedToken).isEqualTo(token);
+    }
+
+    @DisplayName("토큰을 지운다.")
+    @Test
+    void delete() {
+        //given
+        String key = "key: ";
+        String token = "dummy-token";
+        long expirationMillis = 60000L;
+
+        redisTemplate.opsForValue()
+                .set(key, token, expirationMillis, TimeUnit.MILLISECONDS);
+        //when
+        redisAdapter.delete(key);
+
+        //then
+        String result = redisTemplate.opsForValue().get(key);
+        assertThat(result).isNull();
     }
 }

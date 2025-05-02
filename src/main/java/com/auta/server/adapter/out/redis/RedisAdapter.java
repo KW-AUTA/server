@@ -18,4 +18,9 @@ public class RedisAdapter implements RefreshTokenStorePort {
                 key, token, expirationMillis, TimeUnit.MILLISECONDS
         );
     }
+
+    @Override
+    public void delete(String key) {
+        redisTemplate.delete(key);
+    }
 }
