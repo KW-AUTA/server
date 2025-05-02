@@ -1,5 +1,9 @@
 package com.auta.server.adapter.in.project;
 
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
@@ -8,6 +12,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import com.auta.server.ControllerTestSupport;
 import com.auta.server.adapter.in.project.request.ProjectRequest;
+import com.auta.server.application.port.in.project.ProjectCommand;
+import com.auta.server.domain.project.Project;
+import com.auta.server.domain.user.User;
 import java.time.LocalDate;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -28,6 +35,27 @@ class ProjectControllerTest extends ControllerTestSupport {
                 .serviceUrl("https://service.com")
                 .rootFigmaPage("mainPage")
                 .build();
+
+        User user = User.builder()
+                .id(1L)
+                .email("example@example.com")
+                .username("exampleUser")
+                .address(null)
+                .phoneNumber(null)
+                .build();
+
+        given(projectUseCase.createProject(any(ProjectCommand.class), anyString(), any()))
+                .willReturn(Project.builder()
+                        .id(1L)
+                        .projectName("UI 자동화 테스트")
+                        .user(user)
+                        .projectCreatedDate(LocalDate.of(2024, 4, 3))
+                        .projectEnd(LocalDate.of(2024, 4, 4))
+                        .description("프로젝트 설명입니다.")
+                        .figmaUrl("https://figma.com")
+                        .serviceUrl("https://service.com")
+                        .rootFigmaPage("mainPage")
+                        .build());
 
         //when //then
         mockMvc.perform(
@@ -51,6 +79,26 @@ class ProjectControllerTest extends ControllerTestSupport {
                 .rootFigmaPage("mainPage")
                 .build();
 
+        User user = User.builder()
+                .id(1L)
+                .email("example@example.com")
+                .username("exampleUser")
+                .address(null)
+                .phoneNumber(null)
+                .build();
+
+        given(projectUseCase.updateProject(any(ProjectCommand.class), anyLong()))
+                .willReturn(Project.builder()
+                        .id(1L)
+                        .projectName("UI 자동화 테스트")
+                        .user(user)
+                        .projectCreatedDate(LocalDate.of(2024, 4, 3))
+                        .projectEnd(LocalDate.of(2024, 4, 4))
+                        .description("프로젝트 설명입니다.")
+                        .figmaUrl("https://figma.com")
+                        .serviceUrl("https://service.com")
+                        .rootFigmaPage("mainPage")
+                        .build());
         //when //then
         mockMvc.perform(
                         put("/api/v1/projects/1")

@@ -5,9 +5,12 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.Optional;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationCredentialsNotFoundException;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -15,11 +18,14 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.AbstractAuthenticationProcessingFilter;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
-public class JwtAuthenticationFilter extends AbstractAuthenticationProcessingFilter {
+public class RefreshTokenAuthenticationFilter extends AbstractAuthenticationProcessingFilter {
 
-    public JwtAuthenticationFilter(AuthenticationManager authenticationManager) {
-        super(ProtectedUrls.getProtectedUrls());
+    private static final String REFRESH_TOKEN_COOKIE_NAME = "refreshToken";
+
+    public RefreshTokenAuthenticationFilter(AuthenticationManager authenticationManager) {
+        super(new AntPathRequestMatcher("/api/v1/auth/reissue", "POST"));
         this.setAuthenticationManager(authenticationManager);
     }
 
@@ -27,13 +33,13 @@ public class JwtAuthenticationFilter extends AbstractAuthenticationProcessingFil
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response)
             throws IOException {
         try {
-            String header = request.getHeader("Authorization");
-            if (header == null || !header.startsWith("Bearer ")) {
-                throw new AuthenticationCredentialsNotFoundException("Authorization 헤더가 유효하지 않습니다.");
+            Optional<Cookie> refreshCookie = extractRefreshTokenCookie(request);
+            if (refreshCookie.isEmpty()) {
+                throw new AuthenticationCredentialsNotFoundException("Refresh Token 쿠키가 없습니다.");
             }
 
-            String token = header.substring(7);
-            JwtAuthenticationToken authRequest = JwtAuthenticationToken.unauthenticated(token);
+            String refreshToken = refreshCookie.get().getValue();
+            JwtAuthenticationToken authRequest = JwtAuthenticationToken.unauthenticated(refreshToken);
 
             return this.getAuthenticationManager().authenticate(authRequest);
 
@@ -41,6 +47,15 @@ public class JwtAuthenticationFilter extends AbstractAuthenticationProcessingFil
             handleException(response, e);
             return null;
         }
+    }
+
+    private Optional<Cookie> extractRefreshTokenCookie(HttpServletRequest request) {
+        if (request.getCookies() == null) {
+            return Optional.empty();
+        }
+        return Arrays.stream(request.getCookies())
+                .filter(cookie -> REFRESH_TOKEN_COOKIE_NAME.equals(cookie.getName()))
+                .findFirst();
     }
 
     @Override

@@ -17,12 +17,12 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.auta.server.adapter.in.project.ProjectQueryController;
-import com.auta.server.api.service.project.response.PageTestResponse;
-import com.auta.server.api.service.project.response.ProjectDetailResponse;
-import com.auta.server.api.service.project.response.ProjectSummariesResponse;
-import com.auta.server.api.service.project.response.ProjectTestDetailResponse;
-import com.auta.server.api.service.project.response.ProjectTestSummariesResponse;
-import com.auta.server.application.service.ProjectQueryService;
+import com.auta.server.adapter.in.project.response.PageTestResponse;
+import com.auta.server.adapter.in.project.response.ProjectDetailResponse;
+import com.auta.server.adapter.in.project.response.ProjectSummariesResponse;
+import com.auta.server.adapter.in.project.response.ProjectTestDetailResponse;
+import com.auta.server.adapter.in.project.response.ProjectTestSummariesResponse;
+import com.auta.server.application.service.project.ProjectQueryServiceImpl;
 import com.auta.server.docs.RestDocsSupport;
 import com.auta.server.domain.project.ProjectStatus;
 import java.time.LocalDate;
@@ -33,18 +33,18 @@ import org.springframework.restdocs.payload.JsonFieldType;
 
 public class ProjectQueryControllerDocsTest extends RestDocsSupport {
 
-    ProjectQueryService projectQueryService = mock(ProjectQueryService.class);
+    ProjectQueryServiceImpl projectQueryServiceImpl = mock(ProjectQueryServiceImpl.class);
 
     @Override
     protected Object initController() {
-        return new ProjectQueryController(projectQueryService);
+        return new ProjectQueryController(projectQueryServiceImpl);
     }
 
     @DisplayName("프로젝트 리스트 조회")
     @Test
     void getProjectSummaryList() throws Exception {
         //given
-        given(projectQueryService.getProjectSummaryList(anyString(), anyString(), anyInt()))
+        given(projectQueryServiceImpl.getProjectSummaryList(anyString(), anyString(), anyInt()))
                 .willReturn(ProjectSummariesResponse.builder()
                         .projectSummaries(List.of(
                                 ProjectSummariesResponse.ProjectSummary.builder()
@@ -112,7 +112,7 @@ public class ProjectQueryControllerDocsTest extends RestDocsSupport {
     @Test
     void getProjectDetail() throws Exception {
         //given
-        given(projectQueryService.getProjectDetail(anyLong()))
+        given(projectQueryServiceImpl.getProjectDetail(anyLong()))
                 .willReturn(ProjectDetailResponse.builder()
                         .projectName("UI 자동화 테스트")
                         .projectAdmin("adminUser")
@@ -192,7 +192,7 @@ public class ProjectQueryControllerDocsTest extends RestDocsSupport {
     @Test
     void getProjectTestSummaryList() throws Exception {
         //given
-        given(projectQueryService.getProjectTestSummaryList(anyString(), anyString(), anyInt()))
+        given(projectQueryServiceImpl.getProjectTestSummaryList(anyString(), anyString(), anyInt()))
                 .willReturn(ProjectTestSummariesResponse.builder()
                         .tests(List.of(
                                 ProjectTestSummariesResponse.ProjectTestSummary.builder()
@@ -267,7 +267,7 @@ public class ProjectQueryControllerDocsTest extends RestDocsSupport {
     @Test
     void getProjectTestDetail() throws Exception {
         //given
-        given(projectQueryService.getProjectTestDetail(anyLong()))
+        given(projectQueryServiceImpl.getProjectTestDetail(anyLong()))
                 .willReturn(ProjectTestDetailResponse.builder()
                         .projectName("UI 테스트 프로젝트")
                         .projectAdmin("example_admin")
@@ -350,7 +350,7 @@ public class ProjectQueryControllerDocsTest extends RestDocsSupport {
     @Test
     void getPageTestDetails() throws Exception {
         //given
-        given(projectQueryService.getPageTestDetail(anyLong()))
+        given(projectQueryServiceImpl.getPageTestDetail(anyLong()))
                 .willReturn(PageTestResponse.builder()
                         .routingTest(PageTestResponse.RoutingTest.builder()
                                 .success(List.of(

@@ -1,6 +1,6 @@
 package com.auta.server.adapter.in.project.request;
 
-import com.auta.server.api.service.project.request.ProjectServiceRequest;
+import com.auta.server.application.port.in.project.ProjectCommand;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.validation.constraints.NotBlank;
 import java.time.LocalDate;
@@ -31,8 +31,8 @@ public class ProjectRequest {
     @NotBlank(message = "피그마 시작 페이지 이름은 필수입니다.")
     private String rootFigmaPage;
 
-    public ProjectServiceRequest toServiceEntity() {
-        return ProjectServiceRequest.builder()
+    public ProjectCommand toCommand() {
+        return ProjectCommand.builder()
                 .projectName(projectName)
                 .projectEnd(projectEnd)
                 .description(description)

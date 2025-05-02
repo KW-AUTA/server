@@ -1,4 +1,4 @@
-package com.auta.server.api.service.project.response;
+package com.auta.server.adapter.in.project.response;
 
 import com.auta.server.domain.project.ProjectStatus;
 import com.fasterxml.jackson.annotation.JsonFormat;

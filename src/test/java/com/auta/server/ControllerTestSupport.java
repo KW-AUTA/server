@@ -11,10 +11,10 @@ import com.auta.server.adapter.in.project.ProjectQueryController;
 import com.auta.server.adapter.in.user.UserController;
 import com.auta.server.adapter.out.web.CookieManager;
 import com.auta.server.application.port.in.auth.AuthUseCase;
+import com.auta.server.application.port.in.project.ProjectUseCase;
 import com.auta.server.application.port.in.user.UserUseCase;
-import com.auta.server.application.service.DashBoardService;
-import com.auta.server.application.service.ProjectQueryService;
-import com.auta.server.application.service.ProjectService;
+import com.auta.server.application.service.dashboard.DashBoardService;
+import com.auta.server.application.service.project.ProjectQueryServiceImpl;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.AfterEach;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -53,10 +53,10 @@ public abstract class ControllerTestSupport {
     protected DashBoardService dashBoardService;
 
     @MockitoBean
-    protected ProjectQueryService projectQueryService;
+    protected ProjectQueryServiceImpl projectQueryServiceImpl;
 
     @MockitoBean
-    protected ProjectService projectService;
+    protected ProjectUseCase projectUseCase;
 
     @AfterEach
     void clearSecurityContext() {

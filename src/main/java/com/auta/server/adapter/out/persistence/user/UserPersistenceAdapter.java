@@ -17,6 +17,14 @@ public class UserPersistenceAdapter implements UserPort {
 
     @Override
     public User save(User user) {
+        if (userRepository.existsByEmail(user.getEmail())) {
+            throw new BusinessException(ErrorCode.DUPLICATE_EMAIL);
+        }
+
+        if (userRepository.existsByUsername(user.getUsername())) {
+            throw new BusinessException(ErrorCode.DUPLICATE_USERNAME);
+        }
+
         UserEntity saved = userRepository.save(UserMapper.toEntity(user));
         return UserMapper.toDomain(saved);
     }
@@ -29,7 +37,7 @@ public class UserPersistenceAdapter implements UserPort {
             return Optional.empty();
         }
         if (userEntities.size() > 1) {
-            throw new BusinessException(ErrorCode.DUPLICATE_EMAIL);
+            throw new BusinessException(ErrorCode.DUPLICATED_DB_EMAIL);
         }
         return Optional.of(UserMapper.toDomain(userEntities.get(0)));
     }

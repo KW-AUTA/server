@@ -1,4 +1,4 @@
-package com.auta.server.api.service.project.request;
+package com.auta.server.application.port.in.project;
 
 import java.time.LocalDate;
 import lombok.Builder;
@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor
-public class ProjectServiceRequest {
+public class ProjectCommand {
     private String projectName;
     private LocalDate projectEnd;
     private String description;
@@ -16,8 +16,8 @@ public class ProjectServiceRequest {
     private String rootFigmaPage;
 
     @Builder
-    private ProjectServiceRequest(String projectName, LocalDate projectEnd, String description, String figmaUrl,
-                                  String serviceUrl, String rootFigmaPage) {
+    private ProjectCommand(String projectName, LocalDate projectEnd, String description, String figmaUrl,
+                           String serviceUrl, String rootFigmaPage) {
         this.projectName = projectName;
         this.projectEnd = projectEnd;
         this.description = description;

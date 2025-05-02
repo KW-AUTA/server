@@ -1,4 +1,4 @@
-package com.auta.server.api.service.project.response;
+package com.auta.server.adapter.in.project.response;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import java.time.LocalDate;
@@ -9,39 +9,39 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Getter
-@Builder
 @AllArgsConstructor
-@NoArgsConstructor
-public class ProjectTestDetailResponse {
+@Builder
+public class ProjectDetailResponse {
     private String projectName;
-
     private String projectAdmin;
+
     @JsonFormat(pattern = "yyyy-MM-dd")
-    private LocalDate projectStart;
+    private LocalDate projectCreatedDate;
+
     @JsonFormat(pattern = "yyyy-MM-dd")
     private LocalDate projectEnd;
+
     @JsonFormat(pattern = "yyyy-MM-dd")
     private LocalDate testExecutionDate;
 
+    private String figmaRootPage;
     private String description;
-    private TestCountSummary testSummary;
-    private List<PageInfo> pages;
+    private String figmaUrl;
+    private String serviceUrl;
+    private String reportSummary;
 
+    private TestSummary testSummary;
+
+    private List<PageInfo> pages;
 
     @Getter
     @Builder
     @NoArgsConstructor
     @AllArgsConstructor
-    public static class TestCountSummary {
-
-        private int totalSuccessTests;
-        private int totalFailTests;
-        private int interactionSuccessCount;
-        private int interactionFailCount;
-        private int mappingSuccessCount;
-        private int mappingFailCount;
-        private int routingSuccessCount;
-        private int routingFailCount;
+    public static class TestSummary {
+        private int totalRoutingTest;
+        private int totalInteractionTest;
+        private int totalMappingTest;
     }
 
     @Getter
@@ -49,9 +49,8 @@ public class ProjectTestDetailResponse {
     @NoArgsConstructor
     @AllArgsConstructor
     public static class PageInfo {
-        private Long pageId;
         private String pageName;
-
+        private String pageUrl;
+        private String pageImageUrl;
     }
-
 }

@@ -1,4 +1,4 @@
-package com.auta.server.api.service.project.response;
+package com.auta.server.adapter.in.project.response;
 
 import java.util.List;
 import lombok.AllArgsConstructor;

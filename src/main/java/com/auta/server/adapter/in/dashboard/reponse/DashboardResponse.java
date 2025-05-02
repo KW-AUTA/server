@@ -1,4 +1,4 @@
-package com.auta.server.api.service.main.response;
+package com.auta.server.adapter.in.dashboard.reponse;
 
 import com.auta.server.domain.project.ProjectStatus;
 import com.auta.server.domain.test.TestStatus;
