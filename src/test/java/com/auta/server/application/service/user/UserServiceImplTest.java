@@ -10,6 +10,7 @@ import com.auta.server.application.port.in.user.UserCreateCommand;
 import com.auta.server.application.port.in.user.UserUpdateCommand;
 import com.auta.server.domain.user.User;
 import java.util.List;
+import java.util.Optional;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -102,7 +103,10 @@ class UserServiceImplTest extends IntegrationTestSupport {
         //when
         User user = userService.updateUser(command, email);
         //then
-        assertThat(user).extracting("email", "address", "username")
+
+        Optional<UserEntity> optionalUser = userRepository.findById(user.getId());
+        UserEntity userEntity = optionalUser.get();
+        assertThat(userEntity).extracting("email", "address", "username")
                 .contains("test@example.com", "example", "testUser1");
     }
 

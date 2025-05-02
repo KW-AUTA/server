@@ -1,6 +1,7 @@
 package com.auta.server.adapter.out.persistence.user;
 
 import com.auta.server.adapter.out.BaseEntity;
+import com.auta.server.domain.user.User;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -37,4 +38,12 @@ public class UserEntity extends BaseEntity {
     private String address;
 
     private String phoneNumber;
+
+    public void updateFromDomain(User user) {
+        this.email = user.getEmail();
+        this.password = user.getPassword();
+        this.username = user.getUsername();
+        this.address = user.getAddress();
+        this.phoneNumber = user.getPhoneNumber();
+    }
 }

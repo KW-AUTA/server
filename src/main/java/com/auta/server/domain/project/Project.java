@@ -1,5 +1,6 @@
 package com.auta.server.domain.project;
 
+import com.auta.server.application.port.in.project.ProjectCommand;
 import com.auta.server.domain.user.User;
 import java.time.LocalDate;
 import java.util.List;
@@ -25,4 +26,13 @@ public class Project {
     private LocalDate projectCreatedDate;
     private LocalDate projectEnd;
     private ProjectStatus projectStatus;
+
+    public void update(ProjectCommand command) {
+        this.projectName = command.getProjectName();
+        this.projectEnd = command.getProjectEnd();
+        this.description = command.getDescription();
+        this.figmaUrl = command.getFigmaUrl();
+        this.serviceUrl = command.getServiceUrl();
+        this.rootFigmaPage = command.getRootFigmaPage();
+    }
 }

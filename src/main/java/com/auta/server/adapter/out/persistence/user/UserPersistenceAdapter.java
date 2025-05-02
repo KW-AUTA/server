@@ -46,4 +46,12 @@ public class UserPersistenceAdapter implements UserPort {
     public void deleteByEmail(String email) {
         userRepository.deleteByEmail(email);
     }
+
+    @Override
+    public User update(User user) {
+        UserEntity userEntity = userRepository.findById(user.getId())
+                .orElseThrow(() -> new BusinessException(ErrorCode.USER_NOT_FOUND));
+        userEntity.updateFromDomain(user);
+        return UserMapper.toDomain(userEntity);
+    }
 }

@@ -11,6 +11,7 @@ import com.auta.server.domain.project.ProjectStatus;
 import com.auta.server.domain.user.User;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -66,5 +67,119 @@ class ProjectPersistenceAdapterTest extends IntegrationTestSupport {
         assertThat(savedProject).extracting("projectCreatedDate", "projectStatus")
                 .contains(registeredDate, ProjectStatus.NOT_STARTED);
         assertThat(savedProject.getUser().getUsername()).isEqualTo("testUser1");
+    }
+
+    @DisplayName("프로젝트를 조회한다.")
+    @Test
+    void find() {
+        //given
+        LocalDate registeredDate = LocalDate.now();
+        UserEntity userEntity1 = UserEntity.builder()
+                .email("test@example.com1").password("testPassword1").username("testUser1").build();
+        UserEntity userEntity2 = UserEntity.builder()
+                .email("test@example.com2").password("testPassword2").username("testUser2").build();
+        userRepository.saveAll(List.of(
+                userEntity1, userEntity2
+        ));
+
+        ProjectEntity projectEntity = ProjectEntity.builder()
+                .user(userEntity1)
+                .figmaUrl("https://figma.com")
+                .rootFigmaPage("mainPage")
+                .serviceUrl("https://service.com")
+                .projectName("UI 자동화 테스트")
+                .description("프로젝트 설명입니다.")
+                .projectCreatedDate(registeredDate)
+                .projectEnd(LocalDate.of(2025, 4, 4))
+                .projectStatus(ProjectStatus.NOT_STARTED)
+                .build();
+        ProjectEntity saved = projectRepository.save(projectEntity);
+        Long projectId = saved.getId();
+        //when
+        Optional<Project> project = projectPersistenceAdapter.findById(projectId);
+
+        //then
+        assertThat(project).isPresent();
+        assertThat(project.get()).extracting("projectCreatedDate", "projectStatus")
+                .contains(registeredDate, ProjectStatus.NOT_STARTED);
+        assertThat(project.get().getUser().getUsername()).isEqualTo("testUser1");
+    }
+
+    @DisplayName("프로젝트를 조회한다. 프로젝트가 없으면 빈 optional을 반환한다.")
+    @Test
+    void findEmpty() {
+        //given
+        LocalDate registeredDate = LocalDate.now();
+        UserEntity userEntity1 = UserEntity.builder()
+                .email("test@example.com1").password("testPassword1").username("testUser1").build();
+        UserEntity userEntity2 = UserEntity.builder()
+                .email("test@example.com2").password("testPassword2").username("testUser2").build();
+        userRepository.saveAll(List.of(
+                userEntity1, userEntity2
+        ));
+
+        ProjectEntity projectEntity = ProjectEntity.builder()
+                .user(userEntity1)
+                .figmaUrl("https://figma.com")
+                .rootFigmaPage("mainPage")
+                .serviceUrl("https://service.com")
+                .projectName("UI 자동화 테스트")
+                .description("프로젝트 설명입니다.")
+                .projectCreatedDate(registeredDate)
+                .projectEnd(LocalDate.of(2025, 4, 4))
+                .projectStatus(ProjectStatus.NOT_STARTED)
+                .build();
+        ProjectEntity saved = projectRepository.save(projectEntity);
+        Long projectId = 5L;
+        //when
+        Optional<Project> project = projectPersistenceAdapter.findById(projectId);
+
+        //then
+        assertThat(project).isEmpty();
+    }
+
+    @DisplayName("프로젝트를 수정한다.")
+    @Test
+    void update() {
+        //given
+        LocalDate registeredDate = LocalDate.now();
+        UserEntity userEntity1 = UserEntity.builder()
+                .email("test@example.com1").password("testPassword1").username("testUser1").build();
+        UserEntity userEntity2 = UserEntity.builder()
+                .email("test@example.com2").password("testPassword2").username("testUser2").build();
+        userRepository.saveAll(List.of(
+                userEntity1, userEntity2
+        ));
+
+        ProjectEntity projectEntity = ProjectEntity.builder()
+                .user(userEntity1)
+                .figmaUrl("https://figma.com")
+                .rootFigmaPage("mainPage")
+                .serviceUrl("https://service.com")
+                .projectName("UI 자동화 테스트")
+                .description("프로젝트 설명입니다.")
+                .projectCreatedDate(registeredDate)
+                .projectEnd(LocalDate.of(2025, 4, 4))
+                .projectStatus(ProjectStatus.NOT_STARTED)
+                .build();
+
+        ProjectEntity saved = projectRepository.save(projectEntity);
+
+        Project project = Project.builder()
+                .id(1L)
+                .figmaUrl("12")
+                .rootFigmaPage("mainPage")
+                .serviceUrl("https://service.com")
+                .projectName("UI 자동화 테스트")
+                .description("프로젝트")
+                .projectEnd(LocalDate.of(2025, 4, 4))
+                .build();
+
+        //when
+        Project savedProject = projectPersistenceAdapter.update(project);
+
+        //then
+        assertThat(savedProject).extracting("figmaUrl", "description")
+                .contains("12", "프로젝트");
     }
 }

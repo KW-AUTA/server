@@ -44,7 +44,8 @@ public class UserServiceImpl implements UserUseCase {
 
         updateUser(command, user);
 
-        return user;
+        User updatedUser = userPort.update(user);
+        return updatedUser;
     }
 
     @Override

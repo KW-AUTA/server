@@ -3,6 +3,7 @@ package com.auta.server.application.service.project;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import com.auta.server.IntegrationTestSupport;
+import com.auta.server.adapter.out.persistence.project.ProjectEntity;
 import com.auta.server.adapter.out.persistence.project.ProjectRepository;
 import com.auta.server.adapter.out.persistence.user.UserEntity;
 import com.auta.server.adapter.out.persistence.user.UserRepository;
@@ -61,5 +62,50 @@ class ProjectServiceImplTest extends IntegrationTestSupport {
         assertThat(project).extracting("projectCreatedDate", "projectStatus")
                 .contains(registeredDate, ProjectStatus.NOT_STARTED);
         assertThat(project.getUser().getUsername()).isEqualTo("testUser1");
+    }
+
+    @DisplayName("프로젝트를 수정한다.")
+    @Test
+    void updateProject() {
+        //given
+        UserEntity userEntity1 = UserEntity.builder()
+                .email("test@example.com1").password("testPassword1").username("testUser1").build();
+        UserEntity userEntity2 = UserEntity.builder()
+                .email("test@example.com2").password("testPassword2").username("testUser2").build();
+        userRepository.saveAll(List.of(
+                userEntity1, userEntity2
+        ));
+
+        LocalDate registeredDate = LocalDate.now();
+
+        ProjectEntity projectEntity = ProjectEntity.builder()
+                .user(userEntity1)
+                .figmaUrl("https://figma.com")
+                .rootFigmaPage("mainPage")
+                .serviceUrl("https://service.com")
+                .projectName("UI 자동화 테스트")
+                .description("프로젝트 설명입니다.")
+                .projectCreatedDate(registeredDate)
+                .projectEnd(LocalDate.of(2025, 4, 4))
+                .projectStatus(ProjectStatus.NOT_STARTED)
+                .build();
+        ProjectEntity saved = projectRepository.save(projectEntity);
+
+        ProjectCommand command = ProjectCommand.builder()
+                .figmaUrl("12")
+                .rootFigmaPage("mainPage")
+                .serviceUrl("https://service.com")
+                .projectName("UI 자동화 테스트")
+                .description("프로젝트")
+                .projectEnd(LocalDate.of(2025, 4, 4))
+                .build();
+
+        Long projectId = saved.getId();
+        //when
+        Project project = projectService.updateProject(command, projectId);
+
+        //then
+        assertThat(project).extracting("figmaUrl", "description")
+                .contains("12", "프로젝트");
     }
 }

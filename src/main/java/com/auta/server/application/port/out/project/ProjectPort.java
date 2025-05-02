@@ -7,4 +7,6 @@ public interface ProjectPort {
     Project save(Project project);
 
     Optional<Project> findById(Long projectId);
+
+    Project update(Project project);
 }

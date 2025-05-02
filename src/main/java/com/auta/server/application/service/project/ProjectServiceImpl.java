@@ -49,7 +49,9 @@ public class ProjectServiceImpl implements ProjectUseCase {
         Project project = projectPort.findById(projectId)
                 .orElseThrow(() -> new BusinessException(ErrorCode.PROJECT_NOT_FOUND));
 
-        return null;
+        project.update(command);
+
+        return projectPort.update(project);
     }
 
     @Override

@@ -9,4 +9,6 @@ public interface UserPort {
     Optional<User> findByEmail(String email);
 
     void deleteByEmail(String email);
+
+    User update(User user);
 }

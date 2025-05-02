@@ -1,6 +1,7 @@
 package com.auta.server.adapter.out.persistence.project;
 
 import com.auta.server.adapter.out.persistence.user.UserEntity;
+import com.auta.server.domain.project.Project;
 import com.auta.server.domain.project.ProjectStatus;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -39,4 +40,13 @@ public class ProjectEntity {
     private LocalDate projectCreatedDate;
     private LocalDate projectEnd;
     private ProjectStatus projectStatus;
+
+    public void updateFromDomain(Project project) {
+        this.projectName = project.getProjectName();
+        this.projectEnd = project.getProjectEnd();
+        this.description = project.getDescription();
+        this.figmaUrl = project.getFigmaUrl();
+        this.serviceUrl = project.getServiceUrl();
+        this.rootFigmaPage = project.getRootFigmaPage();
+    }
 }
