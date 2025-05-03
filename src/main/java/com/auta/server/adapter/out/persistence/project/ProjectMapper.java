@@ -4,12 +4,16 @@ import com.auta.server.adapter.out.persistence.user.UserMapper;
 import com.auta.server.domain.project.Project;
 import com.auta.server.domain.user.User;
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 
 @Mapper(componentModel = "spring", uses = UserMapper.class)
 public interface ProjectMapper {
     Project toDomain(ProjectEntity entity);
 
+    @Mapping(source = "domain.id", target = "id")
+    @Mapping(source = "user", target = "user")
     ProjectEntity toEntityWithUser(Project domain, User user);
+
 //    public static Project toDomain(ProjectEntity entity) {
 //        return Project.builder()
 //                .id(entity.getId())

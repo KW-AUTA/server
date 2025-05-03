@@ -30,6 +30,9 @@ class ProjectPersistenceAdapterTest extends IntegrationTestSupport {
     @Autowired
     private ProjectMapper projectMapper;
 
+    @Autowired
+    private UserMapper userMapper;
+    
     @AfterEach
     void tearDown() {
         projectRepository.deleteAllInBatch();
@@ -47,7 +50,7 @@ class ProjectPersistenceAdapterTest extends IntegrationTestSupport {
                 userEntity1
         ));
 
-        User user = UserMapper.toDomain(userEntity1);
+        User user = userMapper.toDomain(userEntity1);
 
         Project project = Project.builder()
                 .user(user)

@@ -20,6 +20,9 @@ class UserPersistenceAdapterTest extends IntegrationTestSupport {
     @Autowired
     private UserRepository userRepository; // 확인용으로도 필요할 수 있어
 
+    @Autowired
+    private UserMapper userMapper;
+
     @AfterEach
     void tearDown() {
         userRepository.deleteAllInBatch();
@@ -101,7 +104,7 @@ class UserPersistenceAdapterTest extends IntegrationTestSupport {
                 .username("testUser")
                 .build();
 
-        userRepository.save(UserMapper.toEntity(user));
+        userRepository.save(userMapper.toEntity(user));
 
         //when
         userPersistenceAdapter.deleteByEmail("test@example.com");
