@@ -2,17 +2,26 @@ package com.auta.server.application.service.project;
 
 import com.auta.server.adapter.in.project.response.PageTestResponse;
 import com.auta.server.adapter.in.project.response.ProjectDetailResponse;
-import com.auta.server.adapter.in.project.response.ProjectSummariesResponse;
 import com.auta.server.adapter.in.project.response.ProjectTestDetailResponse;
 import com.auta.server.adapter.in.project.response.ProjectTestSummariesResponse;
 import com.auta.server.application.port.in.project.ProjectQueryUseCase;
+import com.auta.server.application.port.out.project.ProjectPort;
+import com.auta.server.application.port.out.project.ProjectSummaryQueryDto;
+import com.auta.server.domain.project.Project;
+import java.util.List;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 @Service
+@RequiredArgsConstructor
 public class ProjectQueryServiceImpl implements ProjectQueryUseCase {
+    private static final int PAGE_SIZE = 10;
+    private final ProjectPort projectPort;
+
     @Override
-    public ProjectSummariesResponse getProjectSummaryList(String projectName, String sortBy, Integer cursor) {
-        return null;
+    public List<ProjectSummaryQueryDto> getProjectSummaryList(String projectName, String sortBy, Long cursor) {
+        List<Project> projects = projectPort.findByProjectNameWithPaging(projectName, sortBy, cursor, PAGE_SIZE);
+        return projects.stream().map(ProjectSummaryQueryDto::from).toList();
     }
 
     @Override

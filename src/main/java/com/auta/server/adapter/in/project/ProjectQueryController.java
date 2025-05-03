@@ -23,9 +23,9 @@ public class ProjectQueryController {
     public ApiResponse<ProjectSummariesResponse> getProjectSummaryList(
             @RequestParam String projectName,
             @RequestParam String sortBy,
-            @RequestParam Integer cursor) {
+            @RequestParam Long cursor) {
         return ApiResponse.ok("프로젝트 리스트 조회가 완료되었습니다.",
-                projectQueryUseCase.getProjectSummaryList(projectName, sortBy, cursor));
+                ProjectSummariesResponse.from(projectQueryUseCase.getProjectSummaryList(projectName, sortBy, cursor)));
     }
 
     @GetMapping("/api/v1/projects/{projectId}")

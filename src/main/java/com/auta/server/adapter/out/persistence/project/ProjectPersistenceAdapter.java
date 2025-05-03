@@ -5,6 +5,7 @@ import com.auta.server.common.exception.BusinessException;
 import com.auta.server.common.exception.ErrorCode;
 import com.auta.server.domain.project.Project;
 import com.auta.server.domain.user.User;
+import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -14,20 +15,21 @@ import org.springframework.stereotype.Component;
 public class ProjectPersistenceAdapter implements ProjectPort {
 
     private final ProjectRepository projectRepository;
+    private final ProjectMapper projectMapper;
 
     @Override
     public Project save(Project project) {
         User user = project.getUser();
-        ProjectEntity projectEntity = ProjectMapper.toEntityWithUserEntity(project, user);
+        ProjectEntity projectEntity = projectMapper.toEntityWithUser(project, user);
         ProjectEntity savedProject = projectRepository.save(projectEntity);
 
-        return ProjectMapper.toDomain(savedProject);
+        return projectMapper.toDomain(savedProject);
     }
 
     @Override
     public Optional<Project> findById(Long projectId) {
         return projectRepository.findById(projectId)
-                .map(ProjectMapper::toDomain);
+                .map(projectMapper::toDomain);
     }
 
     @Override
@@ -35,7 +37,7 @@ public class ProjectPersistenceAdapter implements ProjectPort {
         ProjectEntity projectEntity = projectRepository.findById(project.getId())
                 .orElseThrow(() -> new BusinessException(ErrorCode.PROJECT_NOT_FOUND));
         projectEntity.updateFromDomain(project);
-        return ProjectMapper.toDomain(projectEntity);
+        return projectMapper.toDomain(projectEntity);
     }
 
     @Override
@@ -43,5 +45,12 @@ public class ProjectPersistenceAdapter implements ProjectPort {
         ProjectEntity projectEntity = projectRepository.findById(project.getId())
                 .orElseThrow(() -> new BusinessException(ErrorCode.PROJECT_NOT_FOUND));
         projectRepository.delete(projectEntity);
+    }
+
+    @Override
+    public List<Project> findByProjectNameWithPaging(String projectName, String sortBy, Long cursor, int pageSize) {
+        List<ProjectEntity> projectEntities = projectRepository.findByProjectNameWithPaging(projectName, sortBy,
+                cursor, pageSize);
+        return projectEntities.stream().map(projectMapper::toDomain).toList();
     }
 }

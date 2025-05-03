@@ -9,6 +9,7 @@ public enum ErrorCode {
     PROJECT_NOT_FOUND(HttpStatus.NOT_FOUND, "존재하지 않는 프로젝트입니다."),
     DUPLICATED_DB_EMAIL(HttpStatus.CONFLICT, "db의 유저 이메일이 중복됩니다."),
     INVALID_PASSWORD(HttpStatus.UNAUTHORIZED, "비밀번호가 틀렸습니다"),
+    INVALID_CURSOR(HttpStatus.BAD_REQUEST, "커서 아이디가 잘못됐습니다"),
     DUPLICATE_USERNAME(HttpStatus.BAD_REQUEST, "이름이 중복됩니다."),
     DUPLICATE_EMAIL(HttpStatus.BAD_REQUEST, "이메일이 중복됩니다.");
 

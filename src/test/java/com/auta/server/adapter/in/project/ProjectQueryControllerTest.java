@@ -14,7 +14,7 @@ class ProjectQueryControllerTest extends ControllerTestSupport {
     @Test
     void getProjectSummaryList() throws Exception {
         //given
-
+        
         //when   //then
         mockMvc.perform(
                         get("/api/v1/projects")

@@ -19,9 +19,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import com.auta.server.adapter.in.project.ProjectQueryController;
 import com.auta.server.adapter.in.project.response.PageTestResponse;
 import com.auta.server.adapter.in.project.response.ProjectDetailResponse;
-import com.auta.server.adapter.in.project.response.ProjectSummariesResponse;
 import com.auta.server.adapter.in.project.response.ProjectTestDetailResponse;
 import com.auta.server.adapter.in.project.response.ProjectTestSummariesResponse;
+import com.auta.server.application.port.out.project.ProjectSummaryQueryDto;
 import com.auta.server.application.service.project.ProjectQueryServiceImpl;
 import com.auta.server.docs.RestDocsSupport;
 import com.auta.server.domain.project.ProjectStatus;
@@ -44,29 +44,28 @@ public class ProjectQueryControllerDocsTest extends RestDocsSupport {
     @Test
     void getProjectSummaryList() throws Exception {
         //given
-        given(projectQueryServiceImpl.getProjectSummaryList(anyString(), anyString(), anyInt()))
-                .willReturn(ProjectSummariesResponse.builder()
-                        .projectSummaries(List.of(
-                                ProjectSummariesResponse.ProjectSummary.builder()
-                                        .projectId(1L)
-                                        .projectAdmin("adminUser")
-                                        .projectName("UI 테스트 프로젝트")
-                                        .projectEnd(LocalDate.of(2024, 12, 31))
-                                        .projectCreatedDate(LocalDate.of(2024, 1, 1))
-                                        .projectStatus(ProjectStatus.IN_PROGRESS)
-                                        .testRate(90)
-                                        .build(),
-                                ProjectSummariesResponse.ProjectSummary.builder()
-                                        .projectId(2L)
-                                        .projectAdmin("otherAdmin")
-                                        .projectName("API 서버 개발")
-                                        .projectEnd(LocalDate.of(2024, 11, 30))
-                                        .projectCreatedDate(LocalDate.of(2024, 2, 15))
-                                        .projectStatus(ProjectStatus.COMPLETED)
-                                        .testRate(100)
-                                        .build()
-                        ))
-                        .build());
+        given(projectQueryServiceImpl.getProjectSummaryList(anyString(), anyString(), anyLong()))
+                .willReturn(List.of(
+                        ProjectSummaryQueryDto.builder()
+                                .projectId(1L)
+                                .projectAdmin("adminUser")
+                                .projectName("UI 테스트 프로젝트")
+                                .projectEnd(LocalDate.of(2024, 12, 31))
+                                .projectCreatedDate(LocalDate.of(2024, 1, 1))
+                                .projectStatus(ProjectStatus.IN_PROGRESS)
+                                .testRate(90)
+                                .build(),
+                        ProjectSummaryQueryDto.builder()
+                                .projectId(2L)
+                                .projectAdmin("otherAdmin")
+                                .projectName("API 서버 개발")
+                                .projectEnd(LocalDate.of(2024, 11, 30))
+                                .projectCreatedDate(LocalDate.of(2024, 2, 15))
+                                .projectStatus(ProjectStatus.COMPLETED)
+                                .testRate(100)
+                                .build()
+                ));
+
         //when   //then
         mockMvc.perform(
                         get("/api/v1/projects", 1)

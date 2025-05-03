@@ -27,6 +27,9 @@ class ProjectPersistenceAdapterTest extends IntegrationTestSupport {
     @Autowired
     private UserRepository userRepository;
 
+    @Autowired
+    private ProjectMapper projectMapper;
+
     @AfterEach
     void tearDown() {
         projectRepository.deleteAllInBatch();
@@ -110,6 +113,7 @@ class ProjectPersistenceAdapterTest extends IntegrationTestSupport {
                 .email("test@example.com1").password("testPassword1").username("testUser1").build();
         UserEntity userEntity2 = UserEntity.builder()
                 .email("test@example.com2").password("testPassword2").username("testUser2").build();
+
         userRepository.saveAll(List.of(
                 userEntity1, userEntity2
         ));
@@ -125,8 +129,9 @@ class ProjectPersistenceAdapterTest extends IntegrationTestSupport {
                 .projectEnd(LocalDate.of(2025, 4, 4))
                 .projectStatus(ProjectStatus.NOT_STARTED)
                 .build();
+
         ProjectEntity saved = projectRepository.save(projectEntity);
-        Long projectId = 5L;
+        Long projectId = -1L;
         //when
         Optional<Project> project = projectPersistenceAdapter.findById(projectId);
 
@@ -159,7 +164,7 @@ class ProjectPersistenceAdapterTest extends IntegrationTestSupport {
         ProjectEntity saved = projectRepository.save(projectEntity);
 
         Project project = Project.builder()
-                .id(1L)
+                .id(saved.getId())
                 .figmaUrl("12")
                 .rootFigmaPage("mainPage")
                 .serviceUrl("https://service.com")
@@ -202,7 +207,7 @@ class ProjectPersistenceAdapterTest extends IntegrationTestSupport {
 
         ProjectEntity saved = projectRepository.save(projectEntity);
 
-        Project project = ProjectMapper.toDomain(saved);
+        Project project = projectMapper.toDomain(saved);
 
         //when
         projectPersistenceAdapter.delete(project);
@@ -210,5 +215,82 @@ class ProjectPersistenceAdapterTest extends IntegrationTestSupport {
         //then
         Optional<ProjectEntity> optionalProject = projectRepository.findById(project.getId());
         assertThat(optionalProject).isEmpty();
+    }
+
+    @DisplayName("프로젝트 이름, 정렬기준에 따른 커서기반 무한 스크롤 페이지를 반환한다.")
+    @Test
+    void findByProjectNameWithPaging() {
+        //given
+        LocalDate registeredDate1 = LocalDate.now();
+        LocalDate registeredDate2 = LocalDate.now().plusDays(1);
+        LocalDate registeredDate3 = LocalDate.now().plusDays(2);
+        UserEntity userEntity1 = UserEntity.builder()
+                .email("test@example.com1").password("testPassword1").username("testUser1").build();
+        UserEntity userEntity2 = UserEntity.builder()
+                .email("test@example.com2").password("testPassword2").username("testUser2").build();
+
+        userRepository.saveAll(List.of(
+                userEntity1, userEntity2
+        ));
+        ProjectEntity projectEntity1 = ProjectEntity.builder()
+                .user(userEntity1)
+                .figmaUrl("https://figma.com")
+                .rootFigmaPage("mainPage")
+                .serviceUrl("https://service.com")
+                .projectName("캡스톤 프로젝트")
+                .description("프로젝트 설명입니다.")
+                .projectCreatedDate(registeredDate1)
+                .projectEnd(LocalDate.of(2025, 4, 4))
+                .projectStatus(ProjectStatus.NOT_STARTED)
+                .build();
+        ProjectEntity projectEntity2 = ProjectEntity.builder()
+                .user(userEntity1)
+                .figmaUrl("https://figma.com")
+                .rootFigmaPage("mainPage")
+                .serviceUrl("https://service.com")
+                .projectName("캡스톤 리뷰")
+                .description("프로젝트 설명입니다.")
+                .projectCreatedDate(registeredDate2)
+                .projectEnd(LocalDate.of(2025, 4, 4))
+                .projectStatus(ProjectStatus.NOT_STARTED)
+                .build();
+        ProjectEntity projectEntity3 = ProjectEntity.builder()
+                .user(userEntity1)
+                .figmaUrl("https://figma.com")
+                .rootFigmaPage("mainPage")
+                .serviceUrl("https://service.com")
+                .projectName("캡스톤 설계")
+                .description("프로젝트 설명입니다.")
+                .projectCreatedDate(registeredDate3)
+                .projectEnd(LocalDate.of(2025, 4, 4))
+                .projectStatus(ProjectStatus.NOT_STARTED)
+                .build();
+        ProjectEntity projectEntity4 = ProjectEntity.builder()
+                .user(userEntity1)
+                .figmaUrl("https://figma.com")
+                .rootFigmaPage("mainPage")
+                .serviceUrl("https://service.com")
+                .projectName("광운대학교 설계")
+                .description("프로젝트 설명입니다.")
+                .projectCreatedDate(registeredDate3)
+                .projectEnd(LocalDate.of(2025, 4, 4))
+                .projectStatus(ProjectStatus.NOT_STARTED)
+                .build();
+
+        projectRepository.saveAll(List.of(projectEntity1, projectEntity2, projectEntity3, projectEntity4));
+
+        //when
+        List<Project> result = projectPersistenceAdapter.findByProjectNameWithPaging(
+                "캡스톤",
+                "createdDate",
+                (Long) null,
+                10
+        );
+
+        //then
+        assertThat(result).hasSize(3);
+        assertThat(result.get(0).getProjectName()).isEqualTo("캡스톤 설계");
+        assertThat(result.get(1).getProjectName()).isEqualTo("캡스톤 리뷰");
+        assertThat(result.get(2).getProjectName()).isEqualTo("캡스톤 프로젝트");
     }
 }
