@@ -14,11 +14,10 @@ public interface ProjectMapper {
     @Mapping(target = "pages", ignore = true)
     @Mapping(source = "projectEntity.userEntity", target = "user")
     Project toDomain(ProjectEntity projectEntity);
-    
+
     @Mapping(target = "pageEntities", ignore = true)
     @Mapping(source = "project.user", target = "userEntity")
     ProjectEntity toEntity(Project project);
-
 
     @Mapping(source = "project.id", target = "id")
     @Mapping(source = "user", target = "userEntity")

@@ -3,6 +3,7 @@ package com.auta.server.adapter.out.persistence.test;
 import io.lettuce.core.dynamic.annotation.Param;
 import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
@@ -14,4 +15,11 @@ public interface TestRepository extends JpaRepository<TestEntity, Long> {
                 where t.pageEntity.id = :pageId
             """)
     List<TestEntity> findAllByPageId(@Param("pageId") Long pageId);
+
+    @Modifying
+    @Query("""
+                delete from TestEntity as t
+                where t.pageEntity.id = :pageId
+            """)
+    void deleteAllByPageId(Long pageId);
 }

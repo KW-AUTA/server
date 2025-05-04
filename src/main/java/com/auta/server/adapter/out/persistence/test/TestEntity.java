@@ -5,11 +5,14 @@ import com.auta.server.adapter.out.persistence.project.ProjectEntity;
 import com.auta.server.domain.test.TestStatus;
 import com.auta.server.domain.test.TestType;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -17,6 +20,7 @@ import lombok.NoArgsConstructor;
 
 @Getter
 @Entity
+@Table(name = "tests")
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
@@ -33,8 +37,10 @@ public class TestEntity {
     @JoinColumn(name = "page_id", nullable = false)
     private PageEntity pageEntity;
 
+    @Enumerated(EnumType.STRING)
     private TestStatus testStatus;
 
+    @Enumerated(EnumType.STRING)
     private TestType testType;
 
     private String failReason;

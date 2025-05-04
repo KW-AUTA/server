@@ -2,14 +2,18 @@ package com.auta.server.application.service.project;
 
 import com.auta.server.application.port.in.project.ProjectCommand;
 import com.auta.server.application.port.in.project.ProjectUseCase;
+import com.auta.server.application.port.out.page.PagePort;
 import com.auta.server.application.port.out.project.ProjectPort;
+import com.auta.server.application.port.out.test.TestPort;
 import com.auta.server.application.port.out.user.UserPort;
 import com.auta.server.common.exception.BusinessException;
 import com.auta.server.common.exception.ErrorCode;
+import com.auta.server.domain.page.Page;
 import com.auta.server.domain.project.Project;
 import com.auta.server.domain.project.ProjectStatus;
 import com.auta.server.domain.user.User;
 import java.time.LocalDate;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -21,6 +25,8 @@ public class ProjectServiceImpl implements ProjectUseCase {
 
     private final ProjectPort projectPort;
     private final UserPort userPort;
+    private final PagePort pagePort;
+    private final TestPort testPort;
 
     @Override
     public Project createProject(ProjectCommand command, String email, LocalDate registeredDate) {
@@ -60,6 +66,12 @@ public class ProjectServiceImpl implements ProjectUseCase {
     public void deleteProject(Long projectId) {
         Project project = projectPort.findById(projectId)
                 .orElseThrow(() -> new BusinessException(ErrorCode.PROJECT_NOT_FOUND));
+
+        List<Page> pages = pagePort.findAllIdsByProjectId(projectId);
+        
+        for (Page page : pages) {
+            testPort.deleteAllByPageId(page.getId());
+        }
 
         projectPort.delete(project);
     }

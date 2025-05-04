@@ -7,6 +7,8 @@ import com.auta.server.domain.project.Project;
 import com.auta.server.domain.project.ProjectStatus;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -47,7 +49,10 @@ public class ProjectEntity extends BaseEntity {
     private String description;
     private LocalDate projectCreatedDate;
     private LocalDate projectEnd;
+
+    @Enumerated(EnumType.STRING)
     private ProjectStatus projectStatus;
+
     private Integer testExecuteTime;
     private Integer testRate;
 

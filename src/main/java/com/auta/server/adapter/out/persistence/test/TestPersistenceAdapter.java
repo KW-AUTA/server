@@ -17,4 +17,9 @@ public class TestPersistenceAdapter implements TestPort {
         List<TestEntity> testEntities = testRepository.findAllByPageId(pageId);
         return testEntities.stream().map(testMapper::toDomain).toList();
     }
+
+    @Override
+    public void deleteAllByPageId(Long pageId) {
+        testRepository.deleteAllByPageId(pageId);
+    }
 }
