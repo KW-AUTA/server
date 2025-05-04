@@ -14,7 +14,7 @@ class ProjectQueryControllerTest extends ControllerTestSupport {
     @Test
     void getProjectSummaryList() throws Exception {
         //given
-        
+
         //when   //then
         mockMvc.perform(
                         get("/api/v1/projects")
@@ -63,17 +63,5 @@ class ProjectQueryControllerTest extends ControllerTestSupport {
                 ).andDo(print())
                 .andExpect(status().isOk());
 
-    }
-
-    @DisplayName("해당 페이지 아이디에 해당하는 테스트 결과를 반환한다.")
-    @Test
-    void getPageTestDetails() throws Exception {
-        //given
-
-        //when   //then
-        mockMvc.perform(
-                        get("/api/v1/pages/{pageId}", 1)
-                ).andDo(print())
-                .andExpect(status().isOk());
     }
 }

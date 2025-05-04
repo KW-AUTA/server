@@ -6,11 +6,13 @@ import static org.mockito.Mockito.mock;
 import com.auta.server.adapter.in.auth.AuthController;
 import com.auta.server.adapter.in.dashboard.DashBoardController;
 import com.auta.server.adapter.in.health.HealthCheckController;
+import com.auta.server.adapter.in.page.PageController;
 import com.auta.server.adapter.in.project.ProjectController;
 import com.auta.server.adapter.in.project.ProjectQueryController;
 import com.auta.server.adapter.in.user.UserController;
 import com.auta.server.adapter.out.web.CookieManager;
 import com.auta.server.application.port.in.auth.AuthUseCase;
+import com.auta.server.application.port.in.page.PageUseCase;
 import com.auta.server.application.port.in.project.ProjectQueryUseCase;
 import com.auta.server.application.port.in.project.ProjectUseCase;
 import com.auta.server.application.port.in.user.UserUseCase;
@@ -34,7 +36,9 @@ import org.springframework.test.web.servlet.MockMvc;
         HealthCheckController.class,
         DashBoardController.class,
         ProjectController.class,
-        ProjectQueryController.class})
+        ProjectQueryController.class,
+        PageController.class
+})
 @Import(CookieManager.class)
 public abstract class ControllerTestSupport {
     @Autowired
@@ -54,6 +58,9 @@ public abstract class ControllerTestSupport {
 
     @MockitoBean
     protected ProjectQueryUseCase projectQueryUseCase;
+
+    @MockitoBean
+    protected PageUseCase pageUseCase;
 
     @MockitoBean
     protected ProjectUseCase projectUseCase;

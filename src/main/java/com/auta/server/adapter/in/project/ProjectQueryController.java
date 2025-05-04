@@ -1,7 +1,6 @@
 package com.auta.server.adapter.in.project;
 
 import com.auta.server.adapter.in.ApiResponse;
-import com.auta.server.adapter.in.project.response.PageTestResponse;
 import com.auta.server.adapter.in.project.response.ProjectDetailResponse;
 import com.auta.server.adapter.in.project.response.ProjectSummariesResponse;
 import com.auta.server.adapter.in.project.response.ProjectTestDetailResponse;
@@ -51,12 +50,4 @@ public class ProjectQueryController {
         return ApiResponse.ok("프로젝트 테스트 세부 조회가 완료되었습니다.",
                 projectQueryUseCase.getProjectTestDetail(projectId));
     }
-
-    @GetMapping("/api/v1/pages/{pageId}")
-    public ApiResponse<PageTestResponse> getPageTestDetail(@PathVariable Long pageId) {
-        return ApiResponse.ok("프로젝트 페이지 테스트 세부 조회가 완료되었습니다.",
-                projectQueryUseCase.getPageTestDetail(pageId));
-    }
-
-
 }

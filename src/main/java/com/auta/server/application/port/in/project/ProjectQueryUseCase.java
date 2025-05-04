@@ -1,6 +1,6 @@
 package com.auta.server.application.port.in.project;
 
-import com.auta.server.adapter.in.project.response.PageTestResponse;
+import com.auta.server.adapter.in.page.response.PageTestResponse;
 import com.auta.server.adapter.in.project.response.ProjectDetailResponse;
 import com.auta.server.adapter.in.project.response.ProjectTestDetailResponse;
 import com.auta.server.adapter.in.project.response.ProjectTestSummariesResponse;

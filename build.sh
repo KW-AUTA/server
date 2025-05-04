@@ -1,7 +1,7 @@
 set -e
 
 SERVER_USER="ubuntu"
-SERVER_IP="192.168.0.18"
+SERVER_IP="219.255.242.174"
 SERVER_DIR="~"
 PEM_KEY_PATH="./auta.pem"
 

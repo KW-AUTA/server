@@ -49,7 +49,7 @@ class ProjectQueryServiceImplTest extends IntegrationTestSupport {
                 userEntity1, userEntity2
         ));
         ProjectEntity projectEntity1 = ProjectEntity.builder()
-                .user(userEntity1)
+                .userEntity(userEntity1)
                 .figmaUrl("https://figma.com")
                 .rootFigmaPage("mainPage")
                 .serviceUrl("https://service.com")
@@ -60,7 +60,7 @@ class ProjectQueryServiceImplTest extends IntegrationTestSupport {
                 .projectStatus(ProjectStatus.NOT_STARTED)
                 .build();
         ProjectEntity projectEntity2 = ProjectEntity.builder()
-                .user(userEntity1)
+                .userEntity(userEntity1)
                 .figmaUrl("https://figma.com")
                 .rootFigmaPage("mainPage")
                 .serviceUrl("https://service.com")
@@ -71,7 +71,7 @@ class ProjectQueryServiceImplTest extends IntegrationTestSupport {
                 .projectStatus(ProjectStatus.NOT_STARTED)
                 .build();
         ProjectEntity projectEntity3 = ProjectEntity.builder()
-                .user(userEntity1)
+                .userEntity(userEntity1)
                 .figmaUrl("https://figma.com")
                 .rootFigmaPage("mainPage")
                 .serviceUrl("https://service.com")
@@ -82,7 +82,7 @@ class ProjectQueryServiceImplTest extends IntegrationTestSupport {
                 .projectStatus(ProjectStatus.NOT_STARTED)
                 .build();
         ProjectEntity projectEntity4 = ProjectEntity.builder()
-                .user(userEntity1)
+                .userEntity(userEntity1)
                 .figmaUrl("https://figma.com")
                 .rootFigmaPage("mainPage")
                 .serviceUrl("https://service.com")

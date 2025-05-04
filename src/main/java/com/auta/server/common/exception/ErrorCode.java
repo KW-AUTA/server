@@ -7,6 +7,7 @@ import org.springframework.http.HttpStatus;
 public enum ErrorCode {
     USER_NOT_FOUND(HttpStatus.NOT_FOUND, "존재하지 않는 사용자입니다."),
     PROJECT_NOT_FOUND(HttpStatus.NOT_FOUND, "존재하지 않는 프로젝트입니다."),
+    PAGE_NOT_FOUND(HttpStatus.NOT_FOUND, "존재하지 않는 페이지입니다."),
     DUPLICATED_DB_EMAIL(HttpStatus.CONFLICT, "db의 유저 이메일이 중복됩니다."),
     INVALID_PASSWORD(HttpStatus.UNAUTHORIZED, "비밀번호가 틀렸습니다"),
     INVALID_CURSOR(HttpStatus.BAD_REQUEST, "커서 아이디가 잘못됐습니다"),

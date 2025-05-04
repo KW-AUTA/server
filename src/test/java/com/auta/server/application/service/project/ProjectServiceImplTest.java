@@ -80,7 +80,7 @@ class ProjectServiceImplTest extends IntegrationTestSupport {
         LocalDate registeredDate = LocalDate.now();
 
         ProjectEntity projectEntity = ProjectEntity.builder()
-                .user(userEntity1)
+                .userEntity(userEntity1)
                 .figmaUrl("https://figma.com")
                 .rootFigmaPage("mainPage")
                 .serviceUrl("https://service.com")
@@ -127,7 +127,7 @@ class ProjectServiceImplTest extends IntegrationTestSupport {
         LocalDate registeredDate = LocalDate.now();
 
         ProjectEntity projectEntity = ProjectEntity.builder()
-                .user(userEntity1)
+                .userEntity(userEntity1)
                 .figmaUrl("https://figma.com")
                 .rootFigmaPage("mainPage")
                 .serviceUrl("https://service.com")

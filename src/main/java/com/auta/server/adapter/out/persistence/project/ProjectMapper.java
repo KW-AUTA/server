@@ -1,18 +1,29 @@
 package com.auta.server.adapter.out.persistence.project;
 
+import com.auta.server.adapter.out.persistence.page.PageMapper;
 import com.auta.server.adapter.out.persistence.user.UserMapper;
 import com.auta.server.domain.project.Project;
 import com.auta.server.domain.user.User;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
-@Mapper(componentModel = "spring", uses = UserMapper.class)
+@Mapper(componentModel = "spring",
+        uses = {UserMapper.class, PageMapper.class})
 public interface ProjectMapper {
-    Project toDomain(ProjectEntity entity);
 
-    @Mapping(source = "domain.id", target = "id")
-    @Mapping(source = "user", target = "user")
-    ProjectEntity toEntityWithUser(Project domain, User user);
+    @Mapping(target = "pages", ignore = true)
+    @Mapping(source = "projectEntity.userEntity", target = "user")
+    Project toDomain(ProjectEntity projectEntity);
+    
+    @Mapping(target = "pageEntities", ignore = true)
+    @Mapping(source = "project.user", target = "userEntity")
+    ProjectEntity toEntity(Project project);
+
+
+    @Mapping(source = "project.id", target = "id")
+    @Mapping(source = "user", target = "userEntity")
+    @Mapping(target = "pageEntities", ignore = true)
+    ProjectEntity toEntityWithUser(Project project, User user);
 
 //    public static Project toDomain(ProjectEntity entity) {
 //        return Project.builder()
