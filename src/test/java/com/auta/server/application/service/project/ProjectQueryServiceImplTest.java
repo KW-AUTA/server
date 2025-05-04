@@ -3,12 +3,18 @@ package com.auta.server.application.service.project;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import com.auta.server.IntegrationTestSupport;
+import com.auta.server.adapter.out.persistence.page.PageEntity;
+import com.auta.server.adapter.out.persistence.page.PageRepository;
 import com.auta.server.adapter.out.persistence.project.ProjectEntity;
 import com.auta.server.adapter.out.persistence.project.ProjectRepository;
+import com.auta.server.adapter.out.persistence.test.TestEntity;
+import com.auta.server.adapter.out.persistence.test.TestRepository;
 import com.auta.server.adapter.out.persistence.user.UserEntity;
 import com.auta.server.adapter.out.persistence.user.UserRepository;
 import com.auta.server.application.port.out.project.ProjectSummaryQueryDto;
+import com.auta.server.domain.project.Project;
 import com.auta.server.domain.project.ProjectStatus;
+import com.auta.server.domain.test.TestType;
 import java.time.LocalDate;
 import java.util.List;
 import org.junit.jupiter.api.AfterEach;
@@ -22,6 +28,12 @@ class ProjectQueryServiceImplTest extends IntegrationTestSupport {
     private ProjectQueryServiceImpl projectQueryService;
 
     @Autowired
+    private TestRepository testRepository;
+
+    @Autowired
+    private PageRepository pageRepository;
+
+    @Autowired
     private ProjectRepository projectRepository;
 
     @Autowired
@@ -29,6 +41,8 @@ class ProjectQueryServiceImplTest extends IntegrationTestSupport {
 
     @AfterEach
     void tearDown() {
+        testRepository.deleteAllInBatch();
+        pageRepository.deleteAllInBatch();
         projectRepository.deleteAllInBatch();
         userRepository.deleteAllInBatch();
     }
@@ -107,5 +121,59 @@ class ProjectQueryServiceImplTest extends IntegrationTestSupport {
         assertThat(result.get(0).getProjectName()).isEqualTo("캡스톤 설계");
         assertThat(result.get(1).getProjectName()).isEqualTo("캡스톤 리뷰");
         assertThat(result.get(2).getProjectName()).isEqualTo("캡스톤 프로젝트");
+    }
+
+    @DisplayName("프로젝트 상세 정보를 불러온다.")
+    @Test
+    void getProjectDetail() {
+        //given
+        LocalDate registeredDate1 = LocalDate.now();
+        UserEntity userEntity1 = UserEntity.builder()
+                .email("test@example.com1").password("testPassword1").username("testUser1").build();
+        UserEntity userEntity2 = UserEntity.builder()
+                .email("test@example.com2").password("testPassword2").username("testUser2").build();
+
+        userRepository.saveAll(List.of(
+                userEntity1, userEntity2
+        ));
+        ProjectEntity projectEntity1 = ProjectEntity.builder()
+                .userEntity(userEntity1)
+                .figmaUrl("https://figma.com")
+                .rootFigmaPage("mainPage")
+                .serviceUrl("https://service.com")
+                .projectName("캡스톤 프로젝트")
+                .description("프로젝트 설명입니다.")
+                .projectCreatedDate(registeredDate1)
+                .projectEnd(LocalDate.of(2025, 4, 4))
+                .projectStatus(ProjectStatus.NOT_STARTED)
+                .build();
+
+        projectRepository.saveAll(List.of(projectEntity1));
+        Long projectId = projectEntity1.getId();
+
+        PageEntity pageEntity = PageEntity.builder()
+                .pageName("Home")
+                .pageBaseUrl("/home")
+                .projectEntity(projectEntity1)
+                .build();
+
+        pageEntity = pageRepository.save(pageEntity);
+
+        TestEntity testEntity = TestEntity.builder()
+                .projectEntity(projectEntity1)
+                .testType(TestType.ROUTING)
+                .pageEntity(pageEntity)
+                .build();
+
+        testRepository.save(testEntity);
+
+        //when
+        Project project = projectQueryService.getProjectDetail(projectId);
+
+        //then
+        assertThat(project.getPages()).isNotNull();
+        project.getPages().forEach(page ->
+                assertThat(page.getTests()).isNotNull()
+        );
     }
 }

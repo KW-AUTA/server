@@ -17,6 +17,7 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -53,7 +54,7 @@ public class ProjectEntity extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private ProjectStatus projectStatus;
 
-    private Integer testExecuteTime;
+    private LocalDateTime testExecuteTime;
     private Integer testRate;
 
     public void updateFromDomain(Project project) {

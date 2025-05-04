@@ -13,6 +13,7 @@ import com.auta.server.domain.project.Project;
 import com.auta.server.domain.project.ProjectStatus;
 import com.auta.server.domain.user.User;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -44,7 +45,7 @@ public class ProjectServiceImpl implements ProjectUseCase {
                 .projectCreatedDate(registeredDate)
                 .projectEnd(command.getProjectEnd())
                 .projectStatus(ProjectStatus.NOT_STARTED)
-                .testExecuteTime(0)
+                .testExecuteTime(LocalDateTime.of(2024, 4, 25, 12, 11))
                 .build();
 
         return projectPort.save(project);
@@ -68,7 +69,7 @@ public class ProjectServiceImpl implements ProjectUseCase {
                 .orElseThrow(() -> new BusinessException(ErrorCode.PROJECT_NOT_FOUND));
 
         List<Page> pages = pagePort.findAllIdsByProjectId(projectId);
-        
+
         for (Page page : pages) {
             testPort.deleteAllByPageId(page.getId());
         }

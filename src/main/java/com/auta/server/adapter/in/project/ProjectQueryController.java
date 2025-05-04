@@ -32,7 +32,7 @@ public class ProjectQueryController {
             @PathVariable Long projectId
     ) {
         return ApiResponse.ok("프로젝트 세부 조회가 완료되었습니다.",
-                projectQueryUseCase.getProjectDetail(projectId));
+                ProjectDetailResponse.from(projectQueryUseCase.getProjectDetail(projectId)));
     }
 
     @GetMapping("/api/v1/projects/tests")

@@ -17,14 +17,17 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.auta.server.adapter.in.project.ProjectQueryController;
-import com.auta.server.adapter.in.project.response.ProjectDetailResponse;
 import com.auta.server.adapter.in.project.response.ProjectTestDetailResponse;
 import com.auta.server.adapter.in.project.response.ProjectTestSummariesResponse;
 import com.auta.server.application.port.out.project.ProjectSummaryQueryDto;
 import com.auta.server.application.service.project.ProjectQueryServiceImpl;
 import com.auta.server.docs.RestDocsSupport;
+import com.auta.server.domain.page.Page;
+import com.auta.server.domain.project.Project;
 import com.auta.server.domain.project.ProjectStatus;
+import com.auta.server.domain.user.User;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -109,34 +112,26 @@ public class ProjectQueryControllerDocsTest extends RestDocsSupport {
     @DisplayName("프로젝트 세부 조회")
     @Test
     void getProjectDetail() throws Exception {
-        //given
+
         given(projectQueryServiceImpl.getProjectDetail(anyLong()))
-                .willReturn(ProjectDetailResponse.builder()
+                .willReturn(Project.builder()
                         .projectName("UI 자동화 테스트")
-                        .projectAdmin("adminUser")
+                        .user(User.builder().id(1L).username("adminUser").build())
                         .projectCreatedDate(LocalDate.of(2024, 1, 1))
                         .projectEnd(LocalDate.of(2024, 12, 31))
-                        .testExecutionDate(LocalDate.of(2024, 4, 25))
-                        .figmaRootPage("HomePage")
+                        .testExecuteTime(LocalDateTime.of(2024, 4, 25, 12, 11))
+                        .rootFigmaPage("HomePage")
                         .description("UI 자동화 프로젝트입니다.")
                         .figmaUrl("https://figma.com/example")
                         .serviceUrl("https://service.com")
-                        .reportSummary("전체 테스트 성공률 95%")
-                        .testSummary(ProjectDetailResponse.TestSummary.builder()
-                                .totalRoutingTest(10)
-                                .totalInteractionTest(15)
-                                .totalMappingTest(20)
-                                .build())
                         .pages(List.of(
-                                ProjectDetailResponse.PageInfo.builder()
+                                Page.builder()
                                         .pageName("메인 페이지")
-                                        .pageUrl("/main")
-                                        .pageImageUrl("https://figma.com/image/login.png")
+                                        .pageBaseUrl("/main")
                                         .build(),
-                                ProjectDetailResponse.PageInfo.builder()
+                                Page.builder()
                                         .pageName("로그인 페이지")
-                                        .pageUrl("/login")
-                                        .pageImageUrl("https://figma.com/image/login.png")
+                                        .pageBaseUrl("/login")
                                         .build()
                         ))
                         .build());
@@ -161,14 +156,15 @@ public class ProjectQueryControllerDocsTest extends RestDocsSupport {
                                         .description("프로젝트 생성일 (yyyy-MM-dd)"),
                                 fieldWithPath("data.projectEnd").type(JsonFieldType.STRING)
                                         .description("프로젝트 종료 예정일 (yyyy-MM-dd)"),
-                                fieldWithPath("data.testExecutionDate").type(JsonFieldType.STRING)
-                                        .description("테스트 실행일 (yyyy-MM-dd)"),
-                                fieldWithPath("data.figmaRootPage").type(JsonFieldType.STRING)
+                                fieldWithPath("data.testExecutionTime").type(JsonFieldType.STRING)
+                                        .description("테스트 실행DateTime (yyyy-MM-dd)"),
+                                fieldWithPath("data.rootFigmaPage").type(JsonFieldType.STRING)
                                         .description("피그마 루트 페이지 이름"),
                                 fieldWithPath("data.description").type(JsonFieldType.STRING).description("프로젝트 설명"),
                                 fieldWithPath("data.figmaUrl").type(JsonFieldType.STRING).description("피그마 URL"),
                                 fieldWithPath("data.serviceUrl").type(JsonFieldType.STRING).description("서비스 URL"),
-                                fieldWithPath("data.reportSummary").type(JsonFieldType.STRING).description("리포트 요약"),
+                                fieldWithPath("data.reportSummary").type(JsonFieldType.NULL)
+                                        .description("리포트 요약(구현 아)"),
 
                                 fieldWithPath("data.testSummary.totalRoutingTest").type(JsonFieldType.NUMBER)
                                         .description("라우팅 테스트 총 개수"),
@@ -179,9 +175,8 @@ public class ProjectQueryControllerDocsTest extends RestDocsSupport {
 
                                 fieldWithPath("data.pages").type(JsonFieldType.ARRAY).description("페이지 목록"),
                                 fieldWithPath("data.pages[].pageName").type(JsonFieldType.STRING).description("페이지 이름"),
-                                fieldWithPath("data.pages[].pageUrl").type(JsonFieldType.STRING).description("페이지 URL"),
-                                fieldWithPath("data.pages[].pageImageUrl").type(JsonFieldType.STRING)
-                                        .description("페이지 피그마 이미지 URL")
+                                fieldWithPath("data.pages[].pageBaseUrl").type(JsonFieldType.STRING)
+                                        .description("페이지 URL")
                         )
                 ));
     }

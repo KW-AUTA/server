@@ -13,6 +13,7 @@ import com.auta.server.application.port.in.project.ProjectCommand;
 import com.auta.server.domain.project.Project;
 import com.auta.server.domain.project.ProjectStatus;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import org.junit.jupiter.api.AfterEach;
@@ -97,7 +98,7 @@ class ProjectServiceImplTest extends IntegrationTestSupport {
                 .projectCreatedDate(registeredDate)
                 .projectEnd(LocalDate.of(2025, 4, 4))
                 .projectStatus(ProjectStatus.NOT_STARTED)
-                .testExecuteTime(0)
+                .testExecuteTime(LocalDateTime.of(2024, 4, 25, 12, 11))
                 .build();
 
         ProjectEntity saved = projectRepository.save(projectEntity);

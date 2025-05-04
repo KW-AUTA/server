@@ -8,7 +8,7 @@ INSERT INTO projects (id, user_id, figma_url, root_figma_page, service_url, proj
                       project_created_date, project_end, project_status, test_execute_time, test_rate,
                       created_date_time, modified_date_time)
 VALUES (1, 1, 'https://figma.com/proj1', '홈페이지', 'https://auta.com', 'AUTA 테스트 프로젝트', '설명입니다', CURRENT_DATE,
-        CURRENT_DATE + 30, 'NOT_STARTED', 120, 85, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+        CURRENT_DATE + 30, 'NOT_STARTED', CURRENT_TIME, 85, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
 
 -- PAGES
 INSERT INTO pages (id, project_id, page_name, page_base_url, created_date_time, modified_date_time)
