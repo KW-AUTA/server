@@ -3,6 +3,7 @@ package com.auta.server.application.service.project;
 import com.auta.server.adapter.in.page.response.PageTestResponse;
 import com.auta.server.adapter.in.project.response.ProjectTestDetailResponse;
 import com.auta.server.adapter.in.project.response.ProjectTestSummariesResponse;
+import com.auta.server.application.port.in.project.ProjectDetailDto;
 import com.auta.server.application.port.in.project.ProjectQueryUseCase;
 import com.auta.server.application.port.out.page.PagePort;
 import com.auta.server.application.port.out.project.ProjectPort;
@@ -13,7 +14,10 @@ import com.auta.server.common.exception.ErrorCode;
 import com.auta.server.domain.page.Page;
 import com.auta.server.domain.project.Project;
 import com.auta.server.domain.test.Test;
+import com.auta.server.domain.test.TestType;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -32,18 +36,15 @@ public class ProjectQueryServiceImpl implements ProjectQueryUseCase {
     }
 
     @Override
-    public Project getProjectDetail(Long projectId) {
+    public ProjectDetailDto getProjectDetail(Long projectId) {
         Project project = projectPort.findById(projectId)
                 .orElseThrow(() -> new BusinessException(ErrorCode.PROJECT_NOT_FOUND));
         List<Page> pages = pagePort.findAllIdsByProjectId(projectId);
+        List<Test> tests = testPort.findAllByProjectId(projectId);
 
-        for (Page page : pages) {
-            List<Test> tests = testPort.findAllByPageId(page.getId());
-            page.addTests(tests);
-        }
-        
-        project.addPages(pages);
-        return project;
+        Map<TestType, Long> testCounts = extractTestCounts(tests);
+
+        return ProjectDetailDto.of(project, pages, testCounts);
     }
 
     @Override
@@ -59,5 +60,10 @@ public class ProjectQueryServiceImpl implements ProjectQueryUseCase {
     @Override
     public PageTestResponse getPageTestDetail(Long pageId) {
         return null;
+    }
+
+    private Map<TestType, Long> extractTestCounts(List<Test> tests) {
+        return tests.stream()
+                .collect(Collectors.groupingBy(Test::getTestType, Collectors.counting()));
     }
 }

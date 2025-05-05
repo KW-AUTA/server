@@ -7,12 +7,13 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.auta.server.ControllerTestSupport;
-import com.auta.server.domain.page.Page;
+import com.auta.server.application.port.in.project.ProjectDetailDto;
 import com.auta.server.domain.project.Project;
 import com.auta.server.domain.user.User;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -38,28 +39,28 @@ class ProjectQueryControllerTest extends ControllerTestSupport {
     void getProjectDetail() throws Exception {
         //given
         given(projectQueryUseCase.getProjectDetail(anyLong()))
-                .willReturn(Project.builder()
-                        .projectName("UI 자동화 테스트")
-                        .user(User.builder().id(1L).username("adminUser").build())
-                        .projectCreatedDate(LocalDate.of(2024, 1, 1))
-                        .projectEnd(LocalDate.of(2024, 12, 31))
-                        .testExecuteTime(LocalDateTime.of(2024, 4, 25, 12, 11))
-                        .rootFigmaPage("HomePage")
-                        .description("UI 자동화 프로젝트입니다.")
-                        .figmaUrl("https://figma.com/example")
-                        .serviceUrl("https://service.com")
-                        .pages(List.of(
-                                Page.builder()
-                                        .pageName("메인 페이지")
-                                        .pageBaseUrl("/main")
-                                        .build(),
-                                Page.builder()
-                                        .pageName("로그인 페이지")
-                                        .pageBaseUrl("/login")
-                                        .build()
-                        ))
+                .willReturn(ProjectDetailDto.builder()
+                        .project(Project.builder().user(User.builder().id(1L).username("adminUser").build())
+                                .projectCreatedDate(LocalDate.of(2024, 1, 1))
+                                .projectEnd(LocalDate.of(2024, 12, 31))
+                                .testExecuteTime(LocalDateTime.of(2024, 4, 25, 12, 11))
+                                .rootFigmaPage("HomePage")
+                                .description("UI 자동화 프로젝트입니다.")
+                                .figmaUrl("https://figma.com/example")
+                                .serviceUrl("https://service.com")
+                                .build())
+                        .pages(List.of
+                                (
+                                        ProjectDetailDto.PageInfo
+                                                .builder().pageName("메인 페이지").pageBaseUrl("/main")
+                                                .build(),
+                                        ProjectDetailDto.PageInfo
+                                                .builder().pageName("로그인 페이지").pageBaseUrl("/login")
+                                                .build()
+                                ))
+                        .testCounts(Map.of())
                         .build());
-        //when   //then
+        //when  //then
         mockMvc.perform(
                         get("/api/v1/projects/{projectId}", 1)
                 ).andDo(print())

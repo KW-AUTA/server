@@ -1,10 +1,14 @@
 package com.auta.server.adapter.in.project.response;
 
+import com.auta.server.application.port.in.project.ProjectDetailDto;
 import com.auta.server.domain.project.Project;
+import com.auta.server.domain.test.TestType;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -36,7 +40,9 @@ public class ProjectDetailResponse {
 
     private List<PageInfo> pages;
 
-    public static ProjectDetailResponse from(Project project) {
+    public static ProjectDetailResponse from(ProjectDetailDto projectDetailDto) {
+        Project project = projectDetailDto.getProject();
+        Map<TestType, Long> testCounts = projectDetailDto.getTestCounts();
         return ProjectDetailResponse.builder()
                 .projectName(project.getProjectName())
                 .projectAdmin(project.getUser().getUsername())
@@ -49,17 +55,24 @@ public class ProjectDetailResponse {
                 .serviceUrl(project.getServiceUrl())
                 .reportSummary(null)
                 .testSummary(TestSummary.builder()
-                        .totalRoutingTest(project.getTotalRoutingTest())
-                        .totalInteractionTest(project.getTotalInteractionTest())
-                        .totalMappingTest(project.getTotalMappingTest())
+                        .totalRoutingTest(
+                                Math.toIntExact(Optional.ofNullable(testCounts.get(TestType.ROUTING)).orElse(0L)))
+                        .totalInteractionTest(
+                                Math.toIntExact(Optional.ofNullable(testCounts.get(TestType.INTERACTION)).orElse(0L)))
+                        .totalMappingTest(
+                                Math.toIntExact(Optional.ofNullable(testCounts.get(TestType.COMPONENT)).orElse(0L)))
                         .build())
-                .pages(project.getPages().stream()
+                .pages(projectDetailDto.getPages().stream()
                         .map(p -> PageInfo.builder()
                                 .pageName(p.getPageName())
                                 .pageBaseUrl(p.getPageBaseUrl())
                                 .build())
                         .toList())
                 .build();
+    }
+
+    private static int getTestCount(Map<TestType, Long> map, TestType type) {
+        return Math.toIntExact(map.getOrDefault(type, 0L));
     }
 
     @Getter

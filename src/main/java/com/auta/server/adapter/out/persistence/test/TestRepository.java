@@ -16,10 +16,17 @@ public interface TestRepository extends JpaRepository<TestEntity, Long> {
             """)
     List<TestEntity> findAllByPageId(@Param("pageId") Long pageId);
 
+    @Query("""
+                select t from TestEntity as t
+                where t.projectEntity.id = :projectId
+            """)
+    List<TestEntity> findAllByProjectId(@Param("projectId") Long projectId);
+
     @Modifying
     @Query("""
                 delete from TestEntity as t
                 where t.pageEntity.id = :pageId
             """)
-    void deleteAllByPageId(Long pageId);
+    void deleteAllByPageId(@Param("pageId") Long pageId);
+
 }

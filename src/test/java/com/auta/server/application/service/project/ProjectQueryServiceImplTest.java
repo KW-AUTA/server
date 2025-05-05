@@ -11,8 +11,8 @@ import com.auta.server.adapter.out.persistence.test.TestEntity;
 import com.auta.server.adapter.out.persistence.test.TestRepository;
 import com.auta.server.adapter.out.persistence.user.UserEntity;
 import com.auta.server.adapter.out.persistence.user.UserRepository;
+import com.auta.server.application.port.in.project.ProjectDetailDto;
 import com.auta.server.application.port.out.project.ProjectSummaryQueryDto;
-import com.auta.server.domain.project.Project;
 import com.auta.server.domain.project.ProjectStatus;
 import com.auta.server.domain.test.TestType;
 import java.time.LocalDate;
@@ -168,12 +168,12 @@ class ProjectQueryServiceImplTest extends IntegrationTestSupport {
         testRepository.save(testEntity);
 
         //when
-        Project project = projectQueryService.getProjectDetail(projectId);
+        ProjectDetailDto projectDetail = projectQueryService.getProjectDetail(projectId);
 
         //then
-        assertThat(project.getPages()).isNotNull();
-        project.getPages().forEach(page ->
-                assertThat(page.getTests()).isNotNull()
+        assertThat(projectDetail.getProject()).isNotNull();
+        projectDetail.getPages().forEach(page ->
+                assertThat(page.getPageName()).isNotNull()
         );
     }
 }
