@@ -8,5 +8,5 @@ public interface TestPort {
 
     List<Test> findAllByProjectId(Long projectId);
 
-    void deleteAllByPageId(Long id);
+    void deleteAllByProjectId(Long projectId);
 }

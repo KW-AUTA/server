@@ -113,13 +113,13 @@ class TestPersistenceAdapterTest extends IntegrationTestSupport {
         );
 
         List<TestEntity> savedTests = testRepository.saveAll(testEntities);
-        Long pageId = pageEntity.getId();
+        Long projectId = projectEntity.getId();
 
         //when
-        testPersistenceAdapter.deleteAllByPageId(pageId);
+        testPersistenceAdapter.deleteAllByProjectId(projectId);
 
         //then
-        assertThat(testRepository.findAllByPageId(pageId)).isEmpty();
+        assertThat(testRepository.findAllByPageId(projectId)).isEmpty();
     }
 
     private TestEntity createDummyTest(ProjectEntity projectEntity, PageEntity pageEntity, TestStatus testStatus,

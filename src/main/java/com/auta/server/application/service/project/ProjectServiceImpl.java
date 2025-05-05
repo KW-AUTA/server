@@ -8,13 +8,11 @@ import com.auta.server.application.port.out.test.TestPort;
 import com.auta.server.application.port.out.user.UserPort;
 import com.auta.server.common.exception.BusinessException;
 import com.auta.server.common.exception.ErrorCode;
-import com.auta.server.domain.page.Page;
 import com.auta.server.domain.project.Project;
 import com.auta.server.domain.project.ProjectStatus;
 import com.auta.server.domain.user.User;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -35,18 +33,7 @@ public class ProjectServiceImpl implements ProjectUseCase {
                 () -> new BusinessException(ErrorCode.USER_NOT_FOUND)
         );
 
-        Project project = Project.builder()
-                .user(user)
-                .figmaUrl(command.getFigmaUrl())
-                .rootFigmaPage(command.getRootFigmaPage())
-                .serviceUrl(command.getServiceUrl())
-                .projectName(command.getProjectName())
-                .description(command.getDescription())
-                .projectCreatedDate(registeredDate)
-                .projectEnd(command.getProjectEnd())
-                .projectStatus(ProjectStatus.NOT_STARTED)
-                .testExecuteTime(LocalDateTime.of(2024, 4, 25, 12, 11))
-                .build();
+        Project project = createProjectDomain(command, registeredDate, user);
 
         return projectPort.save(project);
     }
@@ -68,12 +55,23 @@ public class ProjectServiceImpl implements ProjectUseCase {
         Project project = projectPort.findById(projectId)
                 .orElseThrow(() -> new BusinessException(ErrorCode.PROJECT_NOT_FOUND));
 
-        List<Page> pages = pagePort.findAllIdsByProjectId(projectId);
-
-        for (Page page : pages) {
-            testPort.deleteAllByPageId(page.getId());
-        }
+        testPort.deleteAllByProjectId(project.getId());
 
         projectPort.delete(project);
+    }
+
+    private Project createProjectDomain(ProjectCommand command, LocalDate registeredDate, User user) {
+        return Project.builder()
+                .user(user)
+                .figmaUrl(command.getFigmaUrl())
+                .rootFigmaPage(command.getRootFigmaPage())
+                .serviceUrl(command.getServiceUrl())
+                .projectName(command.getProjectName())
+                .description(command.getDescription())
+                .projectCreatedDate(registeredDate)
+                .projectEnd(command.getProjectEnd())
+                .projectStatus(ProjectStatus.NOT_STARTED)
+                .testExecuteTime(LocalDateTime.of(2024, 4, 25, 12, 11))
+                .build();
     }
 }

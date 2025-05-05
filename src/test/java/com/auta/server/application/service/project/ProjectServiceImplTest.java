@@ -3,10 +3,8 @@ package com.auta.server.application.service.project;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import com.auta.server.IntegrationTestSupport;
-import com.auta.server.adapter.out.persistence.page.PageRepository;
 import com.auta.server.adapter.out.persistence.project.ProjectEntity;
 import com.auta.server.adapter.out.persistence.project.ProjectRepository;
-import com.auta.server.adapter.out.persistence.test.TestRepository;
 import com.auta.server.adapter.out.persistence.user.UserEntity;
 import com.auta.server.adapter.out.persistence.user.UserRepository;
 import com.auta.server.application.port.in.project.ProjectCommand;
@@ -30,12 +28,6 @@ class ProjectServiceImplTest extends IntegrationTestSupport {
 
     @Autowired
     private UserRepository userRepository;
-
-    @Autowired
-    private PageRepository pageRepository;
-
-    @Autowired
-    private TestRepository testRepository;
 
     @AfterEach
     void tearDown() {

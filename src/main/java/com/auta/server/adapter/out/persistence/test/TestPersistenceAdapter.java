@@ -25,7 +25,7 @@ public class TestPersistenceAdapter implements TestPort {
     }
 
     @Override
-    public void deleteAllByPageId(Long pageId) {
-        testRepository.deleteAllByPageId(pageId);
+    public void deleteAllByProjectId(Long projectId) {
+        testRepository.deleteAllByProjectId(projectId);
     }
 }

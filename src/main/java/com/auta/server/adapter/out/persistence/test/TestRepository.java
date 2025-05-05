@@ -25,8 +25,8 @@ public interface TestRepository extends JpaRepository<TestEntity, Long> {
     @Modifying
     @Query("""
                 delete from TestEntity as t
-                where t.pageEntity.id = :pageId
+                where t.projectEntity.id = :projectId
             """)
-    void deleteAllByPageId(@Param("pageId") Long pageId);
+    void deleteAllByProjectId(@Param("projectId") Long projectId);
 
 }
