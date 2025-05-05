@@ -3,7 +3,7 @@ spring:
     active: local
   sql:
     init:
-      mode: always
+      mode: never
   jpa:
     hibernate:
       ddl-auto: none
