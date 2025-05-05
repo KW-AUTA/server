@@ -4,6 +4,7 @@ import com.auta.server.adapter.out.persistence.page.PageEntity;
 import com.auta.server.adapter.out.persistence.project.ProjectEntity;
 import com.auta.server.domain.test.TestStatus;
 import com.auta.server.domain.test.TestType;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -47,7 +48,8 @@ public class TestEntity {
     private String triggerSelector;
     private String expectedDestination;
     private String actualDestination;
-
+    
+    @Column(name = "`trigger`")
     private String trigger;
     private String expectedAction;
     private String actualAction;

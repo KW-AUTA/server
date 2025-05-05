@@ -22,7 +22,7 @@ public class ProjectQueryController {
     public ApiResponse<ProjectSummariesResponse> getProjectSummaryList(
             @RequestParam String projectName,
             @RequestParam String sortBy,
-            @RequestParam Long cursor) {
+            @RequestParam(required = false) Long cursor) {
         return ApiResponse.ok("프로젝트 리스트 조회가 완료되었습니다.",
                 ProjectSummariesResponse.from(projectQueryUseCase.getProjectSummaryList(projectName, sortBy, cursor)));
     }
@@ -39,7 +39,7 @@ public class ProjectQueryController {
     public ApiResponse<ProjectTestSummariesResponse> getProjectTestSummaryList(
             @RequestParam String projectName,
             @RequestParam String sortBy,
-            @RequestParam Integer cursor
+            @RequestParam Integer cursor //커서는 long
     ) {
         return ApiResponse.ok("프로젝트 테스트 리스트 조회가 완료되었습니다.",
                 projectQueryUseCase.getProjectTestSummaryList(projectName, sortBy, cursor));
