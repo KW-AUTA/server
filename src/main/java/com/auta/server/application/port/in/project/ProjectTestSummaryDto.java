@@ -1,10 +1,10 @@
 package com.auta.server.application.port.in.project;
 
 import com.auta.server.domain.project.Project;
+import com.auta.server.domain.test.TestCountSummary;
 import com.auta.server.domain.test.TestType;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import java.time.LocalDate;
-import java.util.Map;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -29,22 +29,16 @@ public class ProjectTestSummaryDto {
 
 
     public static ProjectTestSummaryDto of(Project project,
-                                           Map<TestType, Map<Boolean, Long>> testCountsGroupedByTypeAndStatus) {
-        Map<Boolean, Long> routingTestCounts = testCountsGroupedByTypeAndStatus.get(TestType.ROUTING);
+                                           TestCountSummary testCountSummary) {
 
-        int totalRoutingTest = Math.toIntExact(routingTestCounts.values().stream().mapToLong(Long::longValue).sum());
-        int successRoutingTest = Math.toIntExact(routingTestCounts.getOrDefault(true, 0L));
+        int totalRoutingTest = testCountSummary.total(TestType.ROUTING);
+        int successRoutingTest = testCountSummary.passed(TestType.ROUTING);
 
-        Map<Boolean, Long> interactionTestCounts = testCountsGroupedByTypeAndStatus.get(TestType.INTERACTION);
+        int totalInteractionTest = testCountSummary.total(TestType.INTERACTION);
+        int successInteractionTest = testCountSummary.passed(TestType.INTERACTION);
 
-        int totalInteractionTest = Math.toIntExact(
-                interactionTestCounts.values().stream().mapToLong(Long::longValue).sum());
-        int successInteractionTest = Math.toIntExact(interactionTestCounts.getOrDefault(true, 0L));
-
-        Map<Boolean, Long> mappingTestCounts = testCountsGroupedByTypeAndStatus.get(TestType.MAPPING);
-
-        int totalMappingTest = Math.toIntExact(mappingTestCounts.values().stream().mapToLong(Long::longValue).sum());
-        int successMappingTest = Math.toIntExact(mappingTestCounts.getOrDefault(true, 0L));
+        int totalMappingTest = testCountSummary.total(TestType.MAPPING);
+        int successMappingTest = testCountSummary.passed(TestType.MAPPING);
 
         return ProjectTestSummaryDto.builder()
                 .projectId(project.getId())

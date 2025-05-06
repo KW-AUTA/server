@@ -24,12 +24,10 @@ import com.auta.server.application.port.out.project.ProjectSummaryQueryDto;
 import com.auta.server.docs.RestDocsSupport;
 import com.auta.server.domain.project.Project;
 import com.auta.server.domain.project.ProjectStatus;
-import com.auta.server.domain.test.TestCountSummary;
 import com.auta.server.domain.user.User;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Map;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.restdocs.payload.JsonFieldType;
@@ -135,7 +133,9 @@ public class ProjectQueryControllerDocsTest extends RestDocsSupport {
                                                 .builder().pageName("로그인 페이지").pageBaseUrl("/login")
                                                 .build()
                                 ))
-                        .testCountSummary(TestCountSummary.builder().testCountMap(Map.of()).build())
+                        .totalRoutingTest(3)
+                        .totalInteractionTest(1)
+                        .totalMappingTest(2)
                         .build());
 
         //when   //then

@@ -2,8 +2,6 @@ package com.auta.server.adapter.in.project.response;
 
 import com.auta.server.application.port.in.project.ProjectDetailDto;
 import com.auta.server.domain.project.Project;
-import com.auta.server.domain.test.TestCountSummary;
-import com.auta.server.domain.test.TestType;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -41,7 +39,6 @@ public class ProjectDetailResponse {
 
     public static ProjectDetailResponse from(ProjectDetailDto projectDetailDto) {
         Project project = projectDetailDto.getProject();
-        TestCountSummary summary = projectDetailDto.getTestCountSummary();
         return ProjectDetailResponse.builder()
                 .projectName(project.getProjectName())
                 .projectAdmin(project.getUser().getUsername())
@@ -54,9 +51,9 @@ public class ProjectDetailResponse {
                 .serviceUrl(project.getServiceUrl())
                 .reportSummary(null)
                 .testSummary(TestSummary.builder()
-                        .totalRoutingTest(summary.get(TestType.ROUTING))
-                        .totalInteractionTest(summary.get(TestType.INTERACTION))
-                        .totalMappingTest(summary.get(TestType.MAPPING))
+                        .totalRoutingTest(projectDetailDto.getTotalRoutingTest())
+                        .totalInteractionTest(projectDetailDto.getTotalInteractionTest())
+                        .totalMappingTest(projectDetailDto.getTotalMappingTest())
                         .build())
                 .pages(projectDetailDto.getPages().stream()
                         .map(p -> PageInfo.builder()

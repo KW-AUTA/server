@@ -130,54 +130,28 @@ class ProjectQueryServiceImplTest extends IntegrationTestSupport {
     @Test
     void getProjectDetail() {
         //given
-        LocalDate registeredDate1 = LocalDate.now();
-        UserEntity userEntity1 = UserEntity.builder()
-                .email("test@example.com1").password("testPassword1").username("testUser1").build();
-        UserEntity userEntity2 = UserEntity.builder()
-                .email("test@example.com2").password("testPassword2").username("testUser2").build();
+        UserEntity userEntity = userRepository.save(createDummyUser());
+        ProjectEntity projectEntity = projectRepository.save(createDummyProject(userEntity));
+        PageEntity pageEntity = pageRepository.save(createDummyPage(projectEntity));
 
-        userRepository.saveAll(List.of(
-                userEntity1, userEntity2
-        ));
-        ProjectEntity projectEntity1 = ProjectEntity.builder()
-                .userEntity(userEntity1)
-                .figmaUrl("https://figma.com")
-                .rootFigmaPage("mainPage")
-                .serviceUrl("https://service.com")
-                .projectName("캡스톤 프로젝트")
-                .description("프로젝트 설명입니다.")
-                .projectCreatedDate(registeredDate1)
-                .projectEnd(LocalDate.of(2025, 4, 4))
-                .projectStatus(ProjectStatus.NOT_STARTED)
-                .build();
+        List<TestEntity> testEntities = List.of(
+                createDummyTest(projectEntity, pageEntity, TestStatus.FAILED, TestType.ROUTING),
+                createDummyTest(projectEntity, pageEntity, TestStatus.PASSED, TestType.ROUTING),
+                createDummyTest(projectEntity, pageEntity, TestStatus.PASSED, TestType.INTERACTION),
+                createDummyTest(projectEntity, pageEntity, TestStatus.READY, TestType.ROUTING),
+                createDummyTest(projectEntity, pageEntity, TestStatus.FAILED, TestType.MAPPING)
+        );
 
-        projectRepository.saveAll(List.of(projectEntity1));
-        Long projectId = projectEntity1.getId();
+        List<TestEntity> savedTests = testRepository.saveAll(testEntities);
 
-        PageEntity pageEntity = PageEntity.builder()
-                .pageName("Home")
-                .pageBaseUrl("/home")
-                .projectEntity(projectEntity1)
-                .build();
-
-        pageEntity = pageRepository.save(pageEntity);
-
-        TestEntity testEntity = TestEntity.builder()
-                .projectEntity(projectEntity1)
-                .testType(TestType.ROUTING)
-                .pageEntity(pageEntity)
-                .build();
-
-        testRepository.save(testEntity);
+        Long projectId = projectEntity.getId();
 
         //when
         ProjectDetailDto projectDetail = projectQueryService.getProjectDetail(projectId);
 
         //then
-        assertThat(projectDetail.getProject()).isNotNull();
-        projectDetail.getPages().forEach(page ->
-                assertThat(page.getPageName()).isNotNull()
-        );
+        assertThat(projectDetail).extracting("totalRoutingTest", "totalInteractionTest", "totalMappingTest")
+                .contains(3, 1, 1);
     }
 
     @DisplayName("프로젝트 테스트 요약 리스트를 불러온다. 이 때 프로젝트 이름과 정렬 방식 커서 위치 등을 입력 받고 바탕으로 해당 프로젝튿르의 테스트 요약 리스트를 반환한다.")

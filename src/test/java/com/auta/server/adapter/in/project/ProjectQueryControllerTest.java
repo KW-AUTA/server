@@ -9,12 +9,10 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import com.auta.server.ControllerTestSupport;
 import com.auta.server.application.port.in.project.ProjectDetailDto;
 import com.auta.server.domain.project.Project;
-import com.auta.server.domain.test.TestCountSummary;
 import com.auta.server.domain.user.User;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Map;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -59,7 +57,9 @@ class ProjectQueryControllerTest extends ControllerTestSupport {
                                                 .builder().pageName("로그인 페이지").pageBaseUrl("/login")
                                                 .build()
                                 ))
-                        .testCountSummary(TestCountSummary.builder().testCountMap(Map.of()).build())
+                        .totalRoutingTest(3)
+                        .totalInteractionTest(1)
+                        .totalMappingTest(2)
                         .build());
         //when  //then
         mockMvc.perform(

@@ -25,18 +25,6 @@ public class Test {
 
     private String componentName;
 
-    public boolean isRoutingTest() {
-        return testType.equals(TestType.ROUTING);
-    }
-
-    public boolean isInterActionTest() {
-        return testType.equals(TestType.INTERACTION);
-    }
-
-    public boolean isComponentTest() {
-        return testType.equals(TestType.MAPPING);
-    }
-
     public boolean isPassed() {
         return testStatus.equals(TestStatus.PASSED);
     }

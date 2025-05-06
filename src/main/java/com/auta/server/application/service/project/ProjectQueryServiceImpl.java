@@ -14,10 +14,7 @@ import com.auta.server.domain.page.Page;
 import com.auta.server.domain.project.Project;
 import com.auta.server.domain.test.Test;
 import com.auta.server.domain.test.TestCountSummary;
-import com.auta.server.domain.test.TestType;
 import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -52,12 +49,8 @@ public class ProjectQueryServiceImpl implements ProjectQueryUseCase {
         List<Project> projects = projectPort.findByProjectNameWithPaging(projectName, sortBy, cursor, PAGE_SIZE);
         return projects.stream().map(project -> {
             List<Test> tests = testPort.findAllByProjectId(project.getId());
-            Map<TestType, Map<Boolean, Long>> testCountsGroupedByTypeAndStatus = tests.stream()
-                    .collect(Collectors.groupingBy(Test::getTestType, Collectors.groupingBy(
-                            Test::isPassed,
-                            Collectors.counting()
-                    )));
-            return ProjectTestSummaryDto.of(project, testCountsGroupedByTypeAndStatus);
+            TestCountSummary testCountSummary = TestCountSummary.from(tests);
+            return ProjectTestSummaryDto.of(project, testCountSummary);
         }).toList();
     }
 
