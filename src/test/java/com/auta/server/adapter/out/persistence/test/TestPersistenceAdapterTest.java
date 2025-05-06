@@ -55,7 +55,7 @@ class TestPersistenceAdapterTest extends IntegrationTestSupport {
                 createDummyTest(projectEntity, pageEntity, TestStatus.PASSED, TestType.ROUTING),
                 createDummyTest(projectEntity, pageEntity, TestStatus.PASSED, TestType.INTERACTION),
                 createDummyTest(projectEntity, pageEntity, TestStatus.READY, TestType.ROUTING),
-                createDummyTest(projectEntity, pageEntity, TestStatus.FAILED, TestType.COMPONENT)
+                createDummyTest(projectEntity, pageEntity, TestStatus.FAILED, TestType.MAPPING)
         );
 
         List<TestEntity> savedTests = testRepository.saveAll(testEntities);
@@ -82,7 +82,7 @@ class TestPersistenceAdapterTest extends IntegrationTestSupport {
                 createDummyTest(projectEntity, pageEntity, TestStatus.PASSED, TestType.ROUTING),
                 createDummyTest(projectEntity, pageEntity, TestStatus.PASSED, TestType.INTERACTION),
                 createDummyTest(projectEntity, pageEntity, TestStatus.READY, TestType.ROUTING),
-                createDummyTest(projectEntity, pageEntity, TestStatus.FAILED, TestType.COMPONENT)
+                createDummyTest(projectEntity, pageEntity, TestStatus.FAILED, TestType.MAPPING)
         );
 
         List<TestEntity> savedTests = testRepository.saveAll(testEntities);
@@ -109,7 +109,7 @@ class TestPersistenceAdapterTest extends IntegrationTestSupport {
                 createDummyTest(projectEntity, pageEntity, TestStatus.PASSED, TestType.ROUTING),
                 createDummyTest(projectEntity, pageEntity, TestStatus.PASSED, TestType.INTERACTION),
                 createDummyTest(projectEntity, pageEntity, TestStatus.READY, TestType.ROUTING),
-                createDummyTest(projectEntity, pageEntity, TestStatus.FAILED, TestType.COMPONENT)
+                createDummyTest(projectEntity, pageEntity, TestStatus.FAILED, TestType.MAPPING)
         );
 
         List<TestEntity> savedTests = testRepository.saveAll(testEntities);

@@ -1,5 +1,6 @@
 package com.auta.server.adapter.in.project.response;
 
+import com.auta.server.application.port.in.project.ProjectTestSummaryDto;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import java.time.LocalDate;
 import java.util.List;
@@ -14,6 +15,33 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class ProjectTestSummariesResponse {
     private List<ProjectTestSummary> tests;
+
+    public static ProjectTestSummariesResponse from(List<ProjectTestSummaryDto> projectTestSummaryList) {
+        return ProjectTestSummariesResponse.builder()
+                .tests(
+                        projectTestSummaryList.stream()
+                                .map(
+                                        projectTestSummaryDto ->
+                                                ProjectTestSummary.builder()
+                                                        .projectId(projectTestSummaryDto.getProjectId())
+                                                        .projectName(projectTestSummaryDto.getProjectName())
+                                                        .projectCreatedDate(
+                                                                projectTestSummaryDto.getProjectCreatedDate())
+                                                        .totalRoutingTest(projectTestSummaryDto.getTotalRoutingTest())
+                                                        .successRoutingTest(
+                                                                projectTestSummaryDto.getSuccessRoutingTest())
+                                                        .totalInteractionTest(
+                                                                projectTestSummaryDto.getTotalInteractionTest())
+                                                        .successRoutingTest(
+                                                                projectTestSummaryDto.getSuccessInteractionTest())
+                                                        .totalMappingTest(projectTestSummaryDto.getTotalMappingTest())
+                                                        .successMappingTest(
+                                                                projectTestSummaryDto.getSuccessMappingTest())
+                                                        .build()
+                                ).toList()
+                )
+                .build();
+    }
 
     @Getter
     @Builder

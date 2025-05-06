@@ -1,7 +1,6 @@
 package com.auta.server.docs.project;
 
 
-import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.given;
@@ -18,9 +17,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import com.auta.server.adapter.in.project.ProjectQueryController;
 import com.auta.server.adapter.in.project.response.ProjectTestDetailResponse;
-import com.auta.server.adapter.in.project.response.ProjectTestSummariesResponse;
 import com.auta.server.application.port.in.project.ProjectDetailDto;
 import com.auta.server.application.port.in.project.ProjectQueryUseCase;
+import com.auta.server.application.port.in.project.ProjectTestSummaryDto;
 import com.auta.server.application.port.out.project.ProjectSummaryQueryDto;
 import com.auta.server.docs.RestDocsSupport;
 import com.auta.server.domain.project.Project;
@@ -188,10 +187,8 @@ public class ProjectQueryControllerDocsTest extends RestDocsSupport {
     @Test
     void getProjectTestSummaryList() throws Exception {
         //given
-        given(projectQueryUseCase.getProjectTestSummaryList(anyString(), anyString(), anyInt()))
-                .willReturn(ProjectTestSummariesResponse.builder()
-                        .tests(List.of(
-                                ProjectTestSummariesResponse.ProjectTestSummary.builder()
+        given(projectQueryUseCase.getProjectTestSummaryList(anyString(), anyString(), anyLong()))
+                .willReturn(List.of(ProjectTestSummaryDto.builder()
                                         .projectId(1L)
                                         .projectName("UI 자동화 테스트")
                                         .totalRoutingTest(10)
@@ -202,7 +199,7 @@ public class ProjectQueryControllerDocsTest extends RestDocsSupport {
                                         .successMappingTest(18)
                                         .projectCreatedDate(LocalDate.of(2024, 4, 1))
                                         .build(),
-                                ProjectTestSummariesResponse.ProjectTestSummary.builder()
+                                ProjectTestSummaryDto.builder()
                                         .projectId(2L)
                                         .projectName("API 서버 개발")
                                         .totalRoutingTest(12)
@@ -213,8 +210,8 @@ public class ProjectQueryControllerDocsTest extends RestDocsSupport {
                                         .successMappingTest(13)
                                         .projectCreatedDate(LocalDate.of(2024, 2, 15))
                                         .build()
-                        ))
-                        .build());
+                        )
+                );
         //when   //then
         mockMvc.perform(
                         get("/api/v1/projects/tests")

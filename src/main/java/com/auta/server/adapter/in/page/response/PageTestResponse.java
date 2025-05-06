@@ -26,7 +26,7 @@ public class PageTestResponse {
         return PageTestResponse.builder()
                 .routingTest(RoutingTest.of(filterByType(tests, TestType.ROUTING)))
                 .interactionTest(InteractionTest.of(filterByType(tests, TestType.INTERACTION)))
-                .mappingTest(MappingTest.of(filterByType(tests, TestType.COMPONENT)))
+                .mappingTest(MappingTest.of(filterByType(tests, TestType.MAPPING)))
                 .build();
     }
 

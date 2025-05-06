@@ -34,7 +34,7 @@ public class Test {
     }
 
     public boolean isComponentTest() {
-        return testType.equals(TestType.COMPONENT);
+        return testType.equals(TestType.MAPPING);
     }
 
     public boolean isPassed() {

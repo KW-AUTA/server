@@ -2,7 +2,6 @@ package com.auta.server.application.port.in.project;
 
 import com.auta.server.adapter.in.page.response.PageTestResponse;
 import com.auta.server.adapter.in.project.response.ProjectTestDetailResponse;
-import com.auta.server.adapter.in.project.response.ProjectTestSummariesResponse;
 import com.auta.server.application.port.out.project.ProjectSummaryQueryDto;
 import java.util.List;
 
@@ -12,7 +11,7 @@ public interface ProjectQueryUseCase {
 
     ProjectDetailDto getProjectDetail(Long projectId);
 
-    ProjectTestSummariesResponse getProjectTestSummaryList(String projectName, String sortBy, Integer cursor);
+    List<ProjectTestSummaryDto> getProjectTestSummaryList(String projectName, String sortBy, Long cursor);
 
     ProjectTestDetailResponse getProjectTestDetail(Long projectId);
 

@@ -17,6 +17,7 @@ import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Profile;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -29,6 +30,7 @@ public class TestDataInitializer implements CommandLineRunner {
     private final ProjectRepository projectRepository;
     private final PageRepository pageRepository;
     private final TestRepository testRepository;
+    private final PasswordEncoder passwordEncoder;
 
     @Override
     @Transactional
@@ -36,7 +38,7 @@ public class TestDataInitializer implements CommandLineRunner {
         // 1. 사용자
         UserEntity user = userRepository.save(UserEntity.builder()
                 .email("test@auta.com")
-                .password("$2b$12$fhouvPYQIS9ORwTxUvocDu1aK./W2vnueD/FoE7Y4UIZnlHZD0/FG")
+                .password(passwordEncoder.encode("test1234"))
                 .username("테스트유저")
                 .address("서울시 강남구")
                 .phoneNumber("010-1234-5678")
@@ -90,7 +92,7 @@ public class TestDataInitializer implements CommandLineRunner {
                         "회원가입 제출", "서버 호출", "서버 호출", "제출버튼"),
                 new TestEntity(null, project1, p1, TestStatus.FAILED, TestType.ROUTING, "잘못된 경로로 이동", "#login-btn",
                         "/dashboard", "/error", "로그인 버튼", "이동", "에러", "로그인버튼"),
-                new TestEntity(null, project1, p2, TestStatus.PASSED, TestType.COMPONENT, null, null, null, null, null,
+                new TestEntity(null, project1, p2, TestStatus.PASSED, TestType.MAPPING, null, null, null, null, null,
                         null,
                         null, "알림아이콘"),
                 new TestEntity(null, project1, p3, TestStatus.FAILED, TestType.INTERACTION, "서버 오류", "#join", null,
@@ -106,7 +108,7 @@ public class TestDataInitializer implements CommandLineRunner {
                 new TestEntity(null, project2, p6, TestStatus.PASSED, TestType.INTERACTION, null, "#save-btn", null,
                         null,
                         "설정 저장", "서버 호출", "서버 호출", "저장버튼"),
-                new TestEntity(null, project2, p6, TestStatus.FAILED, TestType.COMPONENT, "컴포넌트 미노출", null, null, null,
+                new TestEntity(null, project2, p6, TestStatus.FAILED, TestType.MAPPING, "컴포넌트 미노출", null, null, null,
                         null, null, null, "토글스위치"),
                 new TestEntity(null, project2, p7, TestStatus.PASSED, TestType.ROUTING, null, "#home",
                         "/dashboard/home",

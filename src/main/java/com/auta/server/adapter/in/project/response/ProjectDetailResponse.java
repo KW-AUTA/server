@@ -8,7 +8,6 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -56,11 +55,11 @@ public class ProjectDetailResponse {
                 .reportSummary(null)
                 .testSummary(TestSummary.builder()
                         .totalRoutingTest(
-                                Math.toIntExact(Optional.ofNullable(testCounts.get(TestType.ROUTING)).orElse(0L)))
+                                getTestCount(testCounts, TestType.ROUTING))
                         .totalInteractionTest(
-                                Math.toIntExact(Optional.ofNullable(testCounts.get(TestType.INTERACTION)).orElse(0L)))
+                                getTestCount(testCounts, TestType.INTERACTION))
                         .totalMappingTest(
-                                Math.toIntExact(Optional.ofNullable(testCounts.get(TestType.COMPONENT)).orElse(0L)))
+                                getTestCount(testCounts, TestType.MAPPING))
                         .build())
                 .pages(projectDetailDto.getPages().stream()
                         .map(p -> PageInfo.builder()

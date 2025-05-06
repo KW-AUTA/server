@@ -2,9 +2,9 @@ package com.auta.server.application.service.project;
 
 import com.auta.server.adapter.in.page.response.PageTestResponse;
 import com.auta.server.adapter.in.project.response.ProjectTestDetailResponse;
-import com.auta.server.adapter.in.project.response.ProjectTestSummariesResponse;
 import com.auta.server.application.port.in.project.ProjectDetailDto;
 import com.auta.server.application.port.in.project.ProjectQueryUseCase;
+import com.auta.server.application.port.in.project.ProjectTestSummaryDto;
 import com.auta.server.application.port.out.page.PagePort;
 import com.auta.server.application.port.out.project.ProjectPort;
 import com.auta.server.application.port.out.project.ProjectSummaryQueryDto;
@@ -48,8 +48,17 @@ public class ProjectQueryServiceImpl implements ProjectQueryUseCase {
     }
 
     @Override
-    public ProjectTestSummariesResponse getProjectTestSummaryList(String projectName, String sortBy, Integer cursor) {
-        return null;
+    public List<ProjectTestSummaryDto> getProjectTestSummaryList(String projectName, String sortBy, Long cursor) {
+        List<Project> projects = projectPort.findByProjectNameWithPaging(projectName, sortBy, cursor, PAGE_SIZE);
+        return projects.stream().map(project -> {
+            List<Test> tests = testPort.findAllByProjectId(project.getId());
+            Map<TestType, Map<Boolean, Long>> testCountsGroupedByTypeAndStatus = tests.stream()
+                    .collect(Collectors.groupingBy(Test::getTestType, Collectors.groupingBy(
+                            Test::isPassed,
+                            Collectors.counting()
+                    )));
+            return ProjectTestSummaryDto.of(project, testCountsGroupedByTypeAndStatus);
+        }).toList();
     }
 
     @Override

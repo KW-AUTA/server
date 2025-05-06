@@ -1,6 +1,7 @@
 package com.auta.server.application.service.project;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.AssertionsForClassTypes.tuple;
 
 import com.auta.server.IntegrationTestSupport;
 import com.auta.server.adapter.out.persistence.page.PageEntity;
@@ -12,8 +13,10 @@ import com.auta.server.adapter.out.persistence.test.TestRepository;
 import com.auta.server.adapter.out.persistence.user.UserEntity;
 import com.auta.server.adapter.out.persistence.user.UserRepository;
 import com.auta.server.application.port.in.project.ProjectDetailDto;
+import com.auta.server.application.port.in.project.ProjectTestSummaryDto;
 import com.auta.server.application.port.out.project.ProjectSummaryQueryDto;
 import com.auta.server.domain.project.ProjectStatus;
+import com.auta.server.domain.test.TestStatus;
 import com.auta.server.domain.test.TestType;
 import java.time.LocalDate;
 import java.util.List;
@@ -175,5 +178,66 @@ class ProjectQueryServiceImplTest extends IntegrationTestSupport {
         projectDetail.getPages().forEach(page ->
                 assertThat(page.getPageName()).isNotNull()
         );
+    }
+
+    @DisplayName("프로젝트 테스트 요약 리스트를 불러온다. 이 때 프로젝트 이름과 정렬 방식 커서 위치 등을 입력 받고 바탕으로 해당 프로젝튿르의 테스트 요약 리스트를 반환한다.")
+    @Test
+    void getProjectTestSummaryList() {
+        //given
+        UserEntity userEntity = userRepository.save(createDummyUser());
+        ProjectEntity projectEntity = projectRepository.save(createDummyProject(userEntity));
+        PageEntity pageEntity = pageRepository.save(createDummyPage(projectEntity));
+
+        List<TestEntity> testEntities = List.of(
+                createDummyTest(projectEntity, pageEntity, TestStatus.FAILED, TestType.ROUTING),
+                createDummyTest(projectEntity, pageEntity, TestStatus.PASSED, TestType.ROUTING),
+                createDummyTest(projectEntity, pageEntity, TestStatus.PASSED, TestType.INTERACTION),
+                createDummyTest(projectEntity, pageEntity, TestStatus.READY, TestType.ROUTING),
+                createDummyTest(projectEntity, pageEntity, TestStatus.FAILED, TestType.MAPPING)
+        );
+
+        List<TestEntity> savedTests = testRepository.saveAll(testEntities);
+
+        //when
+        List<ProjectTestSummaryDto> projectTestSummaryList = projectQueryService.getProjectTestSummaryList(
+                "캡스톤",
+                "",
+                (Long) null
+        );
+
+        //then
+        assertThat(projectTestSummaryList).extracting("totalRoutingTest", "totalInteractionTest", "totalMappingTest",
+                        "successRoutingTest", "successInteractionTest", "successMappingTest")
+                .containsExactlyInAnyOrder(tuple(3, 1, 1, 1, 1, 0));
+
+    }
+
+    private TestEntity createDummyTest(ProjectEntity projectEntity, PageEntity pageEntity, TestStatus testStatus,
+                                       TestType testType) {
+        return TestEntity.builder()
+                .projectEntity(projectEntity)
+                .pageEntity(pageEntity)
+                .testStatus(testStatus)
+                .testType(testType)
+                .build();
+    }
+
+    private PageEntity createDummyPage(ProjectEntity projectEntity) {
+        return PageEntity.builder()
+                .projectEntity(projectEntity)
+                .build();
+    }
+
+    private ProjectEntity createDummyProject(UserEntity userEntity) {
+        return ProjectEntity.builder()
+                .projectName("캡스톤")
+                .projectCreatedDate(LocalDate.now())
+                .userEntity(userEntity)
+                .build();
+    }
+
+    private UserEntity createDummyUser() {
+        return UserEntity.builder()
+                .build();
     }
 }

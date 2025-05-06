@@ -39,10 +39,11 @@ public class ProjectQueryController {
     public ApiResponse<ProjectTestSummariesResponse> getProjectTestSummaryList(
             @RequestParam String projectName,
             @RequestParam String sortBy,
-            @RequestParam Integer cursor //커서는 long
+            @RequestParam Long cursor //커서는 long
     ) {
         return ApiResponse.ok("프로젝트 테스트 리스트 조회가 완료되었습니다.",
-                projectQueryUseCase.getProjectTestSummaryList(projectName, sortBy, cursor));
+                ProjectTestSummariesResponse.from(
+                        projectQueryUseCase.getProjectTestSummaryList(projectName, sortBy, cursor)));
     }
 
     @GetMapping("/api/v1/projects/tests/{projectId}")

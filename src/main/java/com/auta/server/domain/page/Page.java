@@ -29,7 +29,7 @@ public class Page {
     }
 
     public long getTotalMapping() {
-        return getTotalByType(TestType.COMPONENT);
+        return getTotalByType(TestType.MAPPING);
     }
 
     public void addTests(List<Test> tests) {
