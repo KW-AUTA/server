@@ -1,6 +1,5 @@
 package com.auta.server.application.service.project;
 
-import com.auta.server.adapter.in.page.response.PageTestResponse;
 import com.auta.server.adapter.in.project.response.ProjectTestDetailResponse;
 import com.auta.server.application.port.in.project.ProjectDetailDto;
 import com.auta.server.application.port.in.project.ProjectQueryUseCase;
@@ -14,6 +13,7 @@ import com.auta.server.common.exception.ErrorCode;
 import com.auta.server.domain.page.Page;
 import com.auta.server.domain.project.Project;
 import com.auta.server.domain.test.Test;
+import com.auta.server.domain.test.TestCountSummary;
 import com.auta.server.domain.test.TestType;
 import java.util.List;
 import java.util.Map;
@@ -42,9 +42,9 @@ public class ProjectQueryServiceImpl implements ProjectQueryUseCase {
         List<Page> pages = pagePort.findAllIdsByProjectId(projectId);
         List<Test> tests = testPort.findAllByProjectId(projectId);
 
-        Map<TestType, Long> testCounts = extractTestCounts(tests);
+        TestCountSummary testCountSummary = TestCountSummary.from(tests);
 
-        return ProjectDetailDto.of(project, pages, testCounts);
+        return ProjectDetailDto.of(project, pages, testCountSummary);
     }
 
     @Override
@@ -64,15 +64,5 @@ public class ProjectQueryServiceImpl implements ProjectQueryUseCase {
     @Override
     public ProjectTestDetailResponse getProjectTestDetail(Long projectId) {
         return null;
-    }
-
-    @Override
-    public PageTestResponse getPageTestDetail(Long pageId) {
-        return null;
-    }
-
-    private Map<TestType, Long> extractTestCounts(List<Test> tests) {
-        return tests.stream()
-                .collect(Collectors.groupingBy(Test::getTestType, Collectors.counting()));
     }
 }

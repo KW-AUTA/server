@@ -2,12 +2,12 @@ package com.auta.server.adapter.in.project.response;
 
 import com.auta.server.application.port.in.project.ProjectDetailDto;
 import com.auta.server.domain.project.Project;
+import com.auta.server.domain.test.TestCountSummary;
 import com.auta.server.domain.test.TestType;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Map;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -41,7 +41,7 @@ public class ProjectDetailResponse {
 
     public static ProjectDetailResponse from(ProjectDetailDto projectDetailDto) {
         Project project = projectDetailDto.getProject();
-        Map<TestType, Long> testCounts = projectDetailDto.getTestCounts();
+        TestCountSummary summary = projectDetailDto.getTestCountSummary();
         return ProjectDetailResponse.builder()
                 .projectName(project.getProjectName())
                 .projectAdmin(project.getUser().getUsername())
@@ -54,12 +54,9 @@ public class ProjectDetailResponse {
                 .serviceUrl(project.getServiceUrl())
                 .reportSummary(null)
                 .testSummary(TestSummary.builder()
-                        .totalRoutingTest(
-                                getTestCount(testCounts, TestType.ROUTING))
-                        .totalInteractionTest(
-                                getTestCount(testCounts, TestType.INTERACTION))
-                        .totalMappingTest(
-                                getTestCount(testCounts, TestType.MAPPING))
+                        .totalRoutingTest(summary.get(TestType.ROUTING))
+                        .totalInteractionTest(summary.get(TestType.INTERACTION))
+                        .totalMappingTest(summary.get(TestType.MAPPING))
                         .build())
                 .pages(projectDetailDto.getPages().stream()
                         .map(p -> PageInfo.builder()
@@ -68,10 +65,6 @@ public class ProjectDetailResponse {
                                 .build())
                         .toList())
                 .build();
-    }
-
-    private static int getTestCount(Map<TestType, Long> map, TestType type) {
-        return Math.toIntExact(map.getOrDefault(type, 0L));
     }
 
     @Getter

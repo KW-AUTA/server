@@ -24,6 +24,7 @@ import com.auta.server.application.port.out.project.ProjectSummaryQueryDto;
 import com.auta.server.docs.RestDocsSupport;
 import com.auta.server.domain.project.Project;
 import com.auta.server.domain.project.ProjectStatus;
+import com.auta.server.domain.test.TestCountSummary;
 import com.auta.server.domain.user.User;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -134,7 +135,7 @@ public class ProjectQueryControllerDocsTest extends RestDocsSupport {
                                                 .builder().pageName("로그인 페이지").pageBaseUrl("/login")
                                                 .build()
                                 ))
-                        .testCounts(Map.of())
+                        .testCountSummary(TestCountSummary.builder().testCountMap(Map.of()).build())
                         .build());
 
         //when   //then
