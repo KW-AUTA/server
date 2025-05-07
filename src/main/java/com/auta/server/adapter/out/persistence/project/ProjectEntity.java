@@ -48,6 +48,7 @@ public class ProjectEntity extends BaseEntity {
     private String serviceUrl;
     private String projectName;
     private String description;
+    private LocalDate expectedTestExecution;
     private LocalDate projectCreatedDate;
     private LocalDate projectEnd;
 
@@ -59,6 +60,7 @@ public class ProjectEntity extends BaseEntity {
 
     public void updateFromDomain(Project project) {
         this.projectName = project.getProjectName();
+        this.expectedTestExecution = project.getExpectedTestExecution();
         this.projectEnd = project.getProjectEnd();
         this.description = project.getDescription();
         this.figmaUrl = project.getFigmaUrl();

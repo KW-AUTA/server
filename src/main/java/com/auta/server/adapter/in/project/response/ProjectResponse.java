@@ -17,6 +17,8 @@ public class ProjectResponse {
     @JsonFormat(pattern = "yyyy-MM-dd")
     private LocalDate projectCreatedDate;
     @JsonFormat(pattern = "yyyy-MM-dd")
+    private LocalDate expectedTestExecution;
+    @JsonFormat(pattern = "yyyy-MM-dd")
     private LocalDate projectEnd;
     private String description;
     private String figmaUrl;
@@ -28,6 +30,7 @@ public class ProjectResponse {
                 .projectName(project.getProjectName())
                 .administrator(project.getUser().getUsername())
                 .projectCreatedDate(project.getProjectCreatedDate())
+                .expectedTestExecution(project.getExpectedTestExecution())
                 .projectEnd(project.getProjectEnd())
                 .description(project.getDescription())
                 .figmaUrl(project.getFigmaUrl())

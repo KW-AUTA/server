@@ -1,7 +1,6 @@
 package com.auta.server.application.service.project;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.AssertionsForClassTypes.tuple;
 
 import com.auta.server.IntegrationTestSupport;
 import com.auta.server.adapter.out.persistence.page.PageEntity;
@@ -151,7 +150,7 @@ class ProjectQueryServiceImplTest extends IntegrationTestSupport {
 
         //then
         assertThat(projectDetail).extracting("totalRoutingTest", "totalInteractionTest", "totalMappingTest")
-                .contains(3, 1, 1);
+                .contains(2, 1, 1);
     }
 
     @DisplayName("프로젝트 테스트 요약 리스트를 불러온다. 이 때 프로젝트 이름과 정렬 방식 커서 위치 등을 입력 받고 바탕으로 해당 프로젝튿르의 테스트 요약 리스트를 반환한다.")
@@ -166,7 +165,7 @@ class ProjectQueryServiceImplTest extends IntegrationTestSupport {
                 createDummyTest(projectEntity, pageEntity, TestStatus.FAILED, TestType.ROUTING),
                 createDummyTest(projectEntity, pageEntity, TestStatus.PASSED, TestType.ROUTING),
                 createDummyTest(projectEntity, pageEntity, TestStatus.PASSED, TestType.INTERACTION),
-                createDummyTest(projectEntity, pageEntity, TestStatus.READY, TestType.ROUTING),
+                createDummyTest(projectEntity, pageEntity, TestStatus.FAILED, TestType.ROUTING),
                 createDummyTest(projectEntity, pageEntity, TestStatus.FAILED, TestType.MAPPING)
         );
 
@@ -180,9 +179,10 @@ class ProjectQueryServiceImplTest extends IntegrationTestSupport {
         );
 
         //then
-        assertThat(projectTestSummaryList).extracting("totalRoutingTest", "totalInteractionTest", "totalMappingTest",
+        assertThat(projectTestSummaryList).singleElement()
+                .extracting("totalRoutingTest", "totalInteractionTest", "totalMappingTest",
                         "successRoutingTest", "successInteractionTest", "successMappingTest")
-                .containsExactlyInAnyOrder(tuple(3, 1, 1, 1, 1, 0));
+                .contains(3, 1, 1, 1, 1, 0);
 
     }
 

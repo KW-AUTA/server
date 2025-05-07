@@ -18,6 +18,9 @@ public class ProjectRequest {
     private String projectName;
 
     @JsonFormat(pattern = "yyyy-MM-dd")
+    private LocalDate expectedTestExecution;
+
+    @JsonFormat(pattern = "yyyy-MM-dd")
     private LocalDate projectEnd;
 
     private String description;
@@ -34,6 +37,7 @@ public class ProjectRequest {
     public ProjectCommand toCommand() {
         return ProjectCommand.builder()
                 .projectName(projectName)
+                .expectedTestExecution(expectedTestExecution)
                 .projectEnd(projectEnd)
                 .description(description)
                 .figmaUrl(figmaUrl)

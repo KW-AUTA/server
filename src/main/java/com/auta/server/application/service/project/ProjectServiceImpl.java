@@ -69,6 +69,7 @@ public class ProjectServiceImpl implements ProjectUseCase {
                 .projectName(command.getProjectName())
                 .description(command.getDescription())
                 .projectCreatedDate(registeredDate)
+                .expectedTestExecution(command.getExpectedTestExecution())
                 .projectEnd(command.getProjectEnd())
                 .projectStatus(ProjectStatus.NOT_STARTED)
                 .testExecuteTime(LocalDateTime.of(2024, 4, 25, 12, 11))

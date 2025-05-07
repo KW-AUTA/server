@@ -50,6 +50,7 @@ public class ProjectControllerDocsTest extends RestDocsSupport {
         setMockSecurityContext();
         ProjectRequest request = ProjectRequest.builder()
                 .projectName("UI 자동화 테스트")
+                .expectedTestExecution(LocalDate.of(2024, 4, 4))
                 .projectEnd(LocalDate.of(2024, 4, 4))
                 .description("프로젝트 설명입니다.")
                 .figmaUrl("https://figma.com")
@@ -71,6 +72,7 @@ public class ProjectControllerDocsTest extends RestDocsSupport {
                         .projectName("UI 자동화 테스트")
                         .user(user)
                         .projectCreatedDate(LocalDate.of(2024, 4, 3))
+                        .expectedTestExecution(LocalDate.of(2024, 4, 3))
                         .projectEnd(LocalDate.of(2024, 4, 4))
                         .description("프로젝트 설명입니다.")
                         .figmaUrl("https://figma.com")
@@ -90,6 +92,8 @@ public class ProjectControllerDocsTest extends RestDocsSupport {
                         requestFields(
                                 fieldWithPath("projectName").type(JsonFieldType.STRING)
                                         .description("프로젝트 이름"),
+                                fieldWithPath("expectedTestExecution").type(JsonFieldType.STRING)
+                                        .description("예상 테스트 시작일"),
                                 fieldWithPath("projectEnd").type(JsonFieldType.STRING)
                                         .description("프로젝트 종료 예정일 (yyyy-MM-dd)"),
                                 fieldWithPath("description").type(JsonFieldType.STRING)
@@ -113,6 +117,8 @@ public class ProjectControllerDocsTest extends RestDocsSupport {
 
                                 fieldWithPath("data.projectId").type(JsonFieldType.NUMBER)
                                         .description("프로젝트 ID"),
+                                fieldWithPath("data.expectedTestExecution").type(JsonFieldType.STRING)
+                                        .description("예상 테스트 시작일"),
                                 fieldWithPath("data.projectName").type(JsonFieldType.STRING)
                                         .description("프로젝트 이름"),
                                 fieldWithPath("data.administrator").type(JsonFieldType.STRING)
@@ -138,6 +144,7 @@ public class ProjectControllerDocsTest extends RestDocsSupport {
         //given
         ProjectRequest request = ProjectRequest.builder()
                 .projectName("UI 자동화 테스트")
+                .expectedTestExecution(LocalDate.of(2024, 4, 3))
                 .projectEnd(LocalDate.of(2024, 4, 4))
                 .description("프로젝트 설명입니다.")
                 .figmaUrl("https://figma.com")
@@ -159,6 +166,7 @@ public class ProjectControllerDocsTest extends RestDocsSupport {
                         .projectName("UI 자동화 테스트")
                         .user(user)
                         .projectCreatedDate(LocalDate.of(2024, 4, 3))
+                        .expectedTestExecution(LocalDate.of(2024, 4, 3))
                         .projectEnd(LocalDate.of(2024, 4, 4))
                         .description("프로젝트 설명입니다.")
                         .figmaUrl("https://figma.com")
@@ -178,6 +186,8 @@ public class ProjectControllerDocsTest extends RestDocsSupport {
                         requestFields(
                                 fieldWithPath("projectName").type(JsonFieldType.STRING)
                                         .description("프로젝트 이름"),
+                                fieldWithPath("expectedTestExecution").type(JsonFieldType.STRING)
+                                        .description("예상 테스트 시작일"),
                                 fieldWithPath("projectEnd").type(JsonFieldType.STRING)
                                         .description("프로젝트 종료 예정일 (yyyy-MM-dd)"),
                                 fieldWithPath("description").type(JsonFieldType.STRING)
@@ -201,6 +211,8 @@ public class ProjectControllerDocsTest extends RestDocsSupport {
 
                                 fieldWithPath("data.projectId").type(JsonFieldType.NUMBER)
                                         .description("프로젝트 ID"),
+                                fieldWithPath("data.expectedTestExecution").type(JsonFieldType.STRING)
+                                        .description("예상 테스트 시작일"),
                                 fieldWithPath("data.projectName").type(JsonFieldType.STRING)
                                         .description("프로젝트 이름"),
                                 fieldWithPath("data.administrator").type(JsonFieldType.STRING)

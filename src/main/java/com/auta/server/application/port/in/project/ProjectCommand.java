@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class ProjectCommand {
     private String projectName;
+    private LocalDate expectedTestExecution;
     private LocalDate projectEnd;
     private String description;
     private String figmaUrl;
@@ -16,9 +17,12 @@ public class ProjectCommand {
     private String rootFigmaPage;
 
     @Builder
-    private ProjectCommand(String projectName, LocalDate projectEnd, String description, String figmaUrl,
+    private ProjectCommand(String projectName, LocalDate expectedTestExecution, LocalDate projectEnd,
+                           String description,
+                           String figmaUrl,
                            String serviceUrl, String rootFigmaPage) {
         this.projectName = projectName;
+        this.expectedTestExecution = expectedTestExecution;
         this.projectEnd = projectEnd;
         this.description = description;
         this.figmaUrl = figmaUrl;

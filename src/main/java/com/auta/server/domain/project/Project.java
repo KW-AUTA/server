@@ -26,6 +26,7 @@ public class Project {
     private String projectName;
     private String description;
     private LocalDate projectCreatedDate;
+    private LocalDate expectedTestExecution;
     private LocalDate projectEnd;
     private ProjectStatus projectStatus;
     private LocalDateTime testExecuteTime;
@@ -33,6 +34,7 @@ public class Project {
 
     public void update(ProjectCommand command) {
         this.projectName = command.getProjectName();
+        this.expectedTestExecution = command.getExpectedTestExecution();
         this.projectEnd = command.getProjectEnd();
         this.description = command.getDescription();
         this.figmaUrl = command.getFigmaUrl();
@@ -51,7 +53,7 @@ public class Project {
     public int getTotalMappingTest() {
         return getTotalTestBy(Page::getTotalMapping);
     }
-    
+
     public void addPages(List<Page> pages) {
         this.pages = pages;
     }

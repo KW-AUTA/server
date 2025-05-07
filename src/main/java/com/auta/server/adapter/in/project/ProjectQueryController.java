@@ -39,7 +39,7 @@ public class ProjectQueryController {
     public ApiResponse<ProjectTestSummariesResponse> getProjectTestSummaryList(
             @RequestParam String projectName,
             @RequestParam String sortBy,
-            @RequestParam Long cursor //커서는 long
+            @RequestParam Long cursor
     ) {
         return ApiResponse.ok("프로젝트 테스트 리스트 조회가 완료되었습니다.",
                 ProjectTestSummariesResponse.from(
