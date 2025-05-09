@@ -28,7 +28,7 @@ public class ApiControllerAdvice {
     }
 
     @ExceptionHandler(Exception.class)
-    public ResponseEntity<ApiResponse<Object>> businessException(Exception e) {
+    public ResponseEntity<ApiResponse<Object>> exception(Exception e) {
         String message = e.getMessage();
         return ResponseEntity
                 .status(HttpStatus.INTERNAL_SERVER_ERROR)
