@@ -21,6 +21,12 @@ public class ProjectController {
 
     private final ProjectUseCase projectUseCase;
 
+    @PostMapping("/api/v1/projects/{projectId}/run-test")
+    public ApiResponse<String> executeTest(@PathVariable Long projectId) {
+        projectUseCase.executeTest(projectId);
+        return ApiResponse.ok("프로젝트 테스트가 완료 되었습니다.");
+    }
+
     @PostMapping("/api/v1/projects")
     public ApiResponse<ProjectResponse> crateProject(@Valid @RequestBody ProjectRequest request) {
         String email = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();

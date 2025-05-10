@@ -10,4 +10,6 @@ public interface ProjectUseCase {
     Project updateProject(ProjectCommand command, Long projectId);
 
     void deleteProject(Long projectId);
+
+    void executeTest(Long projectId);
 }

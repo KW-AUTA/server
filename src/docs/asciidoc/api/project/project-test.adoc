@@ -1,0 +1,11 @@
+[[project-test]]
+=== 페이지 테스트 실행
+
+==== HTTP Request
+
+include::{snippets}/project-test/http-request.adoc[]
+
+==== HTTP Response
+
+include::{snippets}/project-test/http-response.adoc[]
+include::{snippets}/project-test/response-fields.adoc[]

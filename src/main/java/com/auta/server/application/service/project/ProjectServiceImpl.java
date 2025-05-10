@@ -2,7 +2,6 @@ package com.auta.server.application.service.project;
 
 import com.auta.server.application.port.in.project.ProjectCommand;
 import com.auta.server.application.port.in.project.ProjectUseCase;
-import com.auta.server.application.port.out.page.PagePort;
 import com.auta.server.application.port.out.project.ProjectPort;
 import com.auta.server.application.port.out.test.TestPort;
 import com.auta.server.application.port.out.user.UserPort;
@@ -19,12 +18,11 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
-@Transactional(readOnly = true)
+@Transactional
 public class ProjectServiceImpl implements ProjectUseCase {
 
     private final ProjectPort projectPort;
     private final UserPort userPort;
-    private final PagePort pagePort;
     private final TestPort testPort;
 
     @Override
@@ -38,7 +36,6 @@ public class ProjectServiceImpl implements ProjectUseCase {
         return projectPort.save(project);
     }
 
-    @Transactional
     @Override
     public Project updateProject(ProjectCommand command, Long projectId) {
         Project project = projectPort.findById(projectId)
@@ -49,7 +46,6 @@ public class ProjectServiceImpl implements ProjectUseCase {
         return projectPort.update(project);
     }
 
-    @Transactional
     @Override
     public void deleteProject(Long projectId) {
         Project project = projectPort.findById(projectId)
@@ -58,6 +54,11 @@ public class ProjectServiceImpl implements ProjectUseCase {
         testPort.deleteAllByProjectId(project.getId());
 
         projectPort.delete(project);
+    }
+
+    @Override
+    public void executeTest(Long projectId) {
+        
     }
 
     private Project createProjectDomain(ProjectCommand command, LocalDate registeredDate, User user) {

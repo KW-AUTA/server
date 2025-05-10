@@ -26,4 +26,12 @@ public class ApiControllerAdvice {
                 .status(errorCode.getStatus())
                 .body(ApiResponse.of(errorCode.getStatus(), errorCode.getMessage(), null));
     }
+
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<ApiResponse<Object>> businessException(Exception e) {
+        String message = e.getMessage();
+        return ResponseEntity
+                .status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body(ApiResponse.of(HttpStatus.INTERNAL_SERVER_ERROR, message, null));
+    }
 }

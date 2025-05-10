@@ -22,6 +22,18 @@ import org.springframework.http.MediaType;
 
 class ProjectControllerTest extends ControllerTestSupport {
 
+
+    @DisplayName("프로젝트 테스트를 실행한다.")
+    @Test
+    void executeTest() throws Exception {
+        //given
+        //when //then
+        mockMvc.perform(
+                        post("/api/v1/projects/1/run-test")
+                ).andDo(print())
+                .andExpect(status().isOk());
+    }
+
     @DisplayName("프로젝트를 생성한다.")
     @Test
     void createProject() throws Exception {

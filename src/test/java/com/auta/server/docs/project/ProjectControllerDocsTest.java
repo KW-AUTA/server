@@ -43,6 +43,32 @@ public class ProjectControllerDocsTest extends RestDocsSupport {
         return new ProjectController(projectUseCase);
     }
 
+
+    @DisplayName("프로젝트 테스트 실행")
+    @Test
+    void executeTest() throws Exception {
+        //given
+        //when //then
+        mockMvc.perform(
+                        post("/api/v1/projects/1/run-test")
+                ).andDo(print())
+                .andExpect(status().isOk())
+                .andDo(document("project-test",
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(prettyPrint()),
+                        responseFields(
+                                fieldWithPath("code").type(JsonFieldType.NUMBER)
+                                        .description("상태 코드"),
+                                fieldWithPath("status").type(JsonFieldType.STRING)
+                                        .description("상태"),
+                                fieldWithPath("message").type(JsonFieldType.STRING)
+                                        .description("메시지"),
+                                fieldWithPath("data").type(JsonFieldType.NULL)
+                                        .description("응답 데이터")
+                        )));
+    }
+
+
     @DisplayName("프로젝트 생성")
     @Test
     void createProject() throws Exception {
