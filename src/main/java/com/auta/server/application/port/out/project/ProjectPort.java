@@ -14,4 +14,6 @@ public interface ProjectPort {
     void delete(Project project);
 
     List<Project> findByProjectNameWithPaging(String projectName, String sortBy, Long cursor, int pageSize);
+
+    List<Project> findAllByUserId(Long userId);
 }

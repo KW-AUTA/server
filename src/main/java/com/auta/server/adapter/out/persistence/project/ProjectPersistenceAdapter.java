@@ -53,4 +53,10 @@ public class ProjectPersistenceAdapter implements ProjectPort {
                 cursor, pageSize);
         return projectEntities.stream().map(projectMapper::toDomain).toList();
     }
+
+    @Override
+    public List<Project> findAllByUserId(Long userId) {
+        List<ProjectEntity> projectEntities = projectRepository.findAllByUserId(userId);
+        return projectEntities.stream().map(projectMapper::toDomain).toList();
+    }
 }

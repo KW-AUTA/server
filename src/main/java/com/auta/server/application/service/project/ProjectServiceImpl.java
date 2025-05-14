@@ -12,6 +12,7 @@ import com.auta.server.domain.project.ProjectStatus;
 import com.auta.server.domain.user.User;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -58,7 +59,12 @@ public class ProjectServiceImpl implements ProjectUseCase {
 
     @Override
     public void executeTest(Long projectId) {
-        
+
+    }
+
+    @Override
+    public List<Project> findAllByUserId(Long userId) {
+        return projectPort.findAllByUserId(userId);
     }
 
     private Project createProjectDomain(ProjectCommand command, LocalDate registeredDate, User user) {
