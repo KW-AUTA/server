@@ -99,7 +99,7 @@ class ProjectQueryServiceImplTest extends IntegrationTestSupport {
                 .projectStatus(ProjectStatus.NOT_STARTED)
                 .build();
         ProjectEntity projectEntity4 = ProjectEntity.builder()
-                .userEntity(userEntity1)
+                .userEntity(userEntity2)
                 .figmaUrl("https://figma.com")
                 .rootFigmaPage("mainPage")
                 .serviceUrl("https://service.com")
@@ -187,6 +187,34 @@ class ProjectQueryServiceImplTest extends IntegrationTestSupport {
 
     }
 
+    @DisplayName("프로젝트 테스트 요약 리스트를 불러온다. 이 때 모든 테스트가 없는 프로젝트는 불러와지지 않는다.")
+    @Test
+    void getProjectTestSummaryListWithCompleted() {
+        //given
+        UserEntity userEntity = userRepository.save(createDummyUser());
+        ProjectEntity projectEntity = projectRepository.save(createDummyProject(userEntity));
+        PageEntity pageEntity = pageRepository.save(createDummyPage(projectEntity));
+
+        List<TestEntity> testEntities = List.of(
+//                createDummyTest(projectEntity, pageEntity, TestStatus.FAILED, TestType.ROUTING),
+//                createDummyTest(projectEntity, pageEntity, TestStatus.READY, TestType.ROUTING),
+//                createDummyTest(projectEntity, pageEntity, TestStatus.PASSED, TestType.INTERACTION),
+//                createDummyTest(projectEntity, pageEntity, TestStatus.FAILED, TestType.ROUTING),
+//                createDummyTest(projectEntity, pageEntity, TestStatus.FAILED, TestType.MAPPING)
+        );
+
+        List<TestEntity> savedTests = testRepository.saveAll(testEntities);
+        String email = userEntity.getEmail();
+        //when
+        List<ProjectTestSummaryDto> projectTestSummaryList = projectQueryService.getProjectTestSummaryList(
+                email, "",
+                "",
+                (Long) null
+        );
+
+        //then
+        assertThat(projectTestSummaryList).isEmpty();
+    }
 
     @DisplayName("프로젝트 테스트 상세 정보를 불러온다.")
     @Test

@@ -51,7 +51,7 @@ public class ProjectQueryServiceImpl implements ProjectQueryUseCase {
         List<Project> projects = projectPort.findByProjectNameWithPaging(email, projectName, sortBy, cursor, PAGE_SIZE);
         return projects.stream()
                 .map(project -> Map.entry(project, testPort.findAllByProjectId(project.getId())))
-                .filter(entry -> entry.getValue().stream()
+                .filter(entry -> !entry.getValue().isEmpty() && entry.getValue().stream()
                         .allMatch(test -> test.getTestStatus().isCompleted()))
                 .map(entry -> {
                     TestCountSummary testCountSummary = TestCountSummary.from(entry.getValue());
