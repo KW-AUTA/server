@@ -14,11 +14,20 @@ import org.springframework.stereotype.Component;
 public class UserPersistenceAdapter implements UserPort {
 
     private final UserRepository userRepository;
+    private final UserMapper userMapper;
 
     @Override
     public User save(User user) {
-        UserEntity saved = userRepository.save(UserMapper.toEntity(user));
-        return UserMapper.toDomain(saved);
+        if (userRepository.existsByEmail(user.getEmail())) {
+            throw new BusinessException(ErrorCode.DUPLICATE_EMAIL);
+        }
+
+        if (userRepository.existsByUsername(user.getUsername())) {
+            throw new BusinessException(ErrorCode.DUPLICATE_USERNAME);
+        }
+
+        UserEntity saved = userRepository.save(userMapper.toEntity(user));
+        return userMapper.toDomain(saved);
     }
 
     @Override
@@ -29,13 +38,21 @@ public class UserPersistenceAdapter implements UserPort {
             return Optional.empty();
         }
         if (userEntities.size() > 1) {
-            throw new BusinessException(ErrorCode.DUPLICATE_EMAIL);
+            throw new BusinessException(ErrorCode.DUPLICATED_DB_EMAIL);
         }
-        return Optional.of(UserMapper.toDomain(userEntities.get(0)));
+        return Optional.of(userMapper.toDomain(userEntities.get(0)));
     }
 
     @Override
     public void deleteByEmail(String email) {
         userRepository.deleteByEmail(email);
+    }
+
+    @Override
+    public User update(User user) {
+        UserEntity userEntity = userRepository.findById(user.getId())
+                .orElseThrow(() -> new BusinessException(ErrorCode.USER_NOT_FOUND));
+        userEntity.updateFromDomain(user);
+        return userMapper.toDomain(userEntity);
     }
 }

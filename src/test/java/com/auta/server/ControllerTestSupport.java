@@ -6,15 +6,17 @@ import static org.mockito.Mockito.mock;
 import com.auta.server.adapter.in.auth.AuthController;
 import com.auta.server.adapter.in.dashboard.DashBoardController;
 import com.auta.server.adapter.in.health.HealthCheckController;
+import com.auta.server.adapter.in.page.PageController;
 import com.auta.server.adapter.in.project.ProjectController;
 import com.auta.server.adapter.in.project.ProjectQueryController;
 import com.auta.server.adapter.in.user.UserController;
 import com.auta.server.adapter.out.web.CookieManager;
 import com.auta.server.application.port.in.auth.AuthUseCase;
+import com.auta.server.application.port.in.page.PageUseCase;
+import com.auta.server.application.port.in.project.ProjectQueryUseCase;
+import com.auta.server.application.port.in.project.ProjectUseCase;
 import com.auta.server.application.port.in.user.UserUseCase;
-import com.auta.server.application.service.DashBoardService;
-import com.auta.server.application.service.ProjectQueryService;
-import com.auta.server.application.service.ProjectService;
+import com.auta.server.application.service.dashboard.DashBoardService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.AfterEach;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,7 +36,9 @@ import org.springframework.test.web.servlet.MockMvc;
         HealthCheckController.class,
         DashBoardController.class,
         ProjectController.class,
-        ProjectQueryController.class})
+        ProjectQueryController.class,
+        PageController.class
+})
 @Import(CookieManager.class)
 public abstract class ControllerTestSupport {
     @Autowired
@@ -53,10 +57,13 @@ public abstract class ControllerTestSupport {
     protected DashBoardService dashBoardService;
 
     @MockitoBean
-    protected ProjectQueryService projectQueryService;
+    protected ProjectQueryUseCase projectQueryUseCase;
 
     @MockitoBean
-    protected ProjectService projectService;
+    protected PageUseCase pageUseCase;
+
+    @MockitoBean
+    protected ProjectUseCase projectUseCase;
 
     @AfterEach
     void clearSecurityContext() {

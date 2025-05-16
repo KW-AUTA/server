@@ -1,11 +1,13 @@
 spring:
   profiles:
     active: local
-
+  sql:
+    init:
+      mode: never
   jpa:
     hibernate:
       ddl-auto: none
-      
+
 server:
   servlet:
     encoding:

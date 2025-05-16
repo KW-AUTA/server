@@ -4,12 +4,15 @@ package com.auta.server.application.service.user;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import com.auta.server.IntegrationTestSupport;
+import com.auta.server.adapter.out.persistence.project.ProjectEntity;
+import com.auta.server.adapter.out.persistence.project.ProjectRepository;
 import com.auta.server.adapter.out.persistence.user.UserEntity;
 import com.auta.server.adapter.out.persistence.user.UserRepository;
 import com.auta.server.application.port.in.user.UserCreateCommand;
 import com.auta.server.application.port.in.user.UserUpdateCommand;
 import com.auta.server.domain.user.User;
 import java.util.List;
+import java.util.Optional;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -20,14 +23,19 @@ class UserServiceImplTest extends IntegrationTestSupport {
     @Autowired
     private UserServiceImpl userService;
 
+
     @Autowired
     private PasswordEncoder passwordEncoder;
 
     @Autowired
     private UserRepository userRepository;
 
+    @Autowired
+    private ProjectRepository projectRepository;
+
     @AfterEach
     void tearDown() {
+        projectRepository.deleteAllInBatch();
         userRepository.deleteAllInBatch();
     }
 
@@ -102,7 +110,10 @@ class UserServiceImplTest extends IntegrationTestSupport {
         //when
         User user = userService.updateUser(command, email);
         //then
-        assertThat(user).extracting("email", "address", "username")
+
+        Optional<UserEntity> optionalUser = userRepository.findById(user.getId());
+        UserEntity userEntity = optionalUser.get();
+        assertThat(userEntity).extracting("email", "address", "username")
                 .contains("test@example.com", "example", "testUser1");
     }
 
@@ -110,23 +121,34 @@ class UserServiceImplTest extends IntegrationTestSupport {
     @Test
     void deleteByEmail() {
         //given
-        UserEntity userEntity1 = UserEntity.builder()
-                .email("test@example.com1").password("testPassword1").username("testUser1").build();
-        UserEntity userEntity2 = UserEntity.builder()
-                .email("test@example.com2").password("testPassword2").username("testUser2").build();
-        UserEntity userEntity3 = UserEntity.builder()
-                .email("test@example.com3").password("testPassword3").username("testUser3").build();
-        userRepository.saveAll(List.of(
-                userEntity1, userEntity2, userEntity3
-        ));
+        String email = "test@example.com";
+        UserEntity userEntity = userRepository.save(createDummyUser(email));
 
-        String email = "test@example.com1";
+        List<ProjectEntity> projectEntities = List.of(
+                createDummyProject(userEntity),
+                createDummyProject(userEntity),
+                createDummyProject(userEntity),
+                createDummyProject(userEntity));
+
+        projectRepository.saveAll(projectEntities);
 
         //when
         userService.deleteUser(email);
+
         //then
         List<UserEntity> userEntities = userRepository.findAllByEmail(email);
-
         assertThat(userEntities).isEmpty();
+    }
+
+    private ProjectEntity createDummyProject(UserEntity userEntity) {
+        return ProjectEntity.builder()
+                .userEntity(userEntity)
+                .build();
+    }
+
+    private UserEntity createDummyUser(String email) {
+        return UserEntity.builder()
+                .email(email)
+                .build();
     }
 }

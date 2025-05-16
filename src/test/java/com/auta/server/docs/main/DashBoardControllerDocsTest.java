@@ -14,8 +14,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.auta.server.adapter.in.dashboard.DashBoardController;
-import com.auta.server.api.service.main.response.DashboardResponse;
-import com.auta.server.application.service.DashBoardService;
+import com.auta.server.adapter.in.dashboard.reponse.DashboardResponse;
+import com.auta.server.application.port.in.dashboard.DashboardUserCase;
 import com.auta.server.docs.RestDocsSupport;
 import com.auta.server.domain.project.ProjectStatus;
 import com.auta.server.domain.test.TestStatus;
@@ -28,11 +28,11 @@ import org.springframework.restdocs.payload.JsonFieldType;
 
 public class DashBoardControllerDocsTest extends RestDocsSupport {
 
-    private final DashBoardService dashBoardService = mock(DashBoardService.class);
+    private final DashboardUserCase dashboardUserCase = mock(DashboardUserCase.class);
 
     @Override
     protected Object initController() {
-        return new DashBoardController(dashBoardService);
+        return new DashBoardController(dashboardUserCase);
     }
 
     @DisplayName("대시보드 조회")
@@ -40,7 +40,7 @@ public class DashBoardControllerDocsTest extends RestDocsSupport {
     void getDashboardData() throws Exception {
         //given
         setMockSecurityContext();
-        given(dashBoardService.getDashBoardData(anyString()))
+        given(dashboardUserCase.getDashBoardData(anyString()))
                 .willReturn(
                         DashboardResponse.builder()
                                 .totalProjects(1)

@@ -23,10 +23,11 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import com.auta.server.adapter.in.project.ProjectController;
 import com.auta.server.adapter.in.project.request.ProjectRequest;
-import com.auta.server.api.service.project.request.ProjectServiceRequest;
-import com.auta.server.api.service.project.response.ProjectResponse;
-import com.auta.server.application.service.ProjectService;
+import com.auta.server.application.port.in.project.ProjectCommand;
+import com.auta.server.application.port.in.project.ProjectUseCase;
 import com.auta.server.docs.RestDocsSupport;
+import com.auta.server.domain.project.Project;
+import com.auta.server.domain.user.User;
 import java.time.LocalDate;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -35,12 +36,38 @@ import org.springframework.restdocs.payload.JsonFieldType;
 
 public class ProjectControllerDocsTest extends RestDocsSupport {
 
-    private final ProjectService projectService = mock(ProjectService.class);
+    private final ProjectUseCase projectUseCase = mock(ProjectUseCase.class);
 
     @Override
     protected Object initController() {
-        return new ProjectController(projectService);
+        return new ProjectController(projectUseCase);
     }
+
+
+    @DisplayName("프로젝트 테스트 실행")
+    @Test
+    void executeTest() throws Exception {
+        //given
+        //when //then
+        mockMvc.perform(
+                        post("/api/v1/projects/1/run-test")
+                ).andDo(print())
+                .andExpect(status().isOk())
+                .andDo(document("project-test",
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(prettyPrint()),
+                        responseFields(
+                                fieldWithPath("code").type(JsonFieldType.NUMBER)
+                                        .description("상태 코드"),
+                                fieldWithPath("status").type(JsonFieldType.STRING)
+                                        .description("상태"),
+                                fieldWithPath("message").type(JsonFieldType.STRING)
+                                        .description("메시지"),
+                                fieldWithPath("data").type(JsonFieldType.NULL)
+                                        .description("응답 데이터")
+                        )));
+    }
+
 
     @DisplayName("프로젝트 생성")
     @Test
@@ -49,6 +76,7 @@ public class ProjectControllerDocsTest extends RestDocsSupport {
         setMockSecurityContext();
         ProjectRequest request = ProjectRequest.builder()
                 .projectName("UI 자동화 테스트")
+                .expectedTestExecution(LocalDate.of(2024, 4, 4))
                 .projectEnd(LocalDate.of(2024, 4, 4))
                 .description("프로젝트 설명입니다.")
                 .figmaUrl("https://figma.com")
@@ -56,12 +84,21 @@ public class ProjectControllerDocsTest extends RestDocsSupport {
                 .rootFigmaPage("mainPage")
                 .build();
 
-        given(projectService.createProject(any(ProjectServiceRequest.class), anyString()))
-                .willReturn(ProjectResponse.builder()
-                        .projectId(1L)
+        User user = User.builder()
+                .id(1L)
+                .email("example@example.com")
+                .username("exampleUser")
+                .address(null)
+                .phoneNumber(null)
+                .build();
+
+        given(projectUseCase.createProject(any(ProjectCommand.class), anyString(), any()))
+                .willReturn(Project.builder()
+                        .id(1L)
                         .projectName("UI 자동화 테스트")
-                        .administrator("오준혁")
+                        .user(user)
                         .projectCreatedDate(LocalDate.of(2024, 4, 3))
+                        .expectedTestExecution(LocalDate.of(2024, 4, 3))
                         .projectEnd(LocalDate.of(2024, 4, 4))
                         .description("프로젝트 설명입니다.")
                         .figmaUrl("https://figma.com")
@@ -81,6 +118,8 @@ public class ProjectControllerDocsTest extends RestDocsSupport {
                         requestFields(
                                 fieldWithPath("projectName").type(JsonFieldType.STRING)
                                         .description("프로젝트 이름"),
+                                fieldWithPath("expectedTestExecution").type(JsonFieldType.STRING)
+                                        .description("예상 테스트 시작일"),
                                 fieldWithPath("projectEnd").type(JsonFieldType.STRING)
                                         .description("프로젝트 종료 예정일 (yyyy-MM-dd)"),
                                 fieldWithPath("description").type(JsonFieldType.STRING)
@@ -104,6 +143,8 @@ public class ProjectControllerDocsTest extends RestDocsSupport {
 
                                 fieldWithPath("data.projectId").type(JsonFieldType.NUMBER)
                                         .description("프로젝트 ID"),
+                                fieldWithPath("data.expectedTestExecution").type(JsonFieldType.STRING)
+                                        .description("예상 테스트 시작일"),
                                 fieldWithPath("data.projectName").type(JsonFieldType.STRING)
                                         .description("프로젝트 이름"),
                                 fieldWithPath("data.administrator").type(JsonFieldType.STRING)
@@ -129,6 +170,7 @@ public class ProjectControllerDocsTest extends RestDocsSupport {
         //given
         ProjectRequest request = ProjectRequest.builder()
                 .projectName("UI 자동화 테스트")
+                .expectedTestExecution(LocalDate.of(2024, 4, 3))
                 .projectEnd(LocalDate.of(2024, 4, 4))
                 .description("프로젝트 설명입니다.")
                 .figmaUrl("https://figma.com")
@@ -136,12 +178,21 @@ public class ProjectControllerDocsTest extends RestDocsSupport {
                 .rootFigmaPage("mainPage")
                 .build();
 
-        given(projectService.updateProject(any(ProjectServiceRequest.class), anyLong()))
-                .willReturn(ProjectResponse.builder()
-                        .projectId(1L)
+        User user = User.builder()
+                .id(1L)
+                .email("example@example.com")
+                .username("exampleUser")
+                .address(null)
+                .phoneNumber(null)
+                .build();
+
+        given(projectUseCase.updateProject(any(ProjectCommand.class), anyLong()))
+                .willReturn(Project.builder()
+                        .id(1L)
                         .projectName("UI 자동화 테스트")
-                        .administrator("오준혁")
+                        .user(user)
                         .projectCreatedDate(LocalDate.of(2024, 4, 3))
+                        .expectedTestExecution(LocalDate.of(2024, 4, 3))
                         .projectEnd(LocalDate.of(2024, 4, 4))
                         .description("프로젝트 설명입니다.")
                         .figmaUrl("https://figma.com")
@@ -158,12 +209,11 @@ public class ProjectControllerDocsTest extends RestDocsSupport {
                 .andDo(document("project-update",
                         preprocessRequest(prettyPrint()),
                         preprocessResponse(prettyPrint()),
-                        pathParameters(
-                                parameterWithName("projectId").description("조회할 프로젝트의 ID")
-                        ),
                         requestFields(
                                 fieldWithPath("projectName").type(JsonFieldType.STRING)
                                         .description("프로젝트 이름"),
+                                fieldWithPath("expectedTestExecution").type(JsonFieldType.STRING)
+                                        .description("예상 테스트 시작일"),
                                 fieldWithPath("projectEnd").type(JsonFieldType.STRING)
                                         .description("프로젝트 종료 예정일 (yyyy-MM-dd)"),
                                 fieldWithPath("description").type(JsonFieldType.STRING)
@@ -187,6 +237,8 @@ public class ProjectControllerDocsTest extends RestDocsSupport {
 
                                 fieldWithPath("data.projectId").type(JsonFieldType.NUMBER)
                                         .description("프로젝트 ID"),
+                                fieldWithPath("data.expectedTestExecution").type(JsonFieldType.STRING)
+                                        .description("예상 테스트 시작일"),
                                 fieldWithPath("data.projectName").type(JsonFieldType.STRING)
                                         .description("프로젝트 이름"),
                                 fieldWithPath("data.administrator").type(JsonFieldType.STRING)
@@ -211,7 +263,7 @@ public class ProjectControllerDocsTest extends RestDocsSupport {
     void deleteProject() throws Exception {
         //given
 
-        doNothing().when(projectService).deleteProject(anyLong());
+        doNothing().when(projectUseCase).deleteProject(anyLong());
         //when //then
         mockMvc.perform(
                         delete("/api/v1/projects/{projectId}", 1L)

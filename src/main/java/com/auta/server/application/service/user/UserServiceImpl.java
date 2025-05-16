@@ -1,12 +1,15 @@
 package com.auta.server.application.service.user;
 
+import com.auta.server.application.port.in.project.ProjectUseCase;
 import com.auta.server.application.port.in.user.UserCreateCommand;
 import com.auta.server.application.port.in.user.UserUpdateCommand;
 import com.auta.server.application.port.in.user.UserUseCase;
 import com.auta.server.application.port.out.user.UserPort;
 import com.auta.server.common.exception.BusinessException;
 import com.auta.server.common.exception.ErrorCode;
+import com.auta.server.domain.project.Project;
 import com.auta.server.domain.user.User;
+import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -19,6 +22,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class UserServiceImpl implements UserUseCase {
 
     private final UserPort userPort;
+    private final ProjectUseCase projectUseCase;
     private final PasswordEncoder passwordEncoder;
 
     @Override
@@ -44,12 +48,18 @@ public class UserServiceImpl implements UserUseCase {
 
         updateUser(command, user);
 
-        return user;
+        return userPort.update(user);
     }
 
     @Override
     @Transactional
     public void deleteUser(String email) {
+        User user = userPort.findByEmail(email)
+                .orElseThrow(() -> new BusinessException(ErrorCode.USER_NOT_FOUND));
+
+        List<Project> projects = projectUseCase.findAllByUserId(user.getId());
+        projects.forEach(project -> projectUseCase.deleteProject(project.getId()));
+
         userPort.deleteByEmail(email);
     }
 
