@@ -18,9 +18,18 @@ public interface TestRepository extends JpaRepository<TestEntity, Long> {
 
     @Query("""
                 select t from TestEntity as t
-                where t.projectEntity.id = :projectId
+                join fetch t.projectEntity p
+                where p.id = :projectId
             """)
     List<TestEntity> findAllByProjectId(@Param("projectId") Long projectId);
+
+    @Query("""
+                select t from TestEntity as t
+                join fetch t.projectEntity p
+                where p.id in :projectIds
+                order by t.createdDateTime desc
+            """)
+    List<TestEntity> findAllByProjectIdInOrderByCreatedTime(@Param("projectIds") List<Long> projectIds);
 
     @Modifying
     @Query("""
@@ -28,5 +37,4 @@ public interface TestRepository extends JpaRepository<TestEntity, Long> {
                 where t.projectEntity.id = :projectId
             """)
     void deleteAllByProjectId(@Param("projectId") Long projectId);
-
 }

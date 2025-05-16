@@ -32,6 +32,26 @@ public class TestCountSummary {
                 .sum());
     }
 
+    public int totalCompleted() {
+        return Math.toIntExact(
+                groupedTestCountMap.values().stream()
+                        .flatMap(statusMap -> statusMap.entrySet().stream())
+                        .filter(entry -> entry.getKey().isCompleted())
+                        .mapToLong(Map.Entry::getValue)
+                        .sum()
+        );
+    }
+
+    public int totalInCompleted() {
+        return Math.toIntExact(
+                groupedTestCountMap.values().stream()
+                        .flatMap(statusMap -> statusMap.entrySet().stream())
+                        .filter(entry -> entry.getKey().isInCompleted())
+                        .mapToLong(Map.Entry::getValue)
+                        .sum()
+        );
+    }
+
     public int typeTotal(TestType type) {
         Map<TestStatus, Long> statusMap = groupedTestCountMap.getOrDefault(type, Map.of());
         return Math.toIntExact(statusMap.entrySet().stream()

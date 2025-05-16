@@ -25,6 +25,12 @@ public class TestPersistenceAdapter implements TestPort {
     }
 
     @Override
+    public List<Test> findAllByProjectIdInOrderByCreationTimeDesc(List<Long> projectIds) {
+        List<TestEntity> testEntities = testRepository.findAllByProjectIdInOrderByCreatedTime(projectIds);
+        return testEntities.stream().map(testMapper::toDomain).toList();
+    }
+
+    @Override
     public void deleteAllByProjectId(Long projectId) {
         testRepository.deleteAllByProjectId(projectId);
     }
