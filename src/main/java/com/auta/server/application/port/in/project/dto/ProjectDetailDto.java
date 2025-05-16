@@ -1,4 +1,4 @@
-package com.auta.server.application.port.in.project;
+package com.auta.server.application.port.in.project.dto;
 
 import com.auta.server.domain.page.Page;
 import com.auta.server.domain.project.Project;
@@ -22,9 +22,9 @@ public class ProjectDetailDto {
                 .project(project)
                 .pages(pages.stream().map(page -> ProjectDetailDto.PageInfo.builder().pageName(page.getPageName())
                         .pageBaseUrl(page.getPageBaseUrl()).build()).toList())
-                .totalRoutingTest(testCountSummary.total(TestType.ROUTING))
-                .totalInteractionTest(testCountSummary.total(TestType.INTERACTION))
-                .totalMappingTest(testCountSummary.total(TestType.MAPPING))
+                .totalRoutingTest(testCountSummary.typeTotal(TestType.ROUTING))
+                .totalInteractionTest(testCountSummary.typeTotal(TestType.INTERACTION))
+                .totalMappingTest(testCountSummary.typeTotal(TestType.MAPPING))
                 .build();
     }
 

@@ -16,11 +16,11 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.auta.server.adapter.in.project.ProjectQueryController;
-import com.auta.server.adapter.in.project.response.ProjectTestDetailResponse;
-import com.auta.server.application.port.in.project.ProjectDetailDto;
 import com.auta.server.application.port.in.project.ProjectQueryUseCase;
-import com.auta.server.application.port.in.project.ProjectTestSummaryDto;
-import com.auta.server.application.port.out.project.ProjectSummaryQueryDto;
+import com.auta.server.application.port.in.project.dto.ProjectDetailDto;
+import com.auta.server.application.port.in.project.dto.ProjectSummaryDto;
+import com.auta.server.application.port.in.project.dto.ProjectTestDetailDto;
+import com.auta.server.application.port.in.project.dto.ProjectTestSummaryDto;
 import com.auta.server.docs.RestDocsSupport;
 import com.auta.server.domain.project.Project;
 import com.auta.server.domain.project.ProjectStatus;
@@ -47,7 +47,7 @@ public class ProjectQueryControllerDocsTest extends RestDocsSupport {
         //given
         given(projectQueryUseCase.getProjectSummaryList(anyString(), anyString(), anyLong()))
                 .willReturn(List.of(
-                        ProjectSummaryQueryDto.builder()
+                        ProjectSummaryDto.builder()
                                 .projectId(1L)
                                 .projectAdmin("adminUser")
                                 .projectName("UI 테스트 프로젝트")
@@ -56,7 +56,7 @@ public class ProjectQueryControllerDocsTest extends RestDocsSupport {
                                 .projectStatus(ProjectStatus.IN_PROGRESS)
                                 .testRate(90)
                                 .build(),
-                        ProjectSummaryQueryDto.builder()
+                        ProjectSummaryDto.builder()
                                 .projectId(2L)
                                 .projectAdmin("otherAdmin")
                                 .projectName("API 서버 개발")
@@ -262,33 +262,34 @@ public class ProjectQueryControllerDocsTest extends RestDocsSupport {
     void getProjectTestDetail() throws Exception {
         //given
         given(projectQueryUseCase.getProjectTestDetail(anyLong()))
-                .willReturn(ProjectTestDetailResponse.builder()
-                        .projectName("UI 테스트 프로젝트")
-                        .projectAdmin("example_admin")
-                        .projectStart(LocalDate.of(2024, 1, 1))
-                        .projectEnd(LocalDate.of(2024, 12, 31))
-                        .testExecutionDate(LocalDate.of(2024, 4, 4))
-                        .description("테스트 프로젝트에 대한 설명입니다.")
-                        .testSummary(ProjectTestDetailResponse.TestCountSummary.builder()
-                                .totalSuccessTests(24)
-                                .totalFailTests(6)
-                                .interactionSuccessCount(10)
-                                .interactionFailCount(2)
-                                .mappingSuccessCount(8)
-                                .mappingFailCount(2)
-                                .routingSuccessCount(6)
-                                .routingFailCount(2)
+                .willReturn(ProjectTestDetailDto.builder()
+                        .project(Project.builder().projectName("AUTA")
+                                .user(User.builder().id(1L).username("adminUser").build())
+                                .projectCreatedDate(LocalDate.of(2024, 1, 1))
+                                .projectEnd(LocalDate.of(2024, 12, 31))
+                                .testExecuteTime(LocalDateTime.of(2024, 4, 25, 12, 11))
+                                .rootFigmaPage("HomePage")
+                                .description("UI 자동화 프로젝트입니다.")
+                                .figmaUrl("https://figma.com/example")
+                                .serviceUrl("https://service.com")
                                 .build())
-                        .pages(List.of(
-                                ProjectTestDetailResponse.PageInfo.builder()
-                                        .pageId(1L)
-                                        .pageName("메인 페이지")
-                                        .build(),
-                                ProjectTestDetailResponse.PageInfo.builder()
-                                        .pageId(2L)
-                                        .pageName("로그인 페이지")
-                                        .build()
-                        ))
+                        .pages(List.of
+                                (
+                                        ProjectTestDetailDto.PageInfo
+                                                .builder().pageName("메인 페이지").pageId(1L)
+                                                .build(),
+                                        ProjectTestDetailDto.PageInfo
+                                                .builder().pageName("로그인 페이지").pageId(2L)
+                                                .build()
+                                ))
+                        .totalSuccessTests(5)
+                        .totalFailTests(1)
+                        .routingSuccessCount(2)
+                        .routingFailCount(0)
+                        .interactionSuccessCount(2)
+                        .interactionFailCount(0)
+                        .mappingSuccessCount(1)
+                        .mappingFailCount(1)
                         .build());
         //when   //then
         mockMvc.perform(
@@ -310,8 +311,8 @@ public class ProjectQueryControllerDocsTest extends RestDocsSupport {
                                         .description("프로젝트 시작일 (yyyy-MM-dd)"),
                                 fieldWithPath("data.projectEnd").type(JsonFieldType.STRING)
                                         .description("프로젝트 종료일 (yyyy-MM-dd)"),
-                                fieldWithPath("data.testExecutionDate").type(JsonFieldType.STRING)
-                                        .description("테스트 수행일 (yyyy-MM-dd)"),
+                                fieldWithPath("data.testExecutionTime").type(JsonFieldType.STRING)
+                                        .description("테스트 수행일 (yyyy-MM-dd HH:mm:ss)"),
                                 fieldWithPath("data.description").type(JsonFieldType.STRING).description("프로젝트 설명"),
 
                                 fieldWithPath("data.testSummary").type(JsonFieldType.OBJECT)

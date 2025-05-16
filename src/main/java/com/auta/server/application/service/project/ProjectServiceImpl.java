@@ -11,7 +11,6 @@ import com.auta.server.domain.project.Project;
 import com.auta.server.domain.project.ProjectStatus;
 import com.auta.server.domain.user.User;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -79,7 +78,6 @@ public class ProjectServiceImpl implements ProjectUseCase {
                 .expectedTestExecution(command.getExpectedTestExecution())
                 .projectEnd(command.getProjectEnd())
                 .projectStatus(ProjectStatus.NOT_STARTED)
-                .testExecuteTime(LocalDateTime.of(2024, 4, 25, 12, 11))
                 .build();
     }
 }

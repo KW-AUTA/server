@@ -19,7 +19,7 @@ public class PagePersistenceAdapter implements PagePort {
     }
 
     @Override
-    public List<Page> findAllIdsByProjectId(Long projectId) {
+    public List<Page> findAllByProjectId(Long projectId) {
         return pageRepository.findAllByProjectId(projectId)
                 .stream().map(pageMapper::toDomain).toList();
     }

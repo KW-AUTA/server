@@ -49,6 +49,6 @@ public class ProjectQueryController {
     @GetMapping("/api/v1/projects/tests/{projectId}")
     public ApiResponse<ProjectTestDetailResponse> getProjectTestDetail(@PathVariable Long projectId) {
         return ApiResponse.ok("프로젝트 테스트 세부 조회가 완료되었습니다.",
-                projectQueryUseCase.getProjectTestDetail(projectId));
+                ProjectTestDetailResponse.from(projectQueryUseCase.getProjectTestDetail(projectId)));
     }
 }

@@ -1,6 +1,6 @@
 package com.auta.server.adapter.in.project.response;
 
-import com.auta.server.application.port.out.project.ProjectSummaryQueryDto;
+import com.auta.server.application.port.in.project.dto.ProjectSummaryDto;
 import com.auta.server.domain.project.ProjectStatus;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import java.time.LocalDate;
@@ -16,8 +16,8 @@ public class ProjectSummariesResponse {
 
     private List<ProjectSummary> projectSummaries;
 
-    public static ProjectSummariesResponse from(List<ProjectSummaryQueryDto> projectSummaryQueryDTOs) {
-        return ProjectSummariesResponse.builder().projectSummaries(projectSummaryQueryDTOs.stream()
+    public static ProjectSummariesResponse from(List<ProjectSummaryDto> projectSummaryDTOS) {
+        return ProjectSummariesResponse.builder().projectSummaries(projectSummaryDTOS.stream()
                         .map(ProjectSummary::from).toList())
                 .build();
     }
@@ -36,14 +36,14 @@ public class ProjectSummariesResponse {
         private ProjectStatus projectStatus;
         private Integer testRate;
 
-        public static ProjectSummary from(ProjectSummaryQueryDto projectSummaryQueryDto) {
-            return ProjectSummary.builder().projectId(projectSummaryQueryDto.getProjectId())
-                    .projectAdmin(projectSummaryQueryDto.getProjectAdmin())
-                    .projectName(projectSummaryQueryDto.getProjectName())
-                    .projectEnd(projectSummaryQueryDto.getProjectEnd())
-                    .projectCreatedDate(projectSummaryQueryDto.getProjectCreatedDate())
-                    .projectStatus(projectSummaryQueryDto.getProjectStatus())
-                    .testRate(projectSummaryQueryDto.getTestRate())
+        public static ProjectSummary from(ProjectSummaryDto projectSummaryDto) {
+            return ProjectSummary.builder().projectId(projectSummaryDto.getProjectId())
+                    .projectAdmin(projectSummaryDto.getProjectAdmin())
+                    .projectName(projectSummaryDto.getProjectName())
+                    .projectEnd(projectSummaryDto.getProjectEnd())
+                    .projectCreatedDate(projectSummaryDto.getProjectCreatedDate())
+                    .projectStatus(projectSummaryDto.getProjectStatus())
+                    .testRate(projectSummaryDto.getTestRate())
                     .build();
         }
     }

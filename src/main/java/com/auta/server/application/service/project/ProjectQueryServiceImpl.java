@@ -1,12 +1,12 @@
 package com.auta.server.application.service.project;
 
-import com.auta.server.adapter.in.project.response.ProjectTestDetailResponse;
-import com.auta.server.application.port.in.project.ProjectDetailDto;
 import com.auta.server.application.port.in.project.ProjectQueryUseCase;
-import com.auta.server.application.port.in.project.ProjectTestSummaryDto;
+import com.auta.server.application.port.in.project.dto.ProjectDetailDto;
+import com.auta.server.application.port.in.project.dto.ProjectSummaryDto;
+import com.auta.server.application.port.in.project.dto.ProjectTestDetailDto;
+import com.auta.server.application.port.in.project.dto.ProjectTestSummaryDto;
 import com.auta.server.application.port.out.page.PagePort;
 import com.auta.server.application.port.out.project.ProjectPort;
-import com.auta.server.application.port.out.project.ProjectSummaryQueryDto;
 import com.auta.server.application.port.out.test.TestPort;
 import com.auta.server.common.exception.BusinessException;
 import com.auta.server.common.exception.ErrorCode;
@@ -28,16 +28,16 @@ public class ProjectQueryServiceImpl implements ProjectQueryUseCase {
     private final TestPort testPort;
 
     @Override
-    public List<ProjectSummaryQueryDto> getProjectSummaryList(String projectName, String sortBy, Long cursor) {
+    public List<ProjectSummaryDto> getProjectSummaryList(String projectName, String sortBy, Long cursor) {
         List<Project> projects = projectPort.findByProjectNameWithPaging(projectName, sortBy, cursor, PAGE_SIZE);
-        return projects.stream().map(ProjectSummaryQueryDto::from).toList();
+        return projects.stream().map(ProjectSummaryDto::from).toList();
     }
 
     @Override
     public ProjectDetailDto getProjectDetail(Long projectId) {
         Project project = projectPort.findById(projectId)
                 .orElseThrow(() -> new BusinessException(ErrorCode.PROJECT_NOT_FOUND));
-        List<Page> pages = pagePort.findAllIdsByProjectId(projectId);
+        List<Page> pages = pagePort.findAllByProjectId(projectId);
         List<Test> tests = testPort.findAllByProjectId(projectId);
 
         TestCountSummary testCountSummary = TestCountSummary.from(tests);
@@ -60,7 +60,15 @@ public class ProjectQueryServiceImpl implements ProjectQueryUseCase {
     }
 
     @Override
-    public ProjectTestDetailResponse getProjectTestDetail(Long projectId) {
-        return null;
+    public ProjectTestDetailDto getProjectTestDetail(Long projectId) {
+        Project project = projectPort.findById(projectId)
+                .orElseThrow(() -> new BusinessException(ErrorCode.PROJECT_NOT_FOUND));
+        
+        List<Page> pages = pagePort.findAllByProjectId(projectId);
+
+        List<Test> tests = testPort.findAllByProjectId(projectId);
+        TestCountSummary testCountSummary = TestCountSummary.from(tests);
+
+        return ProjectTestDetailDto.from(project, pages, testCountSummary);
     }
 }

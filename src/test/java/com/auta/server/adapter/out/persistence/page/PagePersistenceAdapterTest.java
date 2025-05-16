@@ -66,7 +66,7 @@ class PagePersistenceAdapterTest extends IntegrationTestSupport {
         Long projectId = pageEntity.getId();
 
         //when
-        List<Page> pages = pagePersistenceAdapter.findAllIdsByProjectId(projectId);
+        List<Page> pages = pagePersistenceAdapter.findAllByProjectId(projectId);
 
         //then
         assertThat(pages).hasSize(1);

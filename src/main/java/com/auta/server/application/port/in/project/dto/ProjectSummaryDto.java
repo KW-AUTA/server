@@ -1,4 +1,4 @@
-package com.auta.server.application.port.out.project;
+package com.auta.server.application.port.in.project.dto;
 
 import com.auta.server.domain.project.Project;
 import com.auta.server.domain.project.ProjectStatus;
@@ -10,7 +10,7 @@ import lombok.Getter;
 @Getter
 @AllArgsConstructor
 @Builder
-public class ProjectSummaryQueryDto {
+public class ProjectSummaryDto {
     private Long projectId;
     private String projectAdmin;
     private String projectName;
@@ -19,8 +19,8 @@ public class ProjectSummaryQueryDto {
     private ProjectStatus projectStatus;
     private Integer testRate;
 
-    public static ProjectSummaryQueryDto from(Project project) {
-        return ProjectSummaryQueryDto.builder()
+    public static ProjectSummaryDto from(Project project) {
+        return ProjectSummaryDto.builder()
                 .projectId(project.getId())
                 .projectAdmin(project.getUser().getUsername())
                 .projectName(project.getProjectName())

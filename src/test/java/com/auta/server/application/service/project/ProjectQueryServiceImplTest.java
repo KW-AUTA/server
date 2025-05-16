@@ -11,9 +11,10 @@ import com.auta.server.adapter.out.persistence.test.TestEntity;
 import com.auta.server.adapter.out.persistence.test.TestRepository;
 import com.auta.server.adapter.out.persistence.user.UserEntity;
 import com.auta.server.adapter.out.persistence.user.UserRepository;
-import com.auta.server.application.port.in.project.ProjectDetailDto;
-import com.auta.server.application.port.in.project.ProjectTestSummaryDto;
-import com.auta.server.application.port.out.project.ProjectSummaryQueryDto;
+import com.auta.server.application.port.in.project.dto.ProjectDetailDto;
+import com.auta.server.application.port.in.project.dto.ProjectSummaryDto;
+import com.auta.server.application.port.in.project.dto.ProjectTestDetailDto;
+import com.auta.server.application.port.in.project.dto.ProjectTestSummaryDto;
 import com.auta.server.domain.project.ProjectStatus;
 import com.auta.server.domain.test.TestStatus;
 import com.auta.server.domain.test.TestType;
@@ -112,7 +113,7 @@ class ProjectQueryServiceImplTest extends IntegrationTestSupport {
         projectRepository.saveAll(List.of(projectEntity1, projectEntity2, projectEntity3, projectEntity4));
 
         //when
-        List<ProjectSummaryQueryDto> result = projectQueryService.getProjectSummaryList(
+        List<ProjectSummaryDto> result = projectQueryService.getProjectSummaryList(
                 "캡스톤",
                 "createdDate",
                 (Long) null
@@ -184,6 +185,37 @@ class ProjectQueryServiceImplTest extends IntegrationTestSupport {
                         "successRoutingTest", "successInteractionTest", "successMappingTest")
                 .contains(3, 1, 1, 1, 1, 0);
 
+    }
+
+
+    @DisplayName("프로젝트 테스트 상세 정보를 불러온다.")
+    @Test
+    void getProjectTestDetail() {
+        //given
+        UserEntity userEntity = userRepository.save(createDummyUser());
+        ProjectEntity projectEntity = projectRepository.save(createDummyProject(userEntity));
+        PageEntity pageEntity = pageRepository.save(createDummyPage(projectEntity));
+
+        List<TestEntity> testEntities = List.of(
+                createDummyTest(projectEntity, pageEntity, TestStatus.FAILED, TestType.ROUTING),
+                createDummyTest(projectEntity, pageEntity, TestStatus.PASSED, TestType.ROUTING),
+                createDummyTest(projectEntity, pageEntity, TestStatus.PASSED, TestType.INTERACTION),
+                createDummyTest(projectEntity, pageEntity, TestStatus.PASSED, TestType.ROUTING),
+                createDummyTest(projectEntity, pageEntity, TestStatus.FAILED, TestType.MAPPING)
+        );
+
+        List<TestEntity> savedTests = testRepository.saveAll(testEntities);
+
+        Long projectId = projectEntity.getId();
+
+        //when
+        ProjectTestDetailDto projectTestDetail = projectQueryService.getProjectTestDetail(projectId);
+
+        //then
+        assertThat(projectTestDetail).extracting("totalSuccessTests", "totalFailTests", "routingSuccessCount"
+                        , "routingFailCount", "interactionSuccessCount", "interactionFailCount", "mappingSuccessCount",
+                        "mappingFailCount")
+                .contains(3, 2, 2, 1, 1, 0, 0, 1);
     }
 
     private TestEntity createDummyTest(ProjectEntity projectEntity, PageEntity pageEntity, TestStatus testStatus,

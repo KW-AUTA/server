@@ -1,16 +1,18 @@
 package com.auta.server.application.port.in.project;
 
-import com.auta.server.adapter.in.project.response.ProjectTestDetailResponse;
-import com.auta.server.application.port.out.project.ProjectSummaryQueryDto;
+import com.auta.server.application.port.in.project.dto.ProjectDetailDto;
+import com.auta.server.application.port.in.project.dto.ProjectSummaryDto;
+import com.auta.server.application.port.in.project.dto.ProjectTestDetailDto;
+import com.auta.server.application.port.in.project.dto.ProjectTestSummaryDto;
 import java.util.List;
 
 public interface ProjectQueryUseCase {
 
-    List<ProjectSummaryQueryDto> getProjectSummaryList(String projectName, String sortBy, Long cursor);
+    List<ProjectSummaryDto> getProjectSummaryList(String projectName, String sortBy, Long cursor);
 
     ProjectDetailDto getProjectDetail(Long projectId);
 
     List<ProjectTestSummaryDto> getProjectTestSummaryList(String projectName, String sortBy, Long cursor);
 
-    ProjectTestDetailResponse getProjectTestDetail(Long projectId);
+    ProjectTestDetailDto getProjectTestDetail(Long projectId);
 }

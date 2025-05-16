@@ -1,6 +1,6 @@
 package com.auta.server.adapter.in.project.response;
 
-import com.auta.server.application.port.in.project.ProjectTestSummaryDto;
+import com.auta.server.application.port.in.project.dto.ProjectTestSummaryDto;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import java.time.LocalDate;
 import java.util.List;

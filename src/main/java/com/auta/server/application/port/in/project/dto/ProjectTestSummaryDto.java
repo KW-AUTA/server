@@ -1,4 +1,4 @@
-package com.auta.server.application.port.in.project;
+package com.auta.server.application.port.in.project.dto;
 
 import com.auta.server.domain.project.Project;
 import com.auta.server.domain.test.TestCountSummary;
@@ -31,14 +31,14 @@ public class ProjectTestSummaryDto {
     public static ProjectTestSummaryDto of(Project project,
                                            TestCountSummary testCountSummary) {
 
-        int totalRoutingTest = testCountSummary.total(TestType.ROUTING);
-        int successRoutingTest = testCountSummary.passed(TestType.ROUTING);
+        int totalRoutingTest = testCountSummary.typeTotal(TestType.ROUTING);
+        int successRoutingTest = testCountSummary.typePassed(TestType.ROUTING);
 
-        int totalInteractionTest = testCountSummary.total(TestType.INTERACTION);
-        int successInteractionTest = testCountSummary.passed(TestType.INTERACTION);
+        int totalInteractionTest = testCountSummary.typeTotal(TestType.INTERACTION);
+        int successInteractionTest = testCountSummary.typePassed(TestType.INTERACTION);
 
-        int totalMappingTest = testCountSummary.total(TestType.MAPPING);
-        int successMappingTest = testCountSummary.passed(TestType.MAPPING);
+        int totalMappingTest = testCountSummary.typeTotal(TestType.MAPPING);
+        int successMappingTest = testCountSummary.typePassed(TestType.MAPPING);
 
         return ProjectTestSummaryDto.builder()
                 .projectId(project.getId())
