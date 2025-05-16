@@ -79,11 +79,11 @@ class ProjectQueryRepositoryImplTest extends IntegrationTestSupport {
                 .projectStatus(ProjectStatus.NOT_STARTED)
                 .build();
         ProjectEntity projectEntity4 = ProjectEntity.builder()
-                .userEntity(userEntity1)
+                .userEntity(userEntity2)
                 .figmaUrl("https://figma.com")
                 .rootFigmaPage("mainPage")
                 .serviceUrl("https://service.com")
-                .projectName("광운대학교 설계")
+                .projectName("캡스톤 설계")
                 .description("프로젝트 설명입니다.")
                 .projectCreatedDate(registeredDate3)
                 .projectEnd(LocalDate.of(2025, 4, 4))
@@ -91,10 +91,11 @@ class ProjectQueryRepositoryImplTest extends IntegrationTestSupport {
                 .build();
 
         projectRepository.saveAll(List.of(projectEntity1, projectEntity2, projectEntity3, projectEntity4));
+        String email = userEntity1.getEmail();
 
         //when
         List<ProjectEntity> result = projectQueryRepository.findByProjectNameWithPaging(
-                "캡스톤",
+                email, "캡스톤",
                 "createdDate",
                 (Long) null,
                 10

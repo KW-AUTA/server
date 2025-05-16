@@ -23,7 +23,7 @@ class ProjectQueryControllerTest extends ControllerTestSupport {
     @Test
     void getProjectSummaryList() throws Exception {
         //given
-
+        setMockSecurityContext();
         //when   //then
         mockMvc.perform(
                         get("/api/v1/projects")
@@ -73,7 +73,7 @@ class ProjectQueryControllerTest extends ControllerTestSupport {
     @Test
     void getProjectTestSummaryList() throws Exception {
         //given
-
+        setMockSecurityContext();
         //when   //then
         mockMvc.perform(
                         get("/api/v1/projects/tests")

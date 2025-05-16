@@ -48,8 +48,9 @@ public class ProjectPersistenceAdapter implements ProjectPort {
     }
 
     @Override
-    public List<Project> findByProjectNameWithPaging(String projectName, String sortBy, Long cursor, int pageSize) {
-        List<ProjectEntity> projectEntities = projectRepository.findByProjectNameWithPaging(projectName, sortBy,
+    public List<Project> findByProjectNameWithPaging(String email, String projectName, String sortBy, Long cursor,
+                                                     int pageSize) {
+        List<ProjectEntity> projectEntities = projectRepository.findByProjectNameWithPaging(email, projectName, sortBy,
                 cursor, pageSize);
         return projectEntities.stream().map(projectMapper::toDomain).toList();
     }

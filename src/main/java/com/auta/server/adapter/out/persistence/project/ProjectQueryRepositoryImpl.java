@@ -15,20 +15,23 @@ public class ProjectQueryRepositoryImpl implements ProjectQueryRepository {
     private final JPAQueryFactory queryFactory;
 
     @Override
-    public List<ProjectEntity> findByProjectNameWithPaging(String projectName, String sortBy, Long cursor,
+    public List<ProjectEntity> findByProjectNameWithPaging(String email, String projectName, String sortBy, Long cursor,
                                                            int pageSize) {
         QProjectEntity projectEntity = QProjectEntity.projectEntity;
 
-        BooleanExpression condition = (projectName == null || projectName.isBlank())
-                ? null
-                : projectEntity.projectName.containsIgnoreCase(projectName);
+        BooleanExpression condition = projectEntity.userEntity.email.eq(email);
+
+        // 프로젝트명 필터 추가
+        if (projectName != null && !projectName.isBlank()) {
+            condition = condition.and(projectEntity.projectName.containsIgnoreCase(projectName));
+        }
 
         OrderSpecifier<?> orderSpecifier = switch (sortBy) {
             case "createdDate" -> projectEntity.projectCreatedDate.desc();
             case "name" -> projectEntity.projectName.asc();
             default -> projectEntity.id.desc();
         };
-        
+
         if (cursor != null) {
             ProjectEntity cursorEntity = queryFactory
                     .selectFrom(projectEntity)

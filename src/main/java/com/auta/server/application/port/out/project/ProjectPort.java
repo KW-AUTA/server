@@ -13,7 +13,8 @@ public interface ProjectPort {
 
     void delete(Project project);
 
-    List<Project> findByProjectNameWithPaging(String projectName, String sortBy, Long cursor, int pageSize);
+    List<Project> findByProjectNameWithPaging(String email, String projectName, String sortBy, Long cursor,
+                                              int pageSize);
 
     List<Project> findAllByUserId(Long userId);
 }

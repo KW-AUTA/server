@@ -28,8 +28,8 @@ public class ProjectQueryServiceImpl implements ProjectQueryUseCase {
     private final TestPort testPort;
 
     @Override
-    public List<ProjectSummaryDto> getProjectSummaryList(String projectName, String sortBy, Long cursor) {
-        List<Project> projects = projectPort.findByProjectNameWithPaging(projectName, sortBy, cursor, PAGE_SIZE);
+    public List<ProjectSummaryDto> getProjectSummaryList(String email, String projectName, String sortBy, Long cursor) {
+        List<Project> projects = projectPort.findByProjectNameWithPaging(email, projectName, sortBy, cursor, PAGE_SIZE);
         return projects.stream().map(ProjectSummaryDto::from).toList();
     }
 
@@ -46,8 +46,9 @@ public class ProjectQueryServiceImpl implements ProjectQueryUseCase {
     }
 
     @Override
-    public List<ProjectTestSummaryDto> getProjectTestSummaryList(String projectName, String sortBy, Long cursor) {
-        List<Project> projects = projectPort.findByProjectNameWithPaging(projectName, sortBy, cursor, PAGE_SIZE);
+    public List<ProjectTestSummaryDto> getProjectTestSummaryList(String email, String projectName, String sortBy,
+                                                                 Long cursor) {
+        List<Project> projects = projectPort.findByProjectNameWithPaging(email, projectName, sortBy, cursor, PAGE_SIZE);
         return projects.stream()
                 .map(project -> Map.entry(project, testPort.findAllByProjectId(project.getId())))
                 .filter(entry -> entry.getValue().stream()
@@ -63,7 +64,7 @@ public class ProjectQueryServiceImpl implements ProjectQueryUseCase {
     public ProjectTestDetailDto getProjectTestDetail(Long projectId) {
         Project project = projectPort.findById(projectId)
                 .orElseThrow(() -> new BusinessException(ErrorCode.PROJECT_NOT_FOUND));
-        
+
         List<Page> pages = pagePort.findAllByProjectId(projectId);
 
         List<Test> tests = testPort.findAllByProjectId(projectId);

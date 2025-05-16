@@ -111,10 +111,10 @@ class ProjectQueryServiceImplTest extends IntegrationTestSupport {
                 .build();
 
         projectRepository.saveAll(List.of(projectEntity1, projectEntity2, projectEntity3, projectEntity4));
-
+        String email = userEntity1.getEmail();
         //when
         List<ProjectSummaryDto> result = projectQueryService.getProjectSummaryList(
-                "캡스톤",
+                email, "캡스톤",
                 "createdDate",
                 (Long) null
         );
@@ -171,10 +171,10 @@ class ProjectQueryServiceImplTest extends IntegrationTestSupport {
         );
 
         List<TestEntity> savedTests = testRepository.saveAll(testEntities);
-
+        String email = userEntity.getEmail();
         //when
         List<ProjectTestSummaryDto> projectTestSummaryList = projectQueryService.getProjectTestSummaryList(
-                "캡스톤",
+                email, "캡스톤",
                 "",
                 (Long) null
         );
@@ -244,6 +244,7 @@ class ProjectQueryServiceImplTest extends IntegrationTestSupport {
 
     private UserEntity createDummyUser() {
         return UserEntity.builder()
+                .email("test@example.com")
                 .build();
     }
 }

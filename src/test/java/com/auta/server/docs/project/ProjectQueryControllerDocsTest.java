@@ -44,8 +44,9 @@ public class ProjectQueryControllerDocsTest extends RestDocsSupport {
     @DisplayName("프로젝트 리스트 조회")
     @Test
     void getProjectSummaryList() throws Exception {
+        setMockSecurityContext();
         //given
-        given(projectQueryUseCase.getProjectSummaryList(anyString(), anyString(), anyLong()))
+        given(projectQueryUseCase.getProjectSummaryList(anyString(), anyString(), anyString(), anyLong()))
                 .willReturn(List.of(
                         ProjectSummaryDto.builder()
                                 .projectId(1L)
@@ -187,8 +188,9 @@ public class ProjectQueryControllerDocsTest extends RestDocsSupport {
     @DisplayName("프로젝트 테스트 리스트 조회")
     @Test
     void getProjectTestSummaryList() throws Exception {
+        setMockSecurityContext();
         //given
-        given(projectQueryUseCase.getProjectTestSummaryList(anyString(), anyString(), anyLong()))
+        given(projectQueryUseCase.getProjectTestSummaryList(anyString(), anyString(), anyString(), anyLong()))
                 .willReturn(List.of(ProjectTestSummaryDto.builder()
                                         .projectId(1L)
                                         .projectName("UI 자동화 테스트")

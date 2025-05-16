@@ -5,6 +5,7 @@ import com.auta.server.adapter.in.project.response.ProjectDetailResponse;
 import com.auta.server.adapter.in.project.response.ProjectSummariesResponse;
 import com.auta.server.adapter.in.project.response.ProjectTestDetailResponse;
 import com.auta.server.adapter.in.project.response.ProjectTestSummariesResponse;
+import com.auta.server.adapter.in.security.SecurityUtil;
 import com.auta.server.application.port.in.project.ProjectQueryUseCase;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -23,8 +24,10 @@ public class ProjectQueryController {
             @RequestParam String projectName,
             @RequestParam String sortBy,
             @RequestParam(required = false) Long cursor) {
+        String email = SecurityUtil.getCurrentPrinciple();
         return ApiResponse.ok("프로젝트 리스트 조회가 완료되었습니다.",
-                ProjectSummariesResponse.from(projectQueryUseCase.getProjectSummaryList(projectName, sortBy, cursor)));
+                ProjectSummariesResponse.from(
+                        projectQueryUseCase.getProjectSummaryList(email, projectName, sortBy, cursor)));
     }
 
     @GetMapping("/api/v1/projects/{projectId}")
@@ -41,9 +44,10 @@ public class ProjectQueryController {
             @RequestParam String sortBy,
             @RequestParam(required = false) Long cursor
     ) {
+        String email = SecurityUtil.getCurrentPrinciple();
         return ApiResponse.ok("프로젝트 테스트 리스트 조회가 완료되었습니다.",
                 ProjectTestSummariesResponse.from(
-                        projectQueryUseCase.getProjectTestSummaryList(projectName, sortBy, cursor)));
+                        projectQueryUseCase.getProjectTestSummaryList(email, projectName, sortBy, cursor)));
     }
 
     @GetMapping("/api/v1/projects/tests/{projectId}")
