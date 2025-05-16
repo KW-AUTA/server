@@ -1,5 +1,6 @@
 package com.auta.server.adapter.out.persistence.test;
 
+import com.auta.server.adapter.out.BaseEntity;
 import com.auta.server.adapter.out.persistence.page.PageEntity;
 import com.auta.server.adapter.out.persistence.project.ProjectEntity;
 import com.auta.server.domain.test.TestStatus;
@@ -25,7 +26,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class TestEntity {
+public class TestEntity extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -48,7 +49,7 @@ public class TestEntity {
     private String triggerSelector;
     private String expectedDestination;
     private String actualDestination;
-    
+
     @Column(name = "`trigger`")
     private String trigger;
     private String expectedAction;

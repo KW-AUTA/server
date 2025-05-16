@@ -18,4 +18,8 @@ public enum TestStatus {
     public boolean isCompleted() {
         return COMPLETED_STATUSES.contains(this);
     }
+
+    public boolean isInCompleted() {
+        return !COMPLETED_STATUSES.contains(this);
+    }
 }
