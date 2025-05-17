@@ -1,10 +1,13 @@
 package com.auta.server.application.service.project;
 
+import com.auta.server.adapter.out.fastapi.request.GraphRequest;
+import com.auta.server.adapter.out.fastapi.response.GraphResponse;
 import com.auta.server.application.port.in.project.ProjectCommand;
 import com.auta.server.application.port.in.project.ProjectUseCase;
-import com.auta.server.application.port.out.project.ProjectPort;
-import com.auta.server.application.port.out.test.TestPort;
-import com.auta.server.application.port.out.user.UserPort;
+import com.auta.server.application.port.out.fastapi.FastApiPort;
+import com.auta.server.application.port.out.persistence.project.ProjectPort;
+import com.auta.server.application.port.out.persistence.test.TestPort;
+import com.auta.server.application.port.out.persistence.user.UserPort;
 import com.auta.server.common.exception.BusinessException;
 import com.auta.server.common.exception.ErrorCode;
 import com.auta.server.domain.project.Project;
@@ -13,6 +16,7 @@ import com.auta.server.domain.user.User;
 import java.time.LocalDate;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -24,6 +28,17 @@ public class ProjectServiceImpl implements ProjectUseCase {
     private final ProjectPort projectPort;
     private final UserPort userPort;
     private final TestPort testPort;
+    private final FastApiPort fastApiPort;
+
+    @Async
+    @Override
+    public void executeTest(Long projectId) {
+        Project project = projectPort.findById(projectId)
+                .orElseThrow(() -> new BusinessException(ErrorCode.PROJECT_NOT_FOUND));
+
+        GraphResponse graphResponse = fastApiPort.callGraph(
+                new GraphRequest(project.getFigmaUrl(), project.getRootFigmaPage()));
+    }
 
     @Override
     public Project createProject(ProjectCommand command, String email, LocalDate registeredDate) {
@@ -54,11 +69,6 @@ public class ProjectServiceImpl implements ProjectUseCase {
         testPort.deleteAllByProjectId(project.getId());
 
         projectPort.delete(project);
-    }
-
-    @Override
-    public void executeTest(Long projectId) {
-
     }
 
     @Override

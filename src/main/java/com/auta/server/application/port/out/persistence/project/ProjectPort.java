@@ -1,4 +1,4 @@
-package com.auta.server.application.port.out.project;
+package com.auta.server.application.port.out.persistence.project;
 
 import com.auta.server.domain.project.Project;
 import java.util.List;

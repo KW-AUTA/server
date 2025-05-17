@@ -1,6 +1,6 @@
 package com.auta.server.adapter.out.persistence.test;
 
-import com.auta.server.application.port.out.test.TestPort;
+import com.auta.server.application.port.out.persistence.test.TestPort;
 import com.auta.server.domain.test.Test;
 import java.util.List;
 import lombok.RequiredArgsConstructor;

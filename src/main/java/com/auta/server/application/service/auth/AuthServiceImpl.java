@@ -5,7 +5,7 @@ import com.auta.server.application.port.in.auth.AuthUseCase;
 import com.auta.server.application.port.out.auth.RefreshTokenStorePort;
 import com.auta.server.application.port.out.auth.TokenClaimData;
 import com.auta.server.application.port.out.auth.TokenProviderPort;
-import com.auta.server.application.port.out.user.UserPort;
+import com.auta.server.application.port.out.persistence.user.UserPort;
 import com.auta.server.common.exception.BusinessException;
 import com.auta.server.common.exception.ErrorCode;
 import com.auta.server.domain.auth.AuthTokens;

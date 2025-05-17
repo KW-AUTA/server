@@ -1,4 +1,4 @@
-package com.auta.server.application.port.out.page;
+package com.auta.server.application.port.out.persistence.page;
 
 import com.auta.server.domain.page.Page;
 import java.util.List;

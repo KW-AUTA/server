@@ -2,9 +2,9 @@ package com.auta.server.application.service.dashboard;
 
 import com.auta.server.adapter.in.dashboard.reponse.DashboardResponse;
 import com.auta.server.application.port.in.dashboard.DashboardUserCase;
-import com.auta.server.application.port.out.project.ProjectPort;
-import com.auta.server.application.port.out.test.TestPort;
-import com.auta.server.application.port.out.user.UserPort;
+import com.auta.server.application.port.out.persistence.project.ProjectPort;
+import com.auta.server.application.port.out.persistence.test.TestPort;
+import com.auta.server.application.port.out.persistence.user.UserPort;
 import com.auta.server.common.exception.BusinessException;
 import com.auta.server.common.exception.ErrorCode;
 import com.auta.server.domain.project.Project;

@@ -1,4 +1,4 @@
-package com.auta.server.application.port.out.user;
+package com.auta.server.application.port.out.persistence.user;
 
 import com.auta.server.domain.user.User;
 import java.util.Optional;

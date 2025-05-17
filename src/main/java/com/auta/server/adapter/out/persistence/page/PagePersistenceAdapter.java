@@ -1,6 +1,6 @@
 package com.auta.server.adapter.out.persistence.page;
 
-import com.auta.server.application.port.out.page.PagePort;
+import com.auta.server.application.port.out.persistence.page.PagePort;
 import com.auta.server.domain.page.Page;
 import java.util.List;
 import java.util.Optional;
