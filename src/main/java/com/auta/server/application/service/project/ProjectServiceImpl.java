@@ -1,7 +1,6 @@
 package com.auta.server.application.service.project;
 
-import com.auta.server.adapter.out.fastapi.request.GraphRequest;
-import com.auta.server.adapter.out.fastapi.response.GraphResponse;
+import com.auta.server.adapter.out.fastapi.request.InitRequest;
 import com.auta.server.application.port.in.project.ProjectCommand;
 import com.auta.server.application.port.in.project.ProjectUseCase;
 import com.auta.server.application.port.out.fastapi.FastApiPort;
@@ -36,8 +35,8 @@ public class ProjectServiceImpl implements ProjectUseCase {
         Project project = projectPort.findById(projectId)
                 .orElseThrow(() -> new BusinessException(ErrorCode.PROJECT_NOT_FOUND));
 
-        GraphResponse graphResponse = fastApiPort.callGraph(
-                new GraphRequest(project.getFigmaUrl(), project.getRootFigmaPage()));
+        fastApiPort.init(
+                new InitRequest(project.getFigmaUrl()));
     }
 
     @Override

@@ -1,9 +1,9 @@
 package com.auta.server.adapter.out.fastapi;
 
-import com.auta.server.adapter.out.fastapi.request.GraphRequest;
+import com.auta.server.adapter.out.fastapi.request.InitRequest;
 import com.auta.server.adapter.out.fastapi.request.MappingRequest;
 import com.auta.server.adapter.out.fastapi.request.RoutingRequest;
-import com.auta.server.adapter.out.fastapi.response.GraphResponse;
+import com.auta.server.adapter.out.fastapi.response.InitResponse;
 import com.auta.server.adapter.out.fastapi.response.MappingResponse;
 import com.auta.server.adapter.out.fastapi.response.RoutingResponse;
 import com.auta.server.application.port.out.fastapi.FastApiPort;
@@ -20,12 +20,12 @@ public class FastApiClient implements FastApiPort {
     private final WebClient webClient;
 
     @Override
-    public GraphResponse callGraph(GraphRequest request) {
+    public InitResponse init(InitRequest request) {
         return webClient.post()
-                .uri("/graph")
+                .uri("/init")
                 .bodyValue(request)
                 .retrieve()
-                .bodyToMono(GraphResponse.class)
+                .bodyToMono(InitResponse.class)
                 .block();
     }
 
