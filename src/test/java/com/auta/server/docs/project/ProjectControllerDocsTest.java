@@ -8,15 +8,17 @@ import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.mock;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.delete;
-import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.put;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.preprocessRequest;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.preprocessResponse;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.prettyPrint;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
-import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
+import static org.springframework.restdocs.payload.PayloadDocumentation.requestPartFields;
 import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
 import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
+import static org.springframework.restdocs.request.RequestDocumentation.partWithName;
 import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
+import static org.springframework.restdocs.request.RequestDocumentation.requestParts;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.multipart;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -28,10 +30,12 @@ import com.auta.server.application.port.in.project.ProjectUseCase;
 import com.auta.server.docs.RestDocsSupport;
 import com.auta.server.domain.project.Project;
 import com.auta.server.domain.user.User;
+import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
+import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.restdocs.payload.JsonFieldType;
 
 public class ProjectControllerDocsTest extends RestDocsSupport {
@@ -84,6 +88,22 @@ public class ProjectControllerDocsTest extends RestDocsSupport {
                 .rootFigmaPage("mainPage")
                 .build();
 
+        String json = objectMapper.writeValueAsString(request);
+
+        MockMultipartFile jsonPart = new MockMultipartFile(
+                "request",
+                "request.json",
+                "application/json",
+                json.getBytes(StandardCharsets.UTF_8)
+        );
+
+        MockMultipartFile filePart = new MockMultipartFile(
+                "file",                  // @RequestPart 이름과 일치
+                "example.json",          // 파일 이름
+                "application/json",
+                "{ \"key\": \"value\" }".getBytes(StandardCharsets.UTF_8)
+        );
+
         User user = User.builder()
                 .id(1L)
                 .email("example@example.com")
@@ -92,7 +112,7 @@ public class ProjectControllerDocsTest extends RestDocsSupport {
                 .phoneNumber(null)
                 .build();
 
-        given(projectUseCase.createProject(any(ProjectCommand.class), anyString(), any()))
+        given(projectUseCase.createProject(any(ProjectCommand.class), any(), anyString(), any()))
                 .willReturn(Project.builder()
                         .id(1L)
                         .projectName("UI 자동화 테스트")
@@ -102,20 +122,26 @@ public class ProjectControllerDocsTest extends RestDocsSupport {
                         .projectEnd(LocalDate.of(2024, 4, 4))
                         .description("프로젝트 설명입니다.")
                         .figmaUrl("https://figma.com")
+                        .figmaJson("https://s3.com")
                         .serviceUrl("https://service.com")
                         .rootFigmaPage("mainPage")
                         .build());
         //when //then
         mockMvc.perform(
-                        post("/api/v1/projects")
-                                .content(objectMapper.writeValueAsString(request))
-                                .contentType(MediaType.APPLICATION_JSON)
+                        multipart("/api/v1/projects")
+                                .file(jsonPart)
+                                .file(filePart)
+                                .contentType(MediaType.MULTIPART_FORM_DATA)
                 ).andDo(print())
                 .andExpect(status().isOk())
                 .andDo(document("project-create",
                         preprocessRequest(prettyPrint()),
                         preprocessResponse(prettyPrint()),
-                        requestFields(
+                        requestParts(
+                                partWithName("request").description("프로젝트 정보 JSON"),
+                                partWithName("file").description("피그마 JSON 파일")
+                        ),
+                        requestPartFields("request",
                                 fieldWithPath("projectName").type(JsonFieldType.STRING)
                                         .description("프로젝트 이름"),
                                 fieldWithPath("expectedTestExecution").type(JsonFieldType.STRING)
@@ -157,6 +183,8 @@ public class ProjectControllerDocsTest extends RestDocsSupport {
                                         .description("프로젝트 설명"),
                                 fieldWithPath("data.figmaUrl").type(JsonFieldType.STRING)
                                         .description("피그마 URL"),
+                                fieldWithPath("data.figmaJson").type(JsonFieldType.STRING)
+                                        .description("피그마 json 저장 url"),
                                 fieldWithPath("data.serviceUrl").type(JsonFieldType.STRING)
                                         .description("서비스 URL"),
                                 fieldWithPath("data.rootFigmaPage").type(JsonFieldType.STRING)
@@ -178,6 +206,22 @@ public class ProjectControllerDocsTest extends RestDocsSupport {
                 .rootFigmaPage("mainPage")
                 .build();
 
+        String json = objectMapper.writeValueAsString(request);
+
+        MockMultipartFile jsonPart = new MockMultipartFile(
+                "request",
+                "request.json",
+                "application/json",
+                json.getBytes(StandardCharsets.UTF_8)
+        );
+
+        MockMultipartFile filePart = new MockMultipartFile(
+                "file",                  // @RequestPart 이름과 일치
+                "example.json",          // 파일 이름
+                "application/json",
+                "{ \"key\": \"value\" }".getBytes(StandardCharsets.UTF_8)
+        );
+
         User user = User.builder()
                 .id(1L)
                 .email("example@example.com")
@@ -186,7 +230,7 @@ public class ProjectControllerDocsTest extends RestDocsSupport {
                 .phoneNumber(null)
                 .build();
 
-        given(projectUseCase.updateProject(any(ProjectCommand.class), anyLong()))
+        given(projectUseCase.updateProject(any(ProjectCommand.class), any(), anyLong()))
                 .willReturn(Project.builder()
                         .id(1L)
                         .projectName("UI 자동화 테스트")
@@ -196,20 +240,30 @@ public class ProjectControllerDocsTest extends RestDocsSupport {
                         .projectEnd(LocalDate.of(2024, 4, 4))
                         .description("프로젝트 설명입니다.")
                         .figmaUrl("https://figma.com")
+                        .figmaJson("https://s3.com")
                         .serviceUrl("https://service.com")
                         .rootFigmaPage("mainPage")
                         .build());
         //when //then
         mockMvc.perform(
-                        put("/api/v1/projects/{projectId}", 1L)
-                                .content(objectMapper.writeValueAsString(request))
-                                .contentType(MediaType.APPLICATION_JSON)
+                        multipart("/api/v1/projects/{projectId}", 1L)
+                                .file(jsonPart)
+                                .file(filePart)
+                                .with(requests -> {
+                                    requests.setMethod("PUT"); // PUT 메서드로 강제
+                                    return requests;
+                                })
+                                .contentType(MediaType.MULTIPART_FORM_DATA)
                 ).andDo(print())
                 .andExpect(status().isOk())
                 .andDo(document("project-update",
                         preprocessRequest(prettyPrint()),
                         preprocessResponse(prettyPrint()),
-                        requestFields(
+                        requestParts(
+                                partWithName("request").description("프로젝트 정보 JSON"),
+                                partWithName("file").description("피그마 JSON 파일")
+                        ),
+                        requestPartFields("request",
                                 fieldWithPath("projectName").type(JsonFieldType.STRING)
                                         .description("프로젝트 이름"),
                                 fieldWithPath("expectedTestExecution").type(JsonFieldType.STRING)
@@ -251,6 +305,8 @@ public class ProjectControllerDocsTest extends RestDocsSupport {
                                         .description("프로젝트 설명"),
                                 fieldWithPath("data.figmaUrl").type(JsonFieldType.STRING)
                                         .description("피그마 URL"),
+                                fieldWithPath("data.figmaJson").type(JsonFieldType.STRING)
+                                        .description("피그마 json 저장 url"),
                                 fieldWithPath("data.serviceUrl").type(JsonFieldType.STRING)
                                         .description("서비스 URL"),
                                 fieldWithPath("data.rootFigmaPage").type(JsonFieldType.STRING)

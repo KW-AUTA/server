@@ -1,6 +1,9 @@
 package com.auta.server.application.service.project;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.doNothing;
 
 import com.auta.server.IntegrationTestSupport;
 import com.auta.server.adapter.out.persistence.project.ProjectEntity;
@@ -18,6 +21,7 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mock.web.MockMultipartFile;
 
 class ProjectServiceImplTest extends IntegrationTestSupport {
     @Autowired
@@ -57,8 +61,14 @@ class ProjectServiceImplTest extends IntegrationTestSupport {
                 .projectEnd(LocalDate.of(2025, 4, 4))
                 .build();
 
+        MockMultipartFile multipartFile = new MockMultipartFile(
+                "file", "sample.json", "application/json", "{ \"key\": \"value\" }".getBytes()
+        );
+
+        given(s3Port.upload(any())).willReturn("https://s3.mock/sample.json");
+
         //when
-        Project project = projectService.createProject(command, email, registeredDate);
+        Project project = projectService.createProject(command, multipartFile, email, registeredDate);
 
         //then
         assertThat(project).extracting("projectCreatedDate", "projectStatus")
@@ -104,9 +114,16 @@ class ProjectServiceImplTest extends IntegrationTestSupport {
                 .projectEnd(LocalDate.of(2025, 4, 4))
                 .build();
 
+        MockMultipartFile multipartFile = new MockMultipartFile(
+                "file", "sample.json", "application/json", "{ \"key\": \"value\" }".getBytes()
+        );
+
         Long projectId = saved.getId();
+
+        doNothing().when(s3Port).delete(any());
+        given(s3Port.upload(any())).willReturn("https://s3.mock/sample.json");
         //when
-        Project project = projectService.updateProject(command, projectId);
+        Project project = projectService.updateProject(command, multipartFile, projectId);
 
         //then
         assertThat(project).extracting("figmaUrl", "description")
