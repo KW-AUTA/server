@@ -41,11 +41,13 @@ public class ProjectServiceImpl implements ProjectUseCase {
     }
 
     @Override
-    public Project updateProject(ProjectCommand command, Long projectId) {
+    public Project updateProject(ProjectCommand command, MultipartFile jsonFile, Long projectId) {
         Project project = projectPort.findById(projectId)
                 .orElseThrow(() -> new BusinessException(ErrorCode.PROJECT_NOT_FOUND));
-
-        project.update(command);
+        String oldFigmaJsonUrl = project.getFigmaJson();
+        s3Port.delete(oldFigmaJsonUrl);
+        String newFigmaJsonUrl = s3Port.upload(jsonFile);
+        project.update(command, newFigmaJsonUrl);
 
         return projectPort.update(project);
     }

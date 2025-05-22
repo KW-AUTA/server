@@ -50,4 +50,22 @@ public class S3Uploader implements S3Port {
             throw new RuntimeException("S3 업로드 중 오류 발생", e);
         }
     }
+
+    @Override
+    public void delete(String oldFigmaJsonUrl) {
+        if (oldFigmaJsonUrl == null || oldFigmaJsonUrl.isBlank()) {
+            return;
+        }
+
+        String key = extractKeyFromUrl(oldFigmaJsonUrl);
+
+        if (amazonS3Client.doesObjectExist(bucket, key)) {
+            amazonS3Client.deleteObject(bucket, key);
+        }
+    }
+
+    private String extractKeyFromUrl(String url) {
+        int bucketUrlLength = amazonS3Client.getUrl(bucket, "").toString().length();
+        return url.substring(bucketUrlLength);
+    }
 }

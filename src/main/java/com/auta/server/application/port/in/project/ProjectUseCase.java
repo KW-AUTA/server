@@ -9,7 +9,7 @@ public interface ProjectUseCase {
 
     Project createProject(ProjectCommand command, MultipartFile jsonFile, String email, LocalDate registeredDate);
 
-    Project updateProject(ProjectCommand command, Long projectId);
+    Project updateProject(ProjectCommand command, MultipartFile jsonFile, Long projectId);
 
     void deleteProject(Long projectId);
 

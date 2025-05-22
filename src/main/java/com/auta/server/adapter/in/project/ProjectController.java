@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
@@ -41,9 +40,10 @@ public class ProjectController {
 
     @PutMapping("/api/v1/projects/{projectId}")
     public ApiResponse<ProjectResponse> updateProject(@PathVariable Long projectId,
-                                                      @RequestBody ProjectRequest request) {
+                                                      @RequestPart(value = "request") ProjectRequest request,
+                                                      @RequestPart(value = "file") MultipartFile multipartFile) {
         return ApiResponse.ok("프로젝트 생성이 완료되었습니다.",
-                ProjectResponse.from(projectUseCase.updateProject(request.toCommand(), projectId)));
+                ProjectResponse.from(projectUseCase.updateProject(request.toCommand(), multipartFile, projectId)));
     }
 
     @DeleteMapping("/api/v1/projects/{projectId}")

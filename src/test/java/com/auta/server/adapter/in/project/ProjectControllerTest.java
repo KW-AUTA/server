@@ -5,8 +5,8 @@ import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.multipart;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -109,6 +109,22 @@ class ProjectControllerTest extends ControllerTestSupport {
                 .serviceUrl("https://service.com")
                 .rootFigmaPage("mainPage")
                 .build();
+        
+        String json = objectMapper.writeValueAsString(request);
+
+        MockMultipartFile jsonPart = new MockMultipartFile(
+                "request",               // @RequestPart 이름과 일치
+                "request.json",          // 파일 이름
+                "application/json",      // Content-Type
+                json.getBytes(StandardCharsets.UTF_8)
+        );
+
+        MockMultipartFile filePart = new MockMultipartFile(
+                "file",                  // @RequestPart 이름과 일치
+                "example.json",          // 파일 이름
+                "application/json",
+                "{ \"key\": \"value\" }".getBytes(StandardCharsets.UTF_8)
+        );
 
         User user = User.builder()
                 .id(1L)
@@ -118,7 +134,7 @@ class ProjectControllerTest extends ControllerTestSupport {
                 .phoneNumber(null)
                 .build();
 
-        given(projectUseCase.updateProject(any(ProjectCommand.class), anyLong()))
+        given(projectUseCase.updateProject(any(ProjectCommand.class), any(), anyLong()))
                 .willReturn(Project.builder()
                         .id(1L)
                         .projectName("UI 자동화 테스트")
@@ -132,9 +148,14 @@ class ProjectControllerTest extends ControllerTestSupport {
                         .build());
         //when //then
         mockMvc.perform(
-                        put("/api/v1/projects/1")
-                                .content(objectMapper.writeValueAsString(request))
-                                .contentType(MediaType.APPLICATION_JSON)
+                        multipart("/api/v1/projects/{projectId}", 1L)
+                                .file(jsonPart)
+                                .file(filePart)
+                                .with(requests -> {
+                                    requests.setMethod("PUT"); // PUT 메서드로 강제
+                                    return requests;
+                                })
+                                .contentType(MediaType.MULTIPART_FORM_DATA)
                 ).andDo(print())
                 .andExpect(status().isOk());
     }
