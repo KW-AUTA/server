@@ -13,7 +13,9 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 @RequiredArgsConstructor
@@ -28,7 +30,8 @@ public class ProjectController {
     }
 
     @PostMapping("/api/v1/projects")
-    public ApiResponse<ProjectResponse> crateProject(@Valid @RequestBody ProjectRequest request) {
+    public ApiResponse<ProjectResponse> crateProject(@Valid @RequestPart(value = "request") ProjectRequest request,
+                                                     @RequestPart(value = "file") MultipartFile multipartFile) {
         String email = SecurityUtil.getCurrentPrinciple();
         LocalDate registeredDate = LocalDate.now();
         return ApiResponse.ok("프로젝트 생성이 완료되었습니다.",
