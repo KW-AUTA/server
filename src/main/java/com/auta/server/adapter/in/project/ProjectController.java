@@ -35,7 +35,8 @@ public class ProjectController {
         String email = SecurityUtil.getCurrentPrinciple();
         LocalDate registeredDate = LocalDate.now();
         return ApiResponse.ok("프로젝트 생성이 완료되었습니다.",
-                ProjectResponse.from(projectUseCase.createProject(request.toCommand(), email, registeredDate)));
+                ProjectResponse.from(
+                        projectUseCase.createProject(request.toCommand(), multipartFile, email, registeredDate)));
     }
 
     @PutMapping("/api/v1/projects/{projectId}")

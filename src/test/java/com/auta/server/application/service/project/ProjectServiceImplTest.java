@@ -1,6 +1,7 @@
 package com.auta.server.application.service.project;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.BDDMockito.given;
 
 import com.auta.server.IntegrationTestSupport;
 import com.auta.server.adapter.out.persistence.project.ProjectEntity;
@@ -17,7 +18,9 @@ import java.util.Optional;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mock.web.MockMultipartFile;
 
 class ProjectServiceImplTest extends IntegrationTestSupport {
     @Autowired
@@ -57,8 +60,14 @@ class ProjectServiceImplTest extends IntegrationTestSupport {
                 .projectEnd(LocalDate.of(2025, 4, 4))
                 .build();
 
+        MockMultipartFile multipartFile = new MockMultipartFile(
+                "file", "sample.json", "application/json", "{ \"key\": \"value\" }".getBytes()
+        );
+
+        given(s3Port.upload(Mockito.any())).willReturn("https://s3.mock/sample.json");
+
         //when
-        Project project = projectService.createProject(command, email, registeredDate);
+        Project project = projectService.createProject(command, multipartFile, email, registeredDate);
 
         //then
         assertThat(project).extracting("projectCreatedDate", "projectStatus")

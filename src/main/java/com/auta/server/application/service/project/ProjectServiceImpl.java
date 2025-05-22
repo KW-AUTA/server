@@ -3,6 +3,7 @@ package com.auta.server.application.service.project;
 import com.auta.server.application.port.in.project.ProjectCommand;
 import com.auta.server.application.port.in.project.ProjectUseCase;
 import com.auta.server.application.port.out.project.ProjectPort;
+import com.auta.server.application.port.out.s2.S3Port;
 import com.auta.server.application.port.out.test.TestPort;
 import com.auta.server.application.port.out.user.UserPort;
 import com.auta.server.common.exception.BusinessException;
@@ -15,6 +16,7 @@ import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 @Service
 @RequiredArgsConstructor
@@ -24,14 +26,16 @@ public class ProjectServiceImpl implements ProjectUseCase {
     private final ProjectPort projectPort;
     private final UserPort userPort;
     private final TestPort testPort;
+    private final S3Port s3Port;
 
     @Override
-    public Project createProject(ProjectCommand command, String email, LocalDate registeredDate) {
+    public Project createProject(ProjectCommand command, MultipartFile jsonFile, String email,
+                                 LocalDate registeredDate) {
         User user = userPort.findByEmail(email).orElseThrow(
                 () -> new BusinessException(ErrorCode.USER_NOT_FOUND)
         );
-
-        Project project = createProjectDomain(command, registeredDate, user);
+        String jsonUrl = s3Port.upload(jsonFile);
+        Project project = createProjectDomain(command, registeredDate, user, jsonUrl);
 
         return projectPort.save(project);
     }
@@ -66,10 +70,11 @@ public class ProjectServiceImpl implements ProjectUseCase {
         return projectPort.findAllByUserId(userId);
     }
 
-    private Project createProjectDomain(ProjectCommand command, LocalDate registeredDate, User user) {
+    private Project createProjectDomain(ProjectCommand command, LocalDate registeredDate, User user, String jsonUrl) {
         return Project.builder()
                 .user(user)
                 .figmaUrl(command.getFigmaUrl())
+                .figmaJson(jsonUrl)
                 .rootFigmaPage(command.getRootFigmaPage())
                 .serviceUrl(command.getServiceUrl())
                 .projectName(command.getProjectName())

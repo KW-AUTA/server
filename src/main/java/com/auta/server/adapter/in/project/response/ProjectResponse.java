@@ -22,6 +22,7 @@ public class ProjectResponse {
     private LocalDate projectEnd;
     private String description;
     private String figmaUrl;
+    private String figmaJson;
     private String serviceUrl;
     private String rootFigmaPage;
 
@@ -34,6 +35,7 @@ public class ProjectResponse {
                 .projectEnd(project.getProjectEnd())
                 .description(project.getDescription())
                 .figmaUrl(project.getFigmaUrl())
+                .figmaJson(project.getFigmaJson())
                 .serviceUrl(project.getServiceUrl())
                 .rootFigmaPage(project.getRootFigmaPage())
                 .build();

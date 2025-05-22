@@ -21,6 +21,7 @@ public class Project {
     private User user;
     private List<Page> pages;
     private String figmaUrl;
+    private String figmaJson;
     private String rootFigmaPage;
     private String serviceUrl;
     private String projectName;
