@@ -44,6 +44,7 @@ public class ProjectEntity extends BaseEntity {
     private List<PageEntity> pageEntities;
 
     private String figmaUrl;
+    private String figmaJson;
     private String rootFigmaPage;
     private String serviceUrl;
     private String projectName;

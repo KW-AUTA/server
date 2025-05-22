@@ -5,8 +5,8 @@ import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.multipart;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -15,13 +15,15 @@ import com.auta.server.adapter.in.project.request.ProjectRequest;
 import com.auta.server.application.port.in.project.ProjectCommand;
 import com.auta.server.domain.project.Project;
 import com.auta.server.domain.user.User;
+import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
+import org.springframework.mock.web.MockMultipartFile;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 class ProjectControllerTest extends ControllerTestSupport {
-
 
     @DisplayName("프로젝트 테스트를 실행한다.")
     @Test
@@ -48,6 +50,22 @@ class ProjectControllerTest extends ControllerTestSupport {
                 .rootFigmaPage("mainPage")
                 .build();
 
+        String json = objectMapper.writeValueAsString(request);
+
+        MockMultipartFile jsonPart = new MockMultipartFile(
+                "request",               // @RequestPart 이름과 일치
+                "request.json",          // 파일 이름
+                "application/json",      // Content-Type
+                json.getBytes(StandardCharsets.UTF_8)
+        );
+
+        MockMultipartFile filePart = new MockMultipartFile(
+                "file",                  // @RequestPart 이름과 일치
+                "example.json",          // 파일 이름
+                "application/json",
+                "{ \"key\": \"value\" }".getBytes(StandardCharsets.UTF_8)
+        );
+
         User user = User.builder()
                 .id(1L)
                 .email("example@example.com")
@@ -56,7 +74,7 @@ class ProjectControllerTest extends ControllerTestSupport {
                 .phoneNumber(null)
                 .build();
 
-        given(projectUseCase.createProject(any(ProjectCommand.class), anyString(), any()))
+        given(projectUseCase.createProject(any(ProjectCommand.class), any(), anyString(), any()))
                 .willReturn(Project.builder()
                         .id(1L)
                         .projectName("UI 자동화 테스트")
@@ -71,9 +89,10 @@ class ProjectControllerTest extends ControllerTestSupport {
 
         //when //then
         mockMvc.perform(
-                        post("/api/v1/projects")
-                                .content(objectMapper.writeValueAsString(request))
-                                .contentType(MediaType.APPLICATION_JSON)
+                        MockMvcRequestBuilders.multipart("/api/v1/projects")
+                                .file(jsonPart)
+                                .file(filePart)
+                                .contentType(MediaType.MULTIPART_FORM_DATA)
                 ).andDo(print())
                 .andExpect(status().isOk());
     }
@@ -90,6 +109,22 @@ class ProjectControllerTest extends ControllerTestSupport {
                 .serviceUrl("https://service.com")
                 .rootFigmaPage("mainPage")
                 .build();
+        
+        String json = objectMapper.writeValueAsString(request);
+
+        MockMultipartFile jsonPart = new MockMultipartFile(
+                "request",               // @RequestPart 이름과 일치
+                "request.json",          // 파일 이름
+                "application/json",      // Content-Type
+                json.getBytes(StandardCharsets.UTF_8)
+        );
+
+        MockMultipartFile filePart = new MockMultipartFile(
+                "file",                  // @RequestPart 이름과 일치
+                "example.json",          // 파일 이름
+                "application/json",
+                "{ \"key\": \"value\" }".getBytes(StandardCharsets.UTF_8)
+        );
 
         User user = User.builder()
                 .id(1L)
@@ -99,7 +134,7 @@ class ProjectControllerTest extends ControllerTestSupport {
                 .phoneNumber(null)
                 .build();
 
-        given(projectUseCase.updateProject(any(ProjectCommand.class), anyLong()))
+        given(projectUseCase.updateProject(any(ProjectCommand.class), any(), anyLong()))
                 .willReturn(Project.builder()
                         .id(1L)
                         .projectName("UI 자동화 테스트")
@@ -113,9 +148,14 @@ class ProjectControllerTest extends ControllerTestSupport {
                         .build());
         //when //then
         mockMvc.perform(
-                        put("/api/v1/projects/1")
-                                .content(objectMapper.writeValueAsString(request))
-                                .contentType(MediaType.APPLICATION_JSON)
+                        multipart("/api/v1/projects/{projectId}", 1L)
+                                .file(jsonPart)
+                                .file(filePart)
+                                .with(requests -> {
+                                    requests.setMethod("PUT"); // PUT 메서드로 강제
+                                    return requests;
+                                })
+                                .contentType(MediaType.MULTIPART_FORM_DATA)
                 ).andDo(print())
                 .andExpect(status().isOk());
     }

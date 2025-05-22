@@ -21,6 +21,7 @@ public class Project {
     private User user;
     private List<Page> pages;
     private String figmaUrl;
+    private String figmaJson;
     private String rootFigmaPage;
     private String serviceUrl;
     private String projectName;
@@ -32,12 +33,13 @@ public class Project {
     private LocalDateTime testExecuteTime;
     private Integer testRate;
 
-    public void update(ProjectCommand command) {
+    public void update(ProjectCommand command, String figmaJson) {
         this.projectName = command.getProjectName();
         this.expectedTestExecution = command.getExpectedTestExecution();
         this.projectEnd = command.getProjectEnd();
         this.description = command.getDescription();
         this.figmaUrl = command.getFigmaUrl();
+        this.figmaJson = figmaJson;
         this.serviceUrl = command.getServiceUrl();
         this.rootFigmaPage = command.getRootFigmaPage();
     }
