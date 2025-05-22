@@ -1,6 +1,7 @@
 package com.auta.server.application.service.project;
 
 import com.auta.server.adapter.out.fastapi.request.InitRequest;
+import com.auta.server.adapter.out.fastapi.response.InitResponse;
 import com.auta.server.application.port.in.project.ProjectCommand;
 import com.auta.server.application.port.in.project.ProjectUseCase;
 import com.auta.server.application.port.out.fastapi.FastApiPort;
@@ -14,6 +15,7 @@ import com.auta.server.domain.project.ProjectStatus;
 import com.auta.server.domain.user.User;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
@@ -35,8 +37,12 @@ public class ProjectServiceImpl implements ProjectUseCase {
         Project project = projectPort.findById(projectId)
                 .orElseThrow(() -> new BusinessException(ErrorCode.PROJECT_NOT_FOUND));
 
-        fastApiPort.init(
-                new InitRequest(project.getFigmaUrl()));
+        InitResponse initResponse = fastApiPort.init(
+                new InitRequest(
+                        "https://www.figma.com/design/kn3tdCcgeCNnMwugoAiRc1/Untitled?node-id=0-1&p=f&t=yRbnqumbqbcSwdDK-0"));
+        System.out.println(initResponse.fileKey());
+        Map<String, List<String>> graph = fastApiPort.getGraph(initResponse.fileKey());
+        System.out.println(graph);
     }
 
     @Override
