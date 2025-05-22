@@ -1,4 +1,4 @@
-package com.auta.server.application.port.out.test;
+package com.auta.server.application.port.out.persistence.test;
 
 import com.auta.server.domain.test.Test;
 import java.util.List;

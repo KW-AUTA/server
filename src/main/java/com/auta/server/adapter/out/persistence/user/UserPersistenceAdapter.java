@@ -1,6 +1,6 @@
 package com.auta.server.adapter.out.persistence.user;
 
-import com.auta.server.application.port.out.user.UserPort;
+import com.auta.server.application.port.out.persistence.user.UserPort;
 import com.auta.server.common.exception.BusinessException;
 import com.auta.server.common.exception.ErrorCode;
 import com.auta.server.domain.user.User;

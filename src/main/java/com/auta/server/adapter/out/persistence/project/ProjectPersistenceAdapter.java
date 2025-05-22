@@ -1,6 +1,6 @@
 package com.auta.server.adapter.out.persistence.project;
 
-import com.auta.server.application.port.out.project.ProjectPort;
+import com.auta.server.application.port.out.persistence.project.ProjectPort;
 import com.auta.server.common.exception.BusinessException;
 import com.auta.server.common.exception.ErrorCode;
 import com.auta.server.domain.project.Project;
