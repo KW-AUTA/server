@@ -86,13 +86,21 @@ class PagePersistenceAdapterTest extends IntegrationTestSupport {
         UserEntity userEntity = userRepository.save(createDummyUser());
         ProjectEntity projectEntity = projectRepository.save(createDummyProject(userEntity));
         Project project = projectMapper.toDomain(projectEntity);
-        Page page = Page.builder().project(project).build();
+        List<Page> pages = List.of(
+                Page.builder().project(project).build(),
+                Page.builder().project(project).build(),
+                Page.builder().project(project).build()
+        );
 
         //when
-        Page savedPage = pagePersistenceAdapter.save(page);
+        List<Page> savedPages = pagePersistenceAdapter.saveAll(pages);
 
         //then
-        assertThat(savedPage.getProject()).extracting("id").isEqualTo(project.getId());
+        assertThat(savedPages).hasSize(3).extracting(page -> page.getProject().getId())
+                .containsExactlyInAnyOrder(
+                        project.getId(),
+                        project.getId(),
+                        project.getId());
     }
 
     private PageEntity createDummyPage(ProjectEntity projectEntity) {

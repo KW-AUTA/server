@@ -1,6 +1,7 @@
 package com.auta.server.adapter.out.persistence.test;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.groups.Tuple.tuple;
 
 import com.auta.server.IntegrationTestSupport;
 import com.auta.server.adapter.out.persistence.page.PageEntity;
@@ -16,7 +17,6 @@ import com.auta.server.domain.project.Project;
 import com.auta.server.domain.test.TestStatus;
 import com.auta.server.domain.test.TestType;
 import java.util.List;
-import org.assertj.core.groups.Tuple;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -135,7 +135,7 @@ class TestPersistenceAdapterTest extends IntegrationTestSupport {
 
     @DisplayName("테스트 도메인 리스트를 받아서 테스트를 저장한다.")
     @Test
-    void save() {
+    void saveAll() {
         //given
         UserEntity userEntity = userRepository.save(createDummyUser());
         ProjectEntity projectEntity = projectRepository.save(createDummyProject(userEntity));
@@ -159,10 +159,31 @@ class TestPersistenceAdapterTest extends IntegrationTestSupport {
                 test -> test.getPage().getId(),
                 test -> test.getProject().getId()
         ).containsExactlyInAnyOrder(
-                Tuple.tuple(page.getId(), project.getId()),
-                Tuple.tuple(page.getId(), project.getId()),
-                Tuple.tuple(page.getId(), project.getId())
+                tuple(page.getId(), project.getId()),
+                tuple(page.getId(), project.getId()),
+                tuple(page.getId(), project.getId())
         );
+    }
+
+    @DisplayName("테스트 도메인을 받아서 테스트에 저장한다.")
+    @Test
+    void save() {
+        //given
+        UserEntity userEntity = userRepository.save(createDummyUser());
+        ProjectEntity projectEntity = projectRepository.save(createDummyProject(userEntity));
+        PageEntity pageEntity = pageRepository.save(createDummyPage(projectEntity));
+
+        Project project = projectMapper.toDomain(projectEntity);
+        Page page = pageMapper.toDomain(pageEntity);
+        com.auta.server.domain.test.Test test = com.auta.server.domain.test.Test.builder()
+                .project(project).page(page).build();
+
+        //when
+        com.auta.server.domain.test.Test savedTest = testPersistenceAdapter.save(test);
+
+        //then
+        assertThat(savedTest.getProject().getId()).isEqualTo(project.getId());
+        assertThat(savedTest.getPage().getId()).isEqualTo(page.getId());
     }
 
     private TestEntity createDummyTest(ProjectEntity projectEntity, PageEntity pageEntity, TestStatus testStatus,

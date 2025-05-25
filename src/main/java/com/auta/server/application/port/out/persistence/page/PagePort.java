@@ -9,5 +9,5 @@ public interface PagePort {
 
     List<Page> findAllByProjectId(Long projectId);
 
-    Page save(Page page);
+    List<Page> saveAll(List<Page> pages);
 }

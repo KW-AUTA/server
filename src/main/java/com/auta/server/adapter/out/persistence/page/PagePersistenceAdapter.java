@@ -25,8 +25,8 @@ public class PagePersistenceAdapter implements PagePort {
     }
 
     @Override
-    public Page save(Page page) {
-        PageEntity pageEntity = pageRepository.save(pageMapper.toEntity(page));
-        return pageMapper.toDomain(pageEntity);
+    public List<Page> saveAll(List<Page> pages) {
+        List<PageEntity> pageEntities = pageRepository.saveAll(pages.stream().map(pageMapper::toEntity).toList());
+        return pageEntities.stream().map(pageMapper::toDomain).toList();
     }
 }

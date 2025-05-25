@@ -40,4 +40,10 @@ public class TestPersistenceAdapter implements TestPort {
         List<TestEntity> testEntities = testRepository.saveAll(tests.stream().map(testMapper::toEntity).toList());
         return testEntities.stream().map(testMapper::toDomain).toList();
     }
+
+    @Override
+    public Test save(Test test) {
+        TestEntity testEntity = testRepository.save(testMapper.toEntity(test));
+        return testMapper.toDomain(testEntity);
+    }
 }

@@ -16,10 +16,9 @@ import com.auta.server.domain.page.Page;
 import com.auta.server.domain.project.Project;
 import com.auta.server.domain.project.ProjectStatus;
 import com.auta.server.domain.test.Test;
-import com.auta.server.domain.test.TestStatus;
-import com.auta.server.domain.test.TestType;
 import com.auta.server.domain.user.User;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -48,42 +47,46 @@ public class ProjectServiceImpl implements ProjectUseCase {
         Project project = projectPort.findById(projectId)
                 .orElseThrow(() -> new BusinessException(ErrorCode.PROJECT_NOT_FOUND));
         project.changeStatus(ProjectStatus.IN_PROGRESS);
-        dfs(project.getRootFigmaPage(), project.getServiceUrl(), new HashSet<>(), project);
+        List<Page> pages = new ArrayList<>();
+        List<Test> tests = new ArrayList<>();
+        dfs(project.getRootFigmaPage(), project.getServiceUrl(), new HashSet<>(), project, pages, tests);
+
+        pagePort.saveAll(pages);
+        testPort.saveAll(tests);
     }
 
     private void dfs(String currentPage, String currentUrl,
-                     Set<String> visited, Project project) {
+                     Set<String> visited, Project project,
+                     List<Page> pages, List<Test> tests) {
 
         if (visited.contains(currentPage)) {
             return;
         }
 
         visited.add(currentPage);
-        Page page = pagePort.save(Page.of(project, currentPage, currentUrl));
+        Page page = Page.of(project, currentPage, currentUrl);
+        pages.add(page);
 
         ComponentMappingResponse response = fastApiPort.requestComponentMapping(currentUrl, currentPage,
                 project.getId());
         List<MappingInfo> mappings = response.getMappings();
-        List<Test> tests = mappings.stream()
-                .map(mappingInfo -> Test.builder()
-                        .project(project)
-                        .page(page)
-                        .testType(TestType.MAPPING)
-                        .testStatus(mappingInfo.isSuccess() ? TestStatus.PASSED : TestStatus.FAILED)
-                        .failReason(mappingInfo.getFailReason())
-                        .componentName(mappingInfo.getComponentName())
-                        .build()
-                ).toList();
-        List<Test> savedTests = testPort.saveAll(tests);
+        List<Test> mappingTests = mappings.stream()
+                .map(info -> Test.ofMappingResult(project, page, info))
+                .toList();
+
+        tests.addAll(mappingTests);
+
         List<MappingInfo> routingInfos = mappings.stream().filter(MappingInfo::isRouting)
                 .toList();
 
         for (MappingInfo routing : routingInfos) {
-            String triggerSelector = routing.getComponentName();
             String destinationPage = routing.getDestinationFigmaPage();
             String destinationUrl = routing.getDestinationUrl();
-            if (!destinationUrl.isBlank()) {
-                dfs(destinationPage, destinationUrl, visited, project);
+
+            Test test = Test.ofRoutingResult(project, page, routing);
+            tests.add(test);
+            if (routing.isSuccess()) {
+                dfs(destinationPage, destinationUrl, visited, project, pages, tests);
             }
         }
     }

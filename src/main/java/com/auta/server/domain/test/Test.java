@@ -1,5 +1,6 @@
 package com.auta.server.domain.test;
 
+import com.auta.server.adapter.out.fastapi.response.ComponentMappingResponse.MappingInfo;
 import com.auta.server.domain.page.Page;
 import com.auta.server.domain.project.Project;
 import lombok.Builder;
@@ -31,6 +32,30 @@ public class Test {
 
     public boolean isFailed() {
         return testStatus.equals(TestStatus.FAILED);
+    }
+
+    public static Test ofMappingResult(Project project, Page page, MappingInfo info) {
+        return Test.builder()
+                .project(project)
+                .page(page)
+                .testType(TestType.MAPPING)
+                .testStatus(info.isSuccess() ? TestStatus.PASSED : TestStatus.FAILED)
+                .failReason(info.getFailReason())
+                .componentName(info.getComponentName())
+                .build();
+    }
+
+    public static Test ofRoutingResult(Project project, Page page, MappingInfo info) {
+        return Test.builder()
+                .project(project)
+                .page(page)
+                .testType(TestType.ROUTING)
+                .testStatus(info.isSuccess() ? TestStatus.PASSED : TestStatus.FAILED)
+                .failReason(info.getFailReason())
+                .trigger(info.getComponentName())
+                .expectedDestination(info.getDestinationUrl())
+                .actualDestination(info.getActualUrl())
+                .build();
     }
 
 }

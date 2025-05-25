@@ -12,6 +12,7 @@ public class ComponentMappingResponse {
         private String componentName;
         private String destinationFigmaPage;
         private String destinationUrl;
+        private String actualUrl;
         private String failReason;
         private boolean isSuccess;
         private boolean isRouting;

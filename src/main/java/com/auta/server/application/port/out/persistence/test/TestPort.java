@@ -13,4 +13,6 @@ public interface TestPort {
     void deleteAllByProjectId(Long projectId);
 
     List<Test> saveAll(List<Test> tests);
+
+    Test save(Test test);
 }
