@@ -1,22 +1,24 @@
 package com.auta.server.application.service.project;
 
-import com.auta.server.adapter.out.fastapi.request.InitRequest;
-import com.auta.server.adapter.out.fastapi.response.InitResponse;
+import com.auta.server.adapter.out.fastapi.response.ComponentMappingResponse;
+import com.auta.server.adapter.out.fastapi.response.ComponentMappingResponse.MappingInfo;
 import com.auta.server.application.port.in.project.ProjectCommand;
 import com.auta.server.application.port.in.project.ProjectUseCase;
 import com.auta.server.application.port.out.fastapi.FastApiPort;
+import com.auta.server.application.port.out.persistence.page.PagePort;
 import com.auta.server.application.port.out.persistence.project.ProjectPort;
 import com.auta.server.application.port.out.persistence.test.TestPort;
 import com.auta.server.application.port.out.persistence.user.UserPort;
-import com.auta.server.application.port.out.s2.S3Port;
+import com.auta.server.application.port.out.s3.S3Port;
 import com.auta.server.common.exception.BusinessException;
 import com.auta.server.common.exception.ErrorCode;
 import com.auta.server.domain.project.Project;
 import com.auta.server.domain.project.ProjectStatus;
 import com.auta.server.domain.user.User;
 import java.time.LocalDate;
+import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
+import java.util.Set;
 import lombok.RequiredArgsConstructor;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
@@ -40,13 +42,34 @@ public class ProjectServiceImpl implements ProjectUseCase {
         Project project = projectPort.findById(projectId)
                 .orElseThrow(() -> new BusinessException(ErrorCode.PROJECT_NOT_FOUND));
 
-        InitResponse initResponse = fastApiPort.init(
-                new InitRequest(
-                        "https://www.figma.com/design/kn3tdCcgeCNnMwugoAiRc1/Untitled?node-id=0-1&p=f&t=yRbnqumbqbcSwdDK-0"));
-        System.out.println(initResponse.fileKey());
-        Map<String, List<String>> graph = fastApiPort.getGraph(initResponse.fileKey());
-        System.out.println(graph);
+        String rootPage = project.getRootFigmaPage();
+        String rootUrl = project.getServiceUrl();
+        Set<String> visited = new HashSet<>();
+        dfs(rootPage, rootUrl, visited, project);
     }
+
+    private void dfs(String currentPage, String currentUrl,
+                     Set<String> visited, Project project) {
+
+        if (visited.contains(currentPage)) {
+            return;
+        }
+        visited.add(currentPage);
+
+        ComponentMappingResponse response = fastApiPort.requestComponentMapping(currentUrl, currentPage,
+                project.getId());
+        List<MappingInfo> routingInfos = response.getMappings().stream().filter(MappingInfo::isRouting)
+                .toList();
+
+        for (MappingInfo routing : routingInfos) {
+            String triggerSelector = routing.getComponentName();
+            String destinationPage = routing.getDestinationFigmaPage();
+            String destinationUrl = routing.getDestinationUrl();
+            if (!destinationUrl.isBlank()) {
+                dfs(destinationPage, destinationUrl, visited, project, figmaJson);
+            }
+        }
+//    }
 
     @Override
     public Project createProject(ProjectCommand command, MultipartFile jsonFile, String email,

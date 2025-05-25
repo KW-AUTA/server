@@ -6,7 +6,6 @@ import com.auta.server.domain.user.User;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.function.Function;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -42,28 +41,5 @@ public class Project {
         this.figmaJson = figmaJson;
         this.serviceUrl = command.getServiceUrl();
         this.rootFigmaPage = command.getRootFigmaPage();
-    }
-
-    public int getTotalRoutingTest() {
-        return getTotalTestBy(Page::getTotalRouting);
-    }
-
-    public int getTotalInteractionTest() {
-        return getTotalTestBy(Page::getTotalInteraction);
-    }
-
-    public int getTotalMappingTest() {
-        return getTotalTestBy(Page::getTotalMapping);
-    }
-
-    public void addPages(List<Page> pages) {
-        this.pages = pages;
-    }
-
-    private int getTotalTestBy(Function<Page, Long> extractor) {
-        return pages == null ? 0 :
-                pages.stream()
-                        .mapToInt(p -> extractor.apply(p).intValue())
-                        .sum();
     }
 }

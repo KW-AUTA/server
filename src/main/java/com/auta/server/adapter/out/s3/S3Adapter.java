@@ -2,7 +2,7 @@ package com.auta.server.adapter.out.s3;
 
 import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.model.ObjectMetadata;
-import com.auta.server.application.port.out.s2.S3Port;
+import com.auta.server.application.port.out.s3.S3Port;
 import java.io.IOException;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
@@ -14,7 +14,7 @@ import org.springframework.web.multipart.MultipartFile;
 @Component
 @RequiredArgsConstructor
 @Profile({"local", "prod"})
-public class S3Uploader implements S3Port {
+public class S3Adapter implements S3Port {
 
     private final AmazonS3Client amazonS3Client;
 
@@ -28,7 +28,7 @@ public class S3Uploader implements S3Port {
             String originalFilename = jsonFile.getOriginalFilename();
             String extension = "";
 
-            if (originalFilename != null && originalFilename.contains(".")) {
+            if (originalFilename.contains(".")) {
                 extension = originalFilename.substring(originalFilename.lastIndexOf("."));
             }
 

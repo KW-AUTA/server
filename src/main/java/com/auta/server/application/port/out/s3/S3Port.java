@@ -1,4 +1,4 @@
-package com.auta.server.application.port.out.s2;
+package com.auta.server.application.port.out.s3;
 
 import org.springframework.web.multipart.MultipartFile;
 

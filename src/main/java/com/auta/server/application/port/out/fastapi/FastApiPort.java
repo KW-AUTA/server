@@ -1,21 +1,12 @@
 package com.auta.server.application.port.out.fastapi;
 
-import com.auta.server.adapter.out.fastapi.request.InitRequest;
-import com.auta.server.adapter.out.fastapi.request.MappingRequest;
-import com.auta.server.adapter.out.fastapi.request.RoutingRequest;
-import com.auta.server.adapter.out.fastapi.response.InitResponse;
-import com.auta.server.adapter.out.fastapi.response.MappingResponse;
-import com.auta.server.adapter.out.fastapi.response.RoutingResponse;
-import java.util.List;
-import java.util.Map;
+import com.auta.server.adapter.out.fastapi.response.ComponentMappingResponse;
 
 public interface FastApiPort {
 
-    InitResponse init(InitRequest request);
+//    FigmaGraphResponse requestFigmaGraphAnalysis(String figmaJson, String rootFigmaPage, String serviceUrl);
 
-    RoutingResponse callRouting(RoutingRequest request);
+    ComponentMappingResponse requestComponentMapping(String currentUrl, String currentPage, Long projectId);
 
-    MappingResponse callMapping(MappingRequest request);
-
-    Map<String, List<String>> getGraph(String s);
+    String requestRouting(String selector, String currentUrl);
 }

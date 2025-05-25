@@ -11,7 +11,6 @@ import org.mapstruct.Mapping;
 public interface PageMapper {
 
     @Mapping(source = "projectEntity", target = "project")
-    @Mapping(target = "tests", ignore = true)
     Page toDomain(PageEntity pageEntity);
 
     @InheritInverseConfiguration

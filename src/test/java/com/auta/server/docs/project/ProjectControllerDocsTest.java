@@ -88,7 +88,9 @@ public class ProjectControllerDocsTest extends RestDocsSupport {
                 .rootFigmaPage("mainPage")
                 .build();
 
-        String json = objectMapper.writeValueAsString(request);
+        String json = objectMapper
+                .writerWithDefaultPrettyPrinter()
+                .writeValueAsString(request);
 
         MockMultipartFile jsonPart = new MockMultipartFile(
                 "request",
@@ -206,7 +208,9 @@ public class ProjectControllerDocsTest extends RestDocsSupport {
                 .rootFigmaPage("mainPage")
                 .build();
 
-        String json = objectMapper.writeValueAsString(request);
+        String json = objectMapper
+                .writerWithDefaultPrettyPrinter()
+                .writeValueAsString(request);
 
         MockMultipartFile jsonPart = new MockMultipartFile(
                 "request",
@@ -259,10 +263,6 @@ public class ProjectControllerDocsTest extends RestDocsSupport {
                 .andDo(document("project-update",
                         preprocessRequest(prettyPrint()),
                         preprocessResponse(prettyPrint()),
-                        requestParts(
-                                partWithName("request").description("프로젝트 정보 JSON"),
-                                partWithName("file").description("피그마 JSON 파일")
-                        ),
                         requestPartFields("request",
                                 fieldWithPath("projectName").type(JsonFieldType.STRING)
                                         .description("프로젝트 이름"),
