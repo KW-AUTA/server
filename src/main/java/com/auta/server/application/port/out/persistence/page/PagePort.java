@@ -8,4 +8,6 @@ public interface PagePort {
     Optional<Page> findById(Long pageId);
 
     List<Page> findAllByProjectId(Long projectId);
+
+    Page save(Page page);
 }

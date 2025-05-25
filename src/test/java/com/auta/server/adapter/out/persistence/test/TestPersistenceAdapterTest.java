@@ -4,14 +4,19 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import com.auta.server.IntegrationTestSupport;
 import com.auta.server.adapter.out.persistence.page.PageEntity;
+import com.auta.server.adapter.out.persistence.page.PageMapper;
 import com.auta.server.adapter.out.persistence.page.PageRepository;
 import com.auta.server.adapter.out.persistence.project.ProjectEntity;
+import com.auta.server.adapter.out.persistence.project.ProjectMapper;
 import com.auta.server.adapter.out.persistence.project.ProjectRepository;
 import com.auta.server.adapter.out.persistence.user.UserEntity;
 import com.auta.server.adapter.out.persistence.user.UserRepository;
+import com.auta.server.domain.page.Page;
+import com.auta.server.domain.project.Project;
 import com.auta.server.domain.test.TestStatus;
 import com.auta.server.domain.test.TestType;
 import java.util.List;
+import org.assertj.core.groups.Tuple;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -33,6 +38,12 @@ class TestPersistenceAdapterTest extends IntegrationTestSupport {
 
     @Autowired
     private TestRepository testRepository;
+
+    @Autowired
+    private ProjectMapper projectMapper;
+
+    @Autowired
+    private PageMapper pageMapper;
 
     @AfterEach
     void tearDown() {
@@ -120,6 +131,38 @@ class TestPersistenceAdapterTest extends IntegrationTestSupport {
 
         //then
         assertThat(testRepository.findAllByPageId(projectId)).isEmpty();
+    }
+
+    @DisplayName("테스트 도메인 리스트를 받아서 테스트를 저장한다.")
+    @Test
+    void save() {
+        //given
+        UserEntity userEntity = userRepository.save(createDummyUser());
+        ProjectEntity projectEntity = projectRepository.save(createDummyProject(userEntity));
+        PageEntity pageEntity = pageRepository.save(createDummyPage(projectEntity));
+
+        Project project = projectMapper.toDomain(projectEntity);
+        Page page = pageMapper.toDomain(pageEntity);
+
+        List<com.auta.server.domain.test.Test> tests =
+                List.of(
+                        com.auta.server.domain.test.Test.builder().page(page).project(project).build(),
+                        com.auta.server.domain.test.Test.builder().page(page).project(project).build(),
+                        com.auta.server.domain.test.Test.builder().page(page).project(project).build()
+                );
+
+        //when
+        List<com.auta.server.domain.test.Test> savedTests = testPersistenceAdapter.saveAll(tests);
+
+        //then
+        assertThat(savedTests).extracting(
+                test -> test.getPage().getId(),
+                test -> test.getProject().getId()
+        ).containsExactlyInAnyOrder(
+                Tuple.tuple(page.getId(), project.getId()),
+                Tuple.tuple(page.getId(), project.getId()),
+                Tuple.tuple(page.getId(), project.getId())
+        );
     }
 
     private TestEntity createDummyTest(ProjectEntity projectEntity, PageEntity pageEntity, TestStatus testStatus,

@@ -11,4 +11,6 @@ public interface TestPort {
     List<Test> findAllByProjectIdInOrderByCreationTimeDesc(List<Long> projectIds);
 
     void deleteAllByProjectId(Long projectId);
+
+    List<Test> saveAll(List<Test> tests);
 }

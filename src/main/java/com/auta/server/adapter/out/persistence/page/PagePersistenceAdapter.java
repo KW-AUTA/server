@@ -23,4 +23,10 @@ public class PagePersistenceAdapter implements PagePort {
         return pageRepository.findAllByProjectId(projectId)
                 .stream().map(pageMapper::toDomain).toList();
     }
+
+    @Override
+    public Page save(Page page) {
+        PageEntity pageEntity = pageRepository.save(pageMapper.toEntity(page));
+        return pageMapper.toDomain(pageEntity);
+    }
 }

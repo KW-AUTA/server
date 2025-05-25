@@ -34,4 +34,10 @@ public class TestPersistenceAdapter implements TestPort {
     public void deleteAllByProjectId(Long projectId) {
         testRepository.deleteAllByProjectId(projectId);
     }
+
+    @Override
+    public List<Test> saveAll(List<Test> tests) {
+        List<TestEntity> testEntities = testRepository.saveAll(tests.stream().map(testMapper::toEntity).toList());
+        return testEntities.stream().map(testMapper::toDomain).toList();
+    }
 }

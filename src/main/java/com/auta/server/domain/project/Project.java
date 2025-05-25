@@ -42,4 +42,8 @@ public class Project {
         this.serviceUrl = command.getServiceUrl();
         this.rootFigmaPage = command.getRootFigmaPage();
     }
+
+    public void changeStatus(ProjectStatus projectStatus) {
+        this.projectStatus = projectStatus;
+    }
 }

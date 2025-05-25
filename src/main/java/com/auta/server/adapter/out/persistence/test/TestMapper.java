@@ -10,8 +10,8 @@ import org.mapstruct.Mapping;
 @Mapper(componentModel = "spring", uses = {ProjectMapper.class, PageMapper.class})
 public interface TestMapper {
 
-    @Mapping(source = "testEntity.projectEntity", target = "project")
-    @Mapping(source = "testEntity.pageEntity", target = "page")
+    @Mapping(source = "projectEntity", target = "project")
+    @Mapping(source = "pageEntity", target = "page")
     Test toDomain(TestEntity testEntity);
 
     @InheritInverseConfiguration

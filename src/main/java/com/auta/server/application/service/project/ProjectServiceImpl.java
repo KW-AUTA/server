@@ -12,8 +12,12 @@ import com.auta.server.application.port.out.persistence.user.UserPort;
 import com.auta.server.application.port.out.s3.S3Port;
 import com.auta.server.common.exception.BusinessException;
 import com.auta.server.common.exception.ErrorCode;
+import com.auta.server.domain.page.Page;
 import com.auta.server.domain.project.Project;
 import com.auta.server.domain.project.ProjectStatus;
+import com.auta.server.domain.test.Test;
+import com.auta.server.domain.test.TestStatus;
+import com.auta.server.domain.test.TestType;
 import com.auta.server.domain.user.User;
 import java.time.LocalDate;
 import java.util.HashSet;
@@ -33,19 +37,18 @@ public class ProjectServiceImpl implements ProjectUseCase {
     private final ProjectPort projectPort;
     private final UserPort userPort;
     private final TestPort testPort;
+    private final PagePort pagePort;
     private final S3Port s3Port;
     private final FastApiPort fastApiPort;
 
     @Async
     @Override
+    @Transactional
     public void executeTest(Long projectId) {
         Project project = projectPort.findById(projectId)
                 .orElseThrow(() -> new BusinessException(ErrorCode.PROJECT_NOT_FOUND));
-
-        String rootPage = project.getRootFigmaPage();
-        String rootUrl = project.getServiceUrl();
-        Set<String> visited = new HashSet<>();
-        dfs(rootPage, rootUrl, visited, project);
+        project.changeStatus(ProjectStatus.IN_PROGRESS);
+        dfs(project.getRootFigmaPage(), project.getServiceUrl(), new HashSet<>(), project);
     }
 
     private void dfs(String currentPage, String currentUrl,
@@ -54,11 +57,25 @@ public class ProjectServiceImpl implements ProjectUseCase {
         if (visited.contains(currentPage)) {
             return;
         }
+
         visited.add(currentPage);
+        Page page = pagePort.save(Page.of(project, currentPage, currentUrl));
 
         ComponentMappingResponse response = fastApiPort.requestComponentMapping(currentUrl, currentPage,
                 project.getId());
-        List<MappingInfo> routingInfos = response.getMappings().stream().filter(MappingInfo::isRouting)
+        List<MappingInfo> mappings = response.getMappings();
+        List<Test> tests = mappings.stream()
+                .map(mappingInfo -> Test.builder()
+                        .project(project)
+                        .page(page)
+                        .testType(TestType.MAPPING)
+                        .testStatus(mappingInfo.isSuccess() ? TestStatus.PASSED : TestStatus.FAILED)
+                        .failReason(mappingInfo.getFailReason())
+                        .componentName(mappingInfo.getComponentName())
+                        .build()
+                ).toList();
+        List<Test> savedTests = testPort.saveAll(tests);
+        List<MappingInfo> routingInfos = mappings.stream().filter(MappingInfo::isRouting)
                 .toList();
 
         for (MappingInfo routing : routingInfos) {
@@ -66,10 +83,10 @@ public class ProjectServiceImpl implements ProjectUseCase {
             String destinationPage = routing.getDestinationFigmaPage();
             String destinationUrl = routing.getDestinationUrl();
             if (!destinationUrl.isBlank()) {
-                dfs(destinationPage, destinationUrl, visited, project, figmaJson);
+                dfs(destinationPage, destinationUrl, visited, project);
             }
         }
-//    }
+    }
 
     @Override
     public Project createProject(ProjectCommand command, MultipartFile jsonFile, String email,

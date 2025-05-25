@@ -4,10 +4,12 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import com.auta.server.IntegrationTestSupport;
 import com.auta.server.adapter.out.persistence.project.ProjectEntity;
+import com.auta.server.adapter.out.persistence.project.ProjectMapper;
 import com.auta.server.adapter.out.persistence.project.ProjectRepository;
 import com.auta.server.adapter.out.persistence.user.UserEntity;
 import com.auta.server.adapter.out.persistence.user.UserRepository;
 import com.auta.server.domain.page.Page;
+import com.auta.server.domain.project.Project;
 import java.util.List;
 import java.util.Optional;
 import org.junit.jupiter.api.AfterEach;
@@ -28,6 +30,9 @@ class PagePersistenceAdapterTest extends IntegrationTestSupport {
 
     @Autowired
     private PageRepository pageRepository;
+
+    @Autowired
+    private ProjectMapper projectMapper;
 
     @AfterEach
     void tearDown() {
@@ -72,6 +77,22 @@ class PagePersistenceAdapterTest extends IntegrationTestSupport {
         assertThat(pages).hasSize(1);
         assertThat(pages.get(0).getProject())
                 .extracting("id").isEqualTo(1L);
+    }
+
+    @DisplayName("페이지를 저장한다.")
+    @Test
+    void save() {
+        //given
+        UserEntity userEntity = userRepository.save(createDummyUser());
+        ProjectEntity projectEntity = projectRepository.save(createDummyProject(userEntity));
+        Project project = projectMapper.toDomain(projectEntity);
+        Page page = Page.builder().project(project).build();
+
+        //when
+        Page savedPage = pagePersistenceAdapter.save(page);
+
+        //then
+        assertThat(savedPage.getProject()).extracting("id").isEqualTo(project.getId());
     }
 
     private PageEntity createDummyPage(ProjectEntity projectEntity) {
