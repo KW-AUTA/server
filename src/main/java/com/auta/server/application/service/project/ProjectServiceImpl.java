@@ -33,11 +33,14 @@ public class ProjectServiceImpl implements ProjectUseCase {
     private final PagePort pagePort;
     private final S3Port s3Port;
     private final FastApiPort fastApiPort;
+    private final ProjectStatusService projectStatusService;
 
     @Async
     @Override
     @Transactional
     public void executeTest(Long projectId) {
+        projectStatusService.updateStatus(projectId, ProjectStatus.IN_PROGRESS);
+
         Project project = projectPort.findById(projectId)
                 .orElseThrow(() -> new BusinessException(ErrorCode.PROJECT_NOT_FOUND));
         project.changeStatus(ProjectStatus.IN_PROGRESS);
@@ -46,6 +49,8 @@ public class ProjectServiceImpl implements ProjectUseCase {
 
         pagePort.saveAll(testCollector.getPages());
         testPort.saveAll(testCollector.getTests());
+
+        projectStatusService.updateStatus(projectId, ProjectStatus.COMPLETED);
     }
 
     @Override
