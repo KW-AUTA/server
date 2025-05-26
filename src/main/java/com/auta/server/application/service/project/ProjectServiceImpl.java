@@ -1,7 +1,5 @@
 package com.auta.server.application.service.project;
 
-import com.auta.server.adapter.out.fastapi.response.ComponentMappingResponse;
-import com.auta.server.adapter.out.fastapi.response.ComponentMappingResponse.MappingInfo;
 import com.auta.server.application.port.in.project.ProjectCommand;
 import com.auta.server.application.port.in.project.ProjectUseCase;
 import com.auta.server.application.port.out.fastapi.FastApiPort;
@@ -10,18 +8,14 @@ import com.auta.server.application.port.out.persistence.project.ProjectPort;
 import com.auta.server.application.port.out.persistence.test.TestPort;
 import com.auta.server.application.port.out.persistence.user.UserPort;
 import com.auta.server.application.port.out.s3.S3Port;
+import com.auta.server.application.service.test.TestCollector;
 import com.auta.server.common.exception.BusinessException;
 import com.auta.server.common.exception.ErrorCode;
-import com.auta.server.domain.page.Page;
 import com.auta.server.domain.project.Project;
 import com.auta.server.domain.project.ProjectStatus;
-import com.auta.server.domain.test.Test;
 import com.auta.server.domain.user.User;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 import lombok.RequiredArgsConstructor;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
@@ -47,48 +41,11 @@ public class ProjectServiceImpl implements ProjectUseCase {
         Project project = projectPort.findById(projectId)
                 .orElseThrow(() -> new BusinessException(ErrorCode.PROJECT_NOT_FOUND));
         project.changeStatus(ProjectStatus.IN_PROGRESS);
-        List<Page> pages = new ArrayList<>();
-        List<Test> tests = new ArrayList<>();
-        dfs(project.getRootFigmaPage(), project.getServiceUrl(), new HashSet<>(), project, pages, tests);
+        TestCollector testCollector = new TestCollector(fastApiPort, project);
+        testCollector.collect(project.getRootFigmaPage(), project.getServiceUrl());
 
-        pagePort.saveAll(pages);
-        testPort.saveAll(tests);
-    }
-
-    private void dfs(String currentPage, String currentUrl,
-                     Set<String> visited, Project project,
-                     List<Page> pages, List<Test> tests) {
-
-        if (visited.contains(currentPage)) {
-            return;
-        }
-
-        visited.add(currentPage);
-        Page page = Page.of(project, currentPage, currentUrl);
-        pages.add(page);
-
-        ComponentMappingResponse response = fastApiPort.requestComponentMapping(currentUrl, currentPage,
-                project.getId());
-        List<MappingInfo> mappings = response.getMappings();
-        List<Test> mappingTests = mappings.stream()
-                .map(info -> Test.ofMappingResult(project, page, info))
-                .toList();
-
-        tests.addAll(mappingTests);
-
-        List<MappingInfo> routingInfos = mappings.stream().filter(MappingInfo::isRouting)
-                .toList();
-
-        for (MappingInfo routing : routingInfos) {
-            String destinationPage = routing.getDestinationFigmaPage();
-            String destinationUrl = routing.getDestinationUrl();
-
-            Test test = Test.ofRoutingResult(project, page, routing);
-            tests.add(test);
-            if (routing.isSuccess()) {
-                dfs(destinationPage, destinationUrl, visited, project, pages, tests);
-            }
-        }
+        pagePort.saveAll(testCollector.getPages());
+        testPort.saveAll(testCollector.getTests());
     }
 
     @Override
