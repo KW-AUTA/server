@@ -2,6 +2,7 @@ package com.auta.server.domain.project;
 
 import com.auta.server.application.port.in.project.ProjectCommand;
 import com.auta.server.domain.page.Page;
+import com.auta.server.domain.test.Test;
 import com.auta.server.domain.user.User;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -45,5 +46,16 @@ public class Project {
 
     public void changeStatus(ProjectStatus projectStatus) {
         this.projectStatus = projectStatus;
+    }
+
+    public void updateTestRate(List<Test> tests) {
+        int total = tests.size();
+        int passed = Math.toIntExact(tests.stream().filter(Test::isPassed).count());
+
+        if (total > 0) {
+            this.testRate = (int) Math.round((passed * 100.0) / total);
+        } else {
+            this.testRate = 0;
+        }
     }
 }

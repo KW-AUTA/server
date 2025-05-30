@@ -51,6 +51,8 @@ public class ProjectServiceImpl implements ProjectUseCase {
         testPort.saveAll(testCollector.getTests());
 
         projectStatusService.updateStatus(projectId, ProjectStatus.COMPLETED);
+        project.updateTestRate(testCollector.getTests());
+        projectPort.update(project);
     }
 
     @Override
