@@ -1,7 +1,7 @@
 package com.auta.server.application.service.test;
 
-import com.auta.server.adapter.out.fastapi.response.ComponentMappingResponse;
-import com.auta.server.adapter.out.fastapi.response.ComponentMappingResponse.MappingInfo;
+import com.auta.server.adapter.out.fastapi.response.MappingResponse;
+import com.auta.server.adapter.out.fastapi.response.MappingResponse.MappingInfo;
 import com.auta.server.application.port.out.fastapi.FastApiPort;
 import com.auta.server.domain.page.Page;
 import com.auta.server.domain.project.Project;
@@ -32,7 +32,7 @@ public class TestCollector {
         Page page = Page.of(project, currentPage, currentUrl);
         pages.add(page);
 
-        ComponentMappingResponse response = fastApiPort.requestComponentMapping(currentUrl, currentPage,
+        MappingResponse response = fastApiPort.requestComponentMapping(currentUrl, currentPage,
                 project.getId());
 
         List<MappingInfo> mappings = response.getMappings();

@@ -1,6 +1,6 @@
 package com.auta.server.domain.test;
 
-import com.auta.server.adapter.out.fastapi.response.ComponentMappingResponse.MappingInfo;
+import com.auta.server.adapter.out.fastapi.response.MappingResponse.MappingInfo;
 import com.auta.server.domain.page.Page;
 import com.auta.server.domain.project.Project;
 import lombok.Builder;
