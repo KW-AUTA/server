@@ -32,7 +32,7 @@ public class ProjectTestSummariesResponse {
                                                                 projectTestSummaryDto.getSuccessRoutingTest())
                                                         .totalInteractionTest(
                                                                 projectTestSummaryDto.getTotalInteractionTest())
-                                                        .successRoutingTest(
+                                                        .successInteractionTest(
                                                                 projectTestSummaryDto.getSuccessInteractionTest())
                                                         .totalMappingTest(projectTestSummaryDto.getTotalMappingTest())
                                                         .successMappingTest(
