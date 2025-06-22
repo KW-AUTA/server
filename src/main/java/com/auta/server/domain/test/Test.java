@@ -58,4 +58,7 @@ public class Test {
                 .build();
     }
 
+    public void reassignPage(Page newPage) {
+        this.page = newPage;
+    }
 }

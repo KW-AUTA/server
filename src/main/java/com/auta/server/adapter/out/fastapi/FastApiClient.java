@@ -17,10 +17,10 @@ public class FastApiClient implements FastApiPort {
     private final WebClient webClient;
 
     @Override
-    public MappingResponse requestComponentMapping(String currentUrl, String currentPage, Long projectId) {
+    public MappingResponse requestComponentMapping(String currentUrl, String currentPage, String figmaJson) {
         MappingRequest request = MappingRequest.builder().currentUrl(currentUrl)
                 .currentPage(currentPage)
-                .projectId(projectId)
+                .figmaUrl(figmaJson)
                 .build();
 
         return webClient.post()

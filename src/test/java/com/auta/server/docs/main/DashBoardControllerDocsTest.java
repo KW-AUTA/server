@@ -57,6 +57,7 @@ public class DashBoardControllerDocsTest extends RestDocsSupport {
                                 ))
                                 .tests(List.of(
                                         DashboardResponse.TestInfo.builder()
+                                                .projectId(1L)
                                                 .testId(11L)
                                                 .projectName("UI 테스트 프로젝트")
                                                 .pageName("메인페이지")
@@ -108,6 +109,8 @@ public class DashBoardControllerDocsTest extends RestDocsSupport {
 
                                 fieldWithPath("data.tests").type(JsonFieldType.ARRAY)
                                         .description("테스트 요약 목록"),
+                                fieldWithPath("data.tests[].projectId").type(JsonFieldType.NUMBER)
+                                        .description("테스트의 프로젝트 Id"),
                                 fieldWithPath("data.tests[].testId").type(JsonFieldType.NUMBER)
                                         .description("테스트 ID"),
                                 fieldWithPath("data.tests[].projectName").type(JsonFieldType.STRING)

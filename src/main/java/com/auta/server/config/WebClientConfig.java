@@ -15,7 +15,7 @@ import reactor.netty.http.client.HttpClient;
 @Slf4j
 @Configuration
 public class WebClientConfig {
-    private final static String BASE_URL = "http://localhost:8000";
+    private final static String BASE_URL = "http://127.0.0.1:8000";
 
     @Bean
     public WebClient webClient() {
@@ -26,7 +26,10 @@ public class WebClientConfig {
                         connection.addHandlerLast(new ReadTimeoutHandler(5000))
                                 .addHandlerLast(new WriteTimeoutHandler(5000)));
         return WebClient.builder()
-                .clientConnector(new ReactorClientHttpConnector(httpClient))
+                .clientConnector(new ReactorClientHttpConnector(
+                        HttpClient.create()
+                                .responseTimeout(Duration.ofSeconds(300))
+                ))
                 .baseUrl(BASE_URL)
                 .filter(logRequest())
                 .filter(logResponse())

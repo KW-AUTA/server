@@ -1,6 +1,10 @@
 spring:
+  servlet:
+    multipart:
+      max-request-size: 50MB
+      max-file-size: 50MB
   profiles:
-    active: local
+    active: prod
   sql:
     init:
       mode: never
@@ -9,6 +13,8 @@ spring:
       ddl-auto: none
 
 server:
+  tomcat:
+    max-http-form-post-size: 52428800
   servlet:
     encoding:
       charset: UTF-8

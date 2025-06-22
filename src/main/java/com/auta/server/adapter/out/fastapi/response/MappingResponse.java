@@ -1,5 +1,6 @@
 package com.auta.server.adapter.out.fastapi.response;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 import lombok.Getter;
 
@@ -14,7 +15,10 @@ public class MappingResponse {
         private String destinationUrl;
         private String actualUrl;
         private String failReason;
+
+        @JsonProperty("isSuccess")
         private boolean isSuccess;
+        @JsonProperty("isRouting")
         private boolean isRouting;
     }
 }

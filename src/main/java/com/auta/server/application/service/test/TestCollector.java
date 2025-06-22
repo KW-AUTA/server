@@ -33,7 +33,7 @@ public class TestCollector {
         pages.add(page);
 
         MappingResponse response = fastApiPort.requestComponentMapping(currentUrl, currentPage,
-                project.getId());
+                project.getFigmaJson());
 
         List<MappingInfo> mappings = response.getMappings();
         tests.addAll(mappings.stream()

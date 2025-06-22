@@ -41,6 +41,7 @@ public class DashboardResponse {
                                 .build()).toList())
                 .tests(tests.stream().map(test ->
                         TestInfo.builder()
+                                .projectId(test.getProject().getId())
                                 .testId(test.getId())
                                 .projectName(test.getProject().getProjectName())
                                 .pageName(test.getPage().getPageName())
@@ -68,6 +69,7 @@ public class DashboardResponse {
     @NoArgsConstructor
     @AllArgsConstructor
     public static class TestInfo {
+        private Long projectId;
         private Long testId;
         private String projectName;
         private String pageName;

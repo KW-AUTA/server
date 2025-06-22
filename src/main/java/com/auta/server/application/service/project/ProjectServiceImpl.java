@@ -11,11 +11,16 @@ import com.auta.server.application.port.out.s3.S3Port;
 import com.auta.server.application.service.test.TestCollector;
 import com.auta.server.common.exception.BusinessException;
 import com.auta.server.common.exception.ErrorCode;
+import com.auta.server.domain.page.Page;
 import com.auta.server.domain.project.Project;
 import com.auta.server.domain.project.ProjectStatus;
+import com.auta.server.domain.test.Test;
 import com.auta.server.domain.user.User;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Map;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
@@ -37,7 +42,6 @@ public class ProjectServiceImpl implements ProjectUseCase {
 
     @Async
     @Override
-    @Transactional
     public void executeTest(Long projectId) {
         projectStatusService.updateStatus(projectId, ProjectStatus.IN_PROGRESS);
 
@@ -47,12 +51,25 @@ public class ProjectServiceImpl implements ProjectUseCase {
         TestCollector testCollector = new TestCollector(fastApiPort, project);
         testCollector.collect(project.getRootFigmaPage(), project.getServiceUrl());
 
-        pagePort.saveAll(testCollector.getPages());
-        testPort.saveAll(testCollector.getTests());
+        List<Page> savedPages = pagePort.saveAll(testCollector.getPages());
+        List<Test> tests = testCollector.getTests();
+        reassignPages(tests, savedPages);
+        testPort.saveAll(tests);
 
         projectStatusService.updateStatus(projectId, ProjectStatus.COMPLETED);
         project.updateTestRate(testCollector.getTests());
         projectPort.update(project);
+    }
+
+    private void reassignPages(List<Test> tests, List<Page> savedPages) {
+        Map<String, Page> pageMap = savedPages.stream()
+                .collect(Collectors.toMap(Page::getPageName, Function.identity()));
+
+        for (Test test : tests) {
+            Page original = test.getPage();
+            Page saved = pageMap.get(original.getPageName());
+            test.reassignPage(saved);
+        }
     }
 
     @Override

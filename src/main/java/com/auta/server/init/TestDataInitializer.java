@@ -73,6 +73,20 @@ public class TestDataInitializer implements CommandLineRunner {
                 .testRate(72)
                 .build());
 
+        ProjectEntity project3 = projectRepository.save(ProjectEntity.builder()
+                .userEntity(user)
+                .projectName("광운대 홈페이지")
+                .description("광운대 홈페이지 프로젝트입니다.")
+                .figmaUrl("https://figma.com/proj2")
+                .figmaJson("https://auta-json-s3.s3.ap-northeast-2.amazonaws.com/framesData.json")
+                .rootFigmaPage("home")
+                .serviceUrl("https://www.kw.ac.kr/ko/index.jsp")
+                .projectCreatedDate(LocalDate.now())
+                .projectEnd(LocalDate.now().plusDays(15))
+                .projectStatus(ProjectStatus.NOT_STARTED)
+                .testExecuteTime(LocalDateTime.now())
+                .build());
+
         // 3. 페이지들
         PageEntity p1 = pageRepository.save(new PageEntity(null, project1, "홈", "/home"));
         PageEntity p2 = pageRepository.save(new PageEntity(null, project1, "회원가입", "/signup"));

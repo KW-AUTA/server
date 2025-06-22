@@ -12,5 +12,5 @@ import lombok.NoArgsConstructor;
 public class MappingRequest {
     private String currentUrl;
     private String currentPage;
-    private Long projectId;
+    private String figmaUrl;
 }
