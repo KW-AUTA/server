@@ -130,6 +130,62 @@ class ProjectServiceImplTest extends IntegrationTestSupport {
                 .contains("12", "프로젝트");
     }
 
+    @DisplayName("json이 추가로 들어오지 않았을 때 json url과 file이름을 제외하고 프로젝트를 수정한다.")
+    @Test
+    void updateProjectWhenJsonIsNull() {
+        //given
+        UserEntity userEntity1 = UserEntity.builder()
+                .email("test@example.com1").password("testPassword1").username("testUser1").build();
+        UserEntity userEntity2 = UserEntity.builder()
+                .email("test@example.com2").password("testPassword2").username("testUser2").build();
+        userRepository.saveAll(List.of(
+                userEntity1, userEntity2
+        ));
+
+        LocalDate registeredDate = LocalDate.now();
+
+        ProjectEntity projectEntity = ProjectEntity.builder()
+                .userEntity(userEntity1)
+                .figmaJson("figmaJsonUrl")
+                .fileName("fileName")
+                .figmaUrl("https://figma.com")
+                .rootFigmaPage("mainPage")
+                .serviceUrl("https://service.com")
+                .projectName("UI 자동화 테스트")
+                .description("프로젝트 설명입니다.")
+                .projectCreatedDate(registeredDate)
+                .projectEnd(LocalDate.of(2025, 4, 4))
+                .projectStatus(ProjectStatus.NOT_STARTED)
+                .testExecuteTime(LocalDateTime.of(2024, 4, 25, 12, 11))
+                .build();
+
+        ProjectEntity saved = projectRepository.save(projectEntity);
+
+        ProjectCommand command = ProjectCommand.builder()
+                .figmaUrl("12")
+                .rootFigmaPage("mainPage")
+                .serviceUrl("https://service.com")
+                .projectName("UI 자동화 테스트")
+                .description("프로젝트")
+                .projectEnd(LocalDate.of(2025, 4, 4))
+                .build();
+
+        MockMultipartFile multipartFile = new MockMultipartFile(
+                "file", "", "application/json", new byte[0]
+        );
+
+        Long projectId = saved.getId();
+
+        doNothing().when(s3Port).delete(any());
+        given(s3Port.upload(any())).willReturn("https://s3.mock/sample.json");
+        //when
+        Project project = projectService.updateProject(command, multipartFile, projectId);
+
+        //then
+        assertThat(project).extracting("figmaUrl", "description", "fileName")
+                .contains("12", "프로젝트", "fileName");
+    }
+
     @DisplayName("프로젝트 아이디를 입력 받아서 프로젝트를 삭제한다.")
     @Test
     void deleteProject() {

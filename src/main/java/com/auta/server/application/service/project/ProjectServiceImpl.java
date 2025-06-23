@@ -61,17 +61,6 @@ public class ProjectServiceImpl implements ProjectUseCase {
         projectPort.update(project);
     }
 
-    private void reassignPages(List<Test> tests, List<Page> savedPages) {
-        Map<String, Page> pageMap = savedPages.stream()
-                .collect(Collectors.toMap(Page::getPageName, Function.identity()));
-
-        for (Test test : tests) {
-            Page original = test.getPage();
-            Page saved = pageMap.get(original.getPageName());
-            test.reassignPage(saved);
-        }
-    }
-
     @Override
     public Project createProject(ProjectCommand command, MultipartFile jsonFile, String email,
                                  LocalDate registeredDate) {
@@ -88,10 +77,15 @@ public class ProjectServiceImpl implements ProjectUseCase {
     public Project updateProject(ProjectCommand command, MultipartFile jsonFile, Long projectId) {
         Project project = projectPort.findById(projectId)
                 .orElseThrow(() -> new BusinessException(ErrorCode.PROJECT_NOT_FOUND));
+        if (jsonFile.isEmpty()) {
+            project.updateWithoutJson(command);
+            return projectPort.update(project);
+        }
+
         String oldFigmaJsonUrl = project.getFigmaJson();
         s3Port.delete(oldFigmaJsonUrl);
         String newFigmaJsonUrl = s3Port.upload(jsonFile);
-        project.update(command, newFigmaJsonUrl);
+        project.update(command, jsonFile.getOriginalFilename(), newFigmaJsonUrl);
 
         return projectPort.update(project);
     }
@@ -109,6 +103,17 @@ public class ProjectServiceImpl implements ProjectUseCase {
     @Override
     public List<Project> findAllByUserId(Long userId) {
         return projectPort.findAllByUserId(userId);
+    }
+
+    private void reassignPages(List<Test> tests, List<Page> savedPages) {
+        Map<String, Page> pageMap = savedPages.stream()
+                .collect(Collectors.toMap(Page::getPageName, Function.identity()));
+
+        for (Test test : tests) {
+            Page original = test.getPage();
+            Page saved = pageMap.get(original.getPageName());
+            test.reassignPage(saved);
+        }
     }
 
     private Project createProjectDomain(ProjectCommand command, LocalDate registeredDate, User user, String jsonUrl) {

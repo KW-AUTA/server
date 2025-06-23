@@ -40,8 +40,8 @@ public class ProjectController {
 
     @PutMapping("/api/v1/projects/{projectId}")
     public ApiResponse<ProjectResponse> updateProject(@PathVariable Long projectId,
-                                                      @RequestPart(value = "request") ProjectRequest request,
-                                                      @RequestPart(value = "file") MultipartFile multipartFile) {
+                                                      @Valid @RequestPart(value = "request") ProjectRequest request,
+                                                      @RequestPart(value = "file", required = false) MultipartFile multipartFile) {
         return ApiResponse.ok("프로젝트 생성이 완료되었습니다.",
                 ProjectResponse.from(projectUseCase.updateProject(request.toCommand(), multipartFile, projectId)));
     }

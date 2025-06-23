@@ -49,6 +49,7 @@ public class ProjectEntity extends BaseEntity {
     private String serviceUrl;
     private String projectName;
     private String description;
+    private String fileName;
     private LocalDate expectedTestExecution;
     private LocalDate projectCreatedDate;
     private LocalDate projectEnd;
@@ -64,6 +65,7 @@ public class ProjectEntity extends BaseEntity {
         this.expectedTestExecution = project.getExpectedTestExecution();
         this.projectEnd = project.getProjectEnd();
         this.description = project.getDescription();
+        this.fileName = project.getFileName();
         this.figmaUrl = project.getFigmaUrl();
         this.serviceUrl = project.getServiceUrl();
         this.rootFigmaPage = project.getRootFigmaPage();

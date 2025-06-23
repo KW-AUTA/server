@@ -21,6 +21,7 @@ public class ProjectResponse {
     @JsonFormat(pattern = "yyyy-MM-dd")
     private LocalDate projectEnd;
     private String description;
+    private String fileName;
     private String figmaUrl;
     private String figmaJson;
     private String serviceUrl;
@@ -34,6 +35,7 @@ public class ProjectResponse {
                 .expectedTestExecution(project.getExpectedTestExecution())
                 .projectEnd(project.getProjectEnd())
                 .description(project.getDescription())
+                .fileName(project.getFileName())
                 .figmaUrl(project.getFigmaUrl())
                 .figmaJson(project.getFigmaJson())
                 .serviceUrl(project.getServiceUrl())

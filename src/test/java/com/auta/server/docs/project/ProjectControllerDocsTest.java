@@ -123,6 +123,7 @@ public class ProjectControllerDocsTest extends RestDocsSupport {
                         .expectedTestExecution(LocalDate.of(2024, 4, 3))
                         .projectEnd(LocalDate.of(2024, 4, 4))
                         .description("프로젝트 설명입니다.")
+                        .fileName("파일 이름입니다.")
                         .figmaUrl("https://figma.com")
                         .figmaJson("https://s3.com")
                         .serviceUrl("https://service.com")
@@ -183,6 +184,8 @@ public class ProjectControllerDocsTest extends RestDocsSupport {
                                         .description("프로젝트 종료 예정일 (yyyy-MM-dd)"),
                                 fieldWithPath("data.description").type(JsonFieldType.STRING)
                                         .description("프로젝트 설명"),
+                                fieldWithPath("data.fileName").type(JsonFieldType.STRING)
+                                        .description("json 파일 이름"),
                                 fieldWithPath("data.figmaUrl").type(JsonFieldType.STRING)
                                         .description("피그마 URL"),
                                 fieldWithPath("data.figmaJson").type(JsonFieldType.STRING)
@@ -243,6 +246,7 @@ public class ProjectControllerDocsTest extends RestDocsSupport {
                         .expectedTestExecution(LocalDate.of(2024, 4, 3))
                         .projectEnd(LocalDate.of(2024, 4, 4))
                         .description("프로젝트 설명입니다.")
+                        .fileName("파일 이름 입니다.")
                         .figmaUrl("https://figma.com")
                         .figmaJson("https://s3.com")
                         .serviceUrl("https://service.com")
@@ -303,6 +307,8 @@ public class ProjectControllerDocsTest extends RestDocsSupport {
                                         .description("프로젝트 종료 예정일 (yyyy-MM-dd)"),
                                 fieldWithPath("data.description").type(JsonFieldType.STRING)
                                         .description("프로젝트 설명"),
+                                fieldWithPath("data.fileName").type(JsonFieldType.STRING)
+                                        .description("json 파일 이름"),
                                 fieldWithPath("data.figmaUrl").type(JsonFieldType.STRING)
                                         .description("피그마 URL"),
                                 fieldWithPath("data.figmaJson").type(JsonFieldType.STRING)
