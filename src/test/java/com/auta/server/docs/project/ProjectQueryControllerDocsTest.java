@@ -122,6 +122,7 @@ public class ProjectQueryControllerDocsTest extends RestDocsSupport {
                                 .testExecuteTime(LocalDateTime.of(2024, 4, 25, 12, 11))
                                 .rootFigmaPage("HomePage")
                                 .description("UI 자동화 프로젝트입니다.")
+                                .fileName("파일 이름입니다.")
                                 .figmaUrl("https://figma.com/example")
                                 .serviceUrl("https://service.com")
                                 .build())
@@ -165,6 +166,7 @@ public class ProjectQueryControllerDocsTest extends RestDocsSupport {
                                 fieldWithPath("data.rootFigmaPage").type(JsonFieldType.STRING)
                                         .description("피그마 루트 페이지 이름"),
                                 fieldWithPath("data.description").type(JsonFieldType.STRING).description("프로젝트 설명"),
+                                fieldWithPath("data.fileName").type(JsonFieldType.STRING).description("피그마 파일 이름"),
                                 fieldWithPath("data.figmaUrl").type(JsonFieldType.STRING).description("피그마 URL"),
                                 fieldWithPath("data.serviceUrl").type(JsonFieldType.STRING).description("서비스 URL"),
                                 fieldWithPath("data.reportSummary").type(JsonFieldType.NULL)

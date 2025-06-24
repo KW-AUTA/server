@@ -42,7 +42,7 @@ public class ProjectController {
     public ApiResponse<ProjectResponse> updateProject(@PathVariable Long projectId,
                                                       @Valid @RequestPart(value = "request") ProjectRequest request,
                                                       @RequestPart(value = "file", required = false) MultipartFile multipartFile) {
-        return ApiResponse.ok("프로젝트 생성이 완료되었습니다.",
+        return ApiResponse.ok("프로젝트 수정이 완료되었습니다.",
                 ProjectResponse.from(projectUseCase.updateProject(request.toCommand(), multipartFile, projectId)));
     }
 

@@ -29,6 +29,7 @@ public class ProjectDetailResponse {
 
     private String rootFigmaPage;
     private String description;
+    private String fileName;
     private String figmaUrl;
     private String serviceUrl;
     private String reportSummary;
@@ -47,6 +48,7 @@ public class ProjectDetailResponse {
                 .testExecutionTime(project.getTestExecuteTime())
                 .rootFigmaPage(project.getRootFigmaPage())
                 .description(project.getDescription())
+                .fileName(project.getFileName())
                 .figmaUrl(project.getFigmaUrl())
                 .serviceUrl(project.getServiceUrl())
                 .reportSummary(null)
