@@ -119,6 +119,7 @@ public class ProjectQueryControllerDocsTest extends RestDocsSupport {
                                 .user(User.builder().id(1L).username("adminUser").build())
                                 .projectCreatedDate(LocalDate.of(2024, 1, 1))
                                 .projectEnd(LocalDate.of(2024, 12, 31))
+                                .projectStatus(ProjectStatus.NOT_STARTED)
                                 .testExecuteTime(LocalDateTime.of(2024, 4, 25, 12, 11))
                                 .rootFigmaPage("HomePage")
                                 .description("UI 자동화 프로젝트입니다.")
@@ -157,6 +158,8 @@ public class ProjectQueryControllerDocsTest extends RestDocsSupport {
                                 fieldWithPath("data.projectName").type(JsonFieldType.STRING).description("프로젝트 이름"),
                                 fieldWithPath("data.projectAdmin").type(JsonFieldType.STRING)
                                         .description("프로젝트 관리자 (username)"),
+                                fieldWithPath("data.projectStatus").type(JsonFieldType.STRING)
+                                        .description("프로젝트 상태 (NOT_STARTED, IN_PROGRESS, COMPLETED)"),
                                 fieldWithPath("data.projectCreatedDate").type(JsonFieldType.STRING)
                                         .description("프로젝트 생성일 (yyyy-MM-dd)"),
                                 fieldWithPath("data.projectEnd").type(JsonFieldType.STRING)

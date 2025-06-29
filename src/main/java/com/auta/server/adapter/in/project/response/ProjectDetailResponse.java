@@ -2,6 +2,7 @@ package com.auta.server.adapter.in.project.response;
 
 import com.auta.server.application.port.in.project.dto.ProjectDetailDto;
 import com.auta.server.domain.project.Project;
+import com.auta.server.domain.project.ProjectStatus;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -17,6 +18,7 @@ import lombok.NoArgsConstructor;
 public class ProjectDetailResponse {
     private String projectName;
     private String projectAdmin;
+    private ProjectStatus projectStatus;
 
     @JsonFormat(pattern = "yyyy-MM-dd")
     private LocalDate projectCreatedDate;
@@ -43,6 +45,7 @@ public class ProjectDetailResponse {
         return ProjectDetailResponse.builder()
                 .projectName(project.getProjectName())
                 .projectAdmin(project.getUser().getUsername())
+                .projectStatus(project.getProjectStatus())
                 .projectCreatedDate(project.getProjectCreatedDate())
                 .projectEnd(project.getProjectEnd())
                 .testExecutionTime(project.getTestExecuteTime())
