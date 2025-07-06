@@ -2,6 +2,9 @@ package com.auta.server.application.service.auth;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.doNothing;
 
 import com.auta.server.IntegrationTestSupport;
 import com.auta.server.adapter.out.persistence.user.UserEntity;
@@ -14,7 +17,6 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 class AuthServiceImplTest extends IntegrationTestSupport {
@@ -28,13 +30,9 @@ class AuthServiceImplTest extends IntegrationTestSupport {
     @Autowired
     private UserRepository userRepository;
 
-    @Autowired
-    private StringRedisTemplate redisTemplate;
-
     @AfterEach
     void tearDown() {
         userRepository.deleteAllInBatch();
-        redisTemplate.getConnectionFactory().getConnection().flushDb();
     }
 
 
@@ -60,7 +58,9 @@ class AuthServiceImplTest extends IntegrationTestSupport {
         ));
 
         AuthCommand command = AuthCommand.builder().email("test@example.com1").password("testPassword1").build();
-
+        doNothing().when(refreshTokenStorePort).store(
+                anyString(), anyString(), anyLong()
+        );
         //when
         AuthTokens tokens = authService.login(command);
 
@@ -92,7 +92,9 @@ class AuthServiceImplTest extends IntegrationTestSupport {
         ));
 
         AuthCommand command = AuthCommand.builder().email("none").password("testPassword1").build();
-
+        doNothing().when(refreshTokenStorePort).store(
+                anyString(), anyString(), anyLong()
+        );
         //when //then
         assertThatThrownBy(() -> authService.login(command))
                 .isInstanceOf(BusinessException.class)
@@ -121,7 +123,9 @@ class AuthServiceImplTest extends IntegrationTestSupport {
         ));
 
         AuthCommand command = AuthCommand.builder().email("test@example.com1").password("invalid").build();
-
+        doNothing().when(refreshTokenStorePort).store(
+                anyString(), anyString(), anyLong()
+        );
         //when //then
         assertThatThrownBy(() -> authService.login(command))
                 .isInstanceOf(BusinessException.class)
@@ -138,7 +142,8 @@ class AuthServiceImplTest extends IntegrationTestSupport {
         authService.logout(email);
 
         //then
-        String result = redisTemplate.opsForValue().get(key);
-        assertThat(result).isNull();
+        doNothing().when(refreshTokenStorePort).delete(
+                anyString()
+        );
     }
 }

@@ -1,58 +1,56 @@
 package com.auta.server.adapter.out.redis;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
-import com.auta.server.IntegrationTestSupport;
 import java.util.concurrent.TimeUnit;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.redis.core.StringRedisTemplate;
+import org.springframework.data.redis.core.ValueOperations;
 
-class RedisAdapterTest extends IntegrationTestSupport {
-    @Autowired
+@ExtendWith(MockitoExtension.class)
+class RedisAdapterTest {
+
+    @Mock
+    private StringRedisTemplate stringRedisTemplate;
+
+    @Mock
+    private ValueOperations<String, String> valueOperations;
+
+    @InjectMocks
     private RedisAdapter redisAdapter;
 
-    @Autowired
-    private StringRedisTemplate redisTemplate;
-
-    @AfterEach
-    void tearDown() {
-        redisTemplate.getConnectionFactory().getConnection().flushDb();
-    }
-
-    @DisplayName("키, 토큰, 캐시 만료기간을 받으면 레디스에 저장한다.")
     @Test
-    void store() {
+    void store_shouldSaveTokenWithExpiration() {
         //given
         String key = "key: ";
         String token = "dummy-token";
         long expirationMillis = 60000L;
+
+        when(stringRedisTemplate.opsForValue()).thenReturn(valueOperations);
 
         //when
         redisAdapter.store(key, token, expirationMillis);
 
         //then
-        String storedToken = redisTemplate.opsForValue().get(key);
-        assertThat(storedToken).isEqualTo(token);
+        verify(valueOperations).set(eq(key), eq(token), eq(expirationMillis), eq(TimeUnit.MILLISECONDS));
     }
 
-    @DisplayName("토큰을 지운다.")
     @Test
-    void delete() {
+    void delete_shouldDeleteToken() {
         //given
         String key = "key: ";
-        String token = "dummy-token";
-        long expirationMillis = 60000L;
+        when(stringRedisTemplate.delete(key)).thenReturn(true);
 
-        redisTemplate.opsForValue()
-                .set(key, token, expirationMillis, TimeUnit.MILLISECONDS);
         //when
         redisAdapter.delete(key);
 
         //then
-        String result = redisTemplate.opsForValue().get(key);
-        assertThat(result).isNull();
+        verify(stringRedisTemplate).delete(eq(key));
     }
 }

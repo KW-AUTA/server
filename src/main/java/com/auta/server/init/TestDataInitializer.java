@@ -54,9 +54,9 @@ public class TestDataInitializer implements CommandLineRunner {
                 .serviceUrl("https://auta.com")
                 .projectCreatedDate(LocalDate.now())
                 .projectEnd(LocalDate.now().plusDays(30))
-                .projectStatus(ProjectStatus.NOT_STARTED)
+                .projectStatus(ProjectStatus.COMPLETED)
                 .testExecuteTime(LocalDateTime.now())
-                .testRate(85)
+                .testRate(60)
                 .build());
 
         ProjectEntity project2 = projectRepository.save(ProjectEntity.builder()
@@ -68,9 +68,9 @@ public class TestDataInitializer implements CommandLineRunner {
                 .serviceUrl("https://project2.com")
                 .projectCreatedDate(LocalDate.now())
                 .projectEnd(LocalDate.now().plusDays(15))
-                .projectStatus(ProjectStatus.IN_PROGRESS)
+                .projectStatus(ProjectStatus.COMPLETED)
                 .testExecuteTime(LocalDateTime.now())
-                .testRate(72)
+                .testRate(40)
                 .build());
 
         ProjectEntity project3 = projectRepository.save(ProjectEntity.builder()
@@ -124,7 +124,7 @@ public class TestDataInitializer implements CommandLineRunner {
                         "설정 저장", "서버 호출", "서버 호출", "저장버튼"),
                 new TestEntity(null, project2, p6, TestStatus.FAILED, TestType.MAPPING, "컴포넌트 미노출", null, null, null,
                         null, null, null, "토글스위치"),
-                new TestEntity(null, project2, p7, TestStatus.PASSED, TestType.ROUTING, null, "#home",
+                new TestEntity(null, project2, p7, TestStatus.FAILED, TestType.ROUTING, null, "#home",
                         "/dashboard/home",
                         "/dashboard/home", "홈 이동", "이동", "이동", "홈링크")
         ));
