@@ -4,7 +4,7 @@
 ==== HTTP Request
 
 include::{snippets}/project-update/http-request.adoc[]
-include::{snippets}/project-update/request-fields.adoc[]
+include::{snippets}/project-update/request-part-request-fields.adoc[]
 
 ==== HTTP Response
 

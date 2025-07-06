@@ -13,7 +13,7 @@ COPY . .
 # Gradle 빌드
 RUN chmod +x gradlew
 
-RUN ./gradlew build -x test -x asciidoctor --no-daemon
+RUN ./gradlew clean test asciidoctor bootJar --no-daemon
 
 # 실행 단계
 FROM openjdk:17-jdk-slim
