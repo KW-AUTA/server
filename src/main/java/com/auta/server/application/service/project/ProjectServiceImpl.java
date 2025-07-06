@@ -2,27 +2,19 @@ package com.auta.server.application.service.project;
 
 import com.auta.server.application.port.in.project.ProjectCommand;
 import com.auta.server.application.port.in.project.ProjectUseCase;
-import com.auta.server.application.port.out.fastapi.FastApiPort;
-import com.auta.server.application.port.out.persistence.page.PagePort;
 import com.auta.server.application.port.out.persistence.project.ProjectPort;
 import com.auta.server.application.port.out.persistence.test.TestPort;
 import com.auta.server.application.port.out.persistence.user.UserPort;
 import com.auta.server.application.port.out.s3.S3Port;
-import com.auta.server.application.service.test.TestCollector;
+import com.auta.server.application.service.test.TestExecutor;
 import com.auta.server.common.exception.BusinessException;
 import com.auta.server.common.exception.ErrorCode;
-import com.auta.server.domain.page.Page;
 import com.auta.server.domain.project.Project;
 import com.auta.server.domain.project.ProjectStatus;
-import com.auta.server.domain.test.Test;
 import com.auta.server.domain.user.User;
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Map;
-import java.util.function.Function;
-import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -35,30 +27,14 @@ public class ProjectServiceImpl implements ProjectUseCase {
     private final ProjectPort projectPort;
     private final UserPort userPort;
     private final TestPort testPort;
-    private final PagePort pagePort;
     private final S3Port s3Port;
-    private final FastApiPort fastApiPort;
     private final ProjectStatusService projectStatusService;
+    private final TestExecutor testExecutor;
 
-    @Async
     @Override
-    public void executeTest(Long projectId) {
+    public void runTest(Long projectId) {
         projectStatusService.updateStatus(projectId, ProjectStatus.IN_PROGRESS);
-
-        Project project = projectPort.findById(projectId)
-                .orElseThrow(() -> new BusinessException(ErrorCode.PROJECT_NOT_FOUND));
-        project.changeStatus(ProjectStatus.IN_PROGRESS);
-        TestCollector testCollector = new TestCollector(fastApiPort, project);
-        testCollector.collect(project.getRootFigmaPage(), project.getServiceUrl());
-
-        List<Page> savedPages = pagePort.saveAll(testCollector.getPages());
-        List<Test> tests = testCollector.getTests();
-        reassignPages(tests, savedPages);
-        testPort.saveAll(tests);
-
-        projectStatusService.updateStatus(projectId, ProjectStatus.COMPLETED);
-        project.updateTestRate(testCollector.getTests());
-        projectPort.update(project);
+        testExecutor.executeAsyncTest(projectId);
     }
 
     @Override
@@ -68,7 +44,7 @@ public class ProjectServiceImpl implements ProjectUseCase {
                 () -> new BusinessException(ErrorCode.USER_NOT_FOUND)
         );
         String jsonUrl = s3Port.upload(jsonFile);
-        Project project = createProjectDomain(command, registeredDate, user, jsonUrl);
+        Project project = createProjectDomain(command, registeredDate, user, jsonUrl, jsonFile.getOriginalFilename());
 
         return projectPort.save(project);
     }
@@ -105,20 +81,11 @@ public class ProjectServiceImpl implements ProjectUseCase {
         return projectPort.findAllByUserId(userId);
     }
 
-    private void reassignPages(List<Test> tests, List<Page> savedPages) {
-        Map<String, Page> pageMap = savedPages.stream()
-                .collect(Collectors.toMap(Page::getPageName, Function.identity()));
-
-        for (Test test : tests) {
-            Page original = test.getPage();
-            Page saved = pageMap.get(original.getPageName());
-            test.reassignPage(saved);
-        }
-    }
-
-    private Project createProjectDomain(ProjectCommand command, LocalDate registeredDate, User user, String jsonUrl) {
+    private Project createProjectDomain(ProjectCommand command, LocalDate registeredDate, User user, String jsonUrl,
+                                        String originalFilename) {
         return Project.builder()
                 .user(user)
+                .fileName(originalFilename)
                 .figmaUrl(command.getFigmaUrl())
                 .figmaJson(jsonUrl)
                 .rootFigmaPage(command.getRootFigmaPage())

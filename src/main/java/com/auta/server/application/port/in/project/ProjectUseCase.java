@@ -6,14 +6,13 @@ import java.util.List;
 import org.springframework.web.multipart.MultipartFile;
 
 public interface ProjectUseCase {
-
     Project createProject(ProjectCommand command, MultipartFile jsonFile, String email, LocalDate registeredDate);
 
     Project updateProject(ProjectCommand command, MultipartFile jsonFile, Long projectId);
 
-    void deleteProject(Long projectId);
+    void runTest(Long projectId);
 
-    void executeTest(Long projectId);
+    void deleteProject(Long projectId);
 
     List<Project> findAllByUserId(Long userId);
 }

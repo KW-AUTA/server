@@ -5,11 +5,13 @@ import com.auta.server.adapter.out.fastapi.response.MappingResponse;
 import com.auta.server.application.port.out.fastapi.FastApiPort;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.annotation.Profile;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
 
 @Slf4j
+@Profile("prod")
 @Component
 @RequiredArgsConstructor
 public class FastApiClient implements FastApiPort {
