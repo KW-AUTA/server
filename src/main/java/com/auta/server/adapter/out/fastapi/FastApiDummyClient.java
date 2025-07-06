@@ -7,7 +7,7 @@ import java.util.List;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 
-@Profile("local")
+@Profile({"local", "test"})
 @Component
 public class FastApiDummyClient implements FastApiPort {
 
