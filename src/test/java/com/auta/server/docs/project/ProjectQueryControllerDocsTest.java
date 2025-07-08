@@ -103,7 +103,7 @@ public class ProjectQueryControllerDocsTest extends RestDocsSupport {
                                 fieldWithPath("data.projectSummaries[].projectCreatedDate").type(JsonFieldType.STRING)
                                         .description("프로젝트 생성일 (yyyy-MM-dd)"),
                                 fieldWithPath("data.projectSummaries[].projectStatus").type(JsonFieldType.STRING)
-                                        .description("프로젝트 상태 (예: 진행중, 완료)"),
+                                        .description("프로젝트 상태 (NOT_STARTED, IN_PROGRESS, COMPLETED, ERROR)"),
                                 fieldWithPath("data.projectSummaries[].testRate").type(JsonFieldType.NUMBER)
                                         .description("테스트 통과율 (%)")
                         )));
@@ -159,7 +159,7 @@ public class ProjectQueryControllerDocsTest extends RestDocsSupport {
                                 fieldWithPath("data.projectAdmin").type(JsonFieldType.STRING)
                                         .description("프로젝트 관리자 (username)"),
                                 fieldWithPath("data.projectStatus").type(JsonFieldType.STRING)
-                                        .description("프로젝트 상태 (NOT_STARTED, IN_PROGRESS, COMPLETED)"),
+                                        .description("프로젝트 상태 (NOT_STARTED, IN_PROGRESS, COMPLETED, ERROR)"),
                                 fieldWithPath("data.projectCreatedDate").type(JsonFieldType.STRING)
                                         .description("프로젝트 생성일 (yyyy-MM-dd)"),
                                 fieldWithPath("data.projectEnd").type(JsonFieldType.STRING)
