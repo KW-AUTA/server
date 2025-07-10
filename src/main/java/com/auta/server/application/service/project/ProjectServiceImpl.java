@@ -28,12 +28,12 @@ public class ProjectServiceImpl implements ProjectUseCase {
     private final UserPort userPort;
     private final TestPort testPort;
     private final S3Port s3Port;
-    private final ProjectStatusService projectStatusService;
+    private final ProjectResultService projectResultService;
     private final TestExecutor testExecutor;
 
     @Override
     public void runTest(Long projectId) {
-        projectStatusService.updateStatus(projectId, ProjectStatus.IN_PROGRESS);
+        projectResultService.updateStatus(projectId, ProjectStatus.IN_PROGRESS);
         testExecutor.executeAsyncTest(projectId);
     }
 

@@ -25,5 +25,13 @@ public class ProjectResultService {
         project.changeStatus(ProjectStatus.COMPLETED);
         projectPort.update(project);
     }
+
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
+    public void updateStatus(Long projectId, ProjectStatus status) {
+        Project project = projectPort.findById(projectId)
+                .orElseThrow(() -> new BusinessException(ErrorCode.PROJECT_NOT_FOUND));
+        project.changeStatus(status);
+        projectPort.save(project);
+    }
 }
 
