@@ -9,6 +9,7 @@ import com.auta.server.common.exception.BusinessException;
 import com.auta.server.common.exception.ErrorCode;
 import com.auta.server.domain.page.Page;
 import com.auta.server.domain.project.Project;
+import com.auta.server.domain.project.ProjectStatus;
 import com.auta.server.domain.test.Test;
 import java.util.List;
 import java.util.Map;
@@ -43,7 +44,7 @@ public class TestExecutor {
 
             projectResultService.applyTestResult(projectId, tests);
         } catch (Exception e) {
-            System.out.println(e.getMessage());
+            projectResultService.updateStatus(projectId, ProjectStatus.ERROR);
         }
     }
 
