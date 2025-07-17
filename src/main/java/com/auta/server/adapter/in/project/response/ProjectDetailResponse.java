@@ -16,45 +16,33 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Builder
 public class ProjectDetailResponse {
-    private String projectName;
-    private String projectAdmin;
-    private ProjectStatus projectStatus;
-
-    @JsonFormat(pattern = "yyyy-MM-dd")
-    private LocalDate projectCreatedDate;
-
-    @JsonFormat(pattern = "yyyy-MM-dd")
-    private LocalDate projectEnd;
-
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    private LocalDateTime testExecutionTime;
-
-    private String rootFigmaPage;
-    private String description;
-    private String fileName;
-    private String figmaUrl;
-    private String serviceUrl;
-    private String reportSummary;
-
+    private ProjectInfo projectInfo;
+    private UIInfo uiInfo;
     private TestSummary testSummary;
-
     private List<PageInfo> pages;
+    private FigmaInfo figmaInfo;
+
 
     public static ProjectDetailResponse from(ProjectDetailDto projectDetailDto) {
         Project project = projectDetailDto.getProject();
         return ProjectDetailResponse.builder()
-                .projectName(project.getProjectName())
-                .projectAdmin(project.getUser().getUsername())
-                .projectStatus(project.getProjectStatus())
-                .projectCreatedDate(project.getProjectCreatedDate())
-                .projectEnd(project.getProjectEnd())
-                .testExecutionTime(project.getTestExecuteTime())
-                .rootFigmaPage(project.getRootFigmaPage())
-                .description(project.getDescription())
-                .fileName(project.getFileName())
-                .figmaUrl(project.getFigmaUrl())
-                .serviceUrl(project.getServiceUrl())
-                .reportSummary(null)
+                .projectInfo(ProjectInfo.builder()
+                        .projectName(project.getProjectName())
+                        .projectAdmin(project.getUser().getUsername())
+                        .projectStatus(project.getProjectStatus())
+                        .projectCreatedDate(project.getProjectCreatedDate())
+                        .projectEnd(project.getProjectEnd())
+                        .description(project.getDescription())
+                        .testExecutionTime(project.getTestExecuteTime())
+                        .build())
+                .figmaInfo(
+                        FigmaInfo.builder()
+                                .rootFigmaPage(project.getRootFigmaPage())
+                                .fileName(project.getFileName())
+                                .figmaUrl(project.getFigmaUrl())
+                                .serviceUrl(project.getServiceUrl())
+                                .build()
+                )
                 .testSummary(TestSummary.builder()
                         .totalRoutingTest(projectDetailDto.getTotalRoutingTest())
                         .totalInteractionTest(projectDetailDto.getTotalInteractionTest())
@@ -73,10 +61,41 @@ public class ProjectDetailResponse {
     @Builder
     @NoArgsConstructor
     @AllArgsConstructor
-    public static class TestSummary {
-        private int totalRoutingTest;
-        private int totalInteractionTest;
-        private int totalMappingTest;
+    public static class ProjectInfo {
+        private String projectName;
+        private String projectAdmin;
+        private ProjectStatus projectStatus;
+        private String description;
+
+        @JsonFormat(pattern = "yyyy-MM-dd")
+        private LocalDate projectCreatedDate;
+
+        @JsonFormat(pattern = "yyyy-MM-dd")
+        private LocalDate projectEnd;
+
+        @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+        private LocalDateTime testExecutionTime;
+    }
+
+    @Getter
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class UIInfo {
+        private Integer score;
+        private List<UITest> uiTests;
+
+    }
+
+    @Getter
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
+    private static class UITest {
+
+        private String UIPageUrl;
+        private String UIDescription;
+
     }
 
     @Getter
@@ -84,7 +103,31 @@ public class ProjectDetailResponse {
     @NoArgsConstructor
     @AllArgsConstructor
     public static class PageInfo {
+
         private String pageName;
         private String pageBaseUrl;
+
+    }
+
+    @Getter
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class TestSummary {
+        private int totalRoutingTest;
+        private int totalInteractionTest;
+        private int totalMappingTest;
+
+    }
+
+    @Getter
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class FigmaInfo {
+        private String rootFigmaPage;
+        private String fileName;
+        private String figmaUrl;
+        private String serviceUrl;
     }
 }
