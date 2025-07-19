@@ -43,6 +43,12 @@ public class ProjectDetailResponse {
                                 .serviceUrl(project.getServiceUrl())
                                 .build()
                 )
+                .uiInfo(UIInfo.builder()
+                        .score(project.getScore())
+                        .uiTests(project.getUiTests().stream().map(uiTest -> UITest.builder()
+                                        .UIPageUrl(uiTest.getUIPageUrl()).UIDescription(uiTest.getUIDescription()).build())
+                                .toList())
+                        .build())
                 .testSummary(TestSummary.builder()
                         .totalRoutingTest(projectDetailDto.getTotalRoutingTest())
                         .totalInteractionTest(projectDetailDto.getTotalInteractionTest())
@@ -92,7 +98,6 @@ public class ProjectDetailResponse {
     @NoArgsConstructor
     @AllArgsConstructor
     private static class UITest {
-
         private String UIPageUrl;
         private String UIDescription;
 
@@ -103,7 +108,6 @@ public class ProjectDetailResponse {
     @NoArgsConstructor
     @AllArgsConstructor
     public static class PageInfo {
-
         private String pageName;
         private String pageBaseUrl;
 

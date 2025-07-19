@@ -3,6 +3,7 @@ package com.auta.server.domain.project;
 import com.auta.server.application.port.in.project.ProjectCommand;
 import com.auta.server.domain.page.Page;
 import com.auta.server.domain.test.Test;
+import com.auta.server.domain.ui.UITest;
 import com.auta.server.domain.user.User;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -20,6 +21,7 @@ public class Project {
     private Long id;
     private User user;
     private List<Page> pages;
+    private List<UITest> uiTests;
     private String figmaUrl;
     private String fileName;
     private String figmaJson;
@@ -33,6 +35,7 @@ public class Project {
     private ProjectStatus projectStatus;
     private LocalDateTime testExecuteTime;
     private Integer testRate;
+    private Integer score;
 
     public void update(ProjectCommand command, String fileName, String figmaJson) {
         updateWithoutJson(command);
