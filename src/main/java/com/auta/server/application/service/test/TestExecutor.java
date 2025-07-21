@@ -1,9 +1,12 @@
 package com.auta.server.application.service.test;
 
+import com.auta.server.adapter.out.fastapi.response.UITestResponse;
+import com.auta.server.adapter.out.s3.S3Adapter;
 import com.auta.server.application.port.out.fastapi.FastApiPort;
 import com.auta.server.application.port.out.persistence.page.PagePort;
 import com.auta.server.application.port.out.persistence.project.ProjectPort;
 import com.auta.server.application.port.out.persistence.test.TestPort;
+import com.auta.server.application.port.out.persistence.ui.UITestPort;
 import com.auta.server.application.service.project.ProjectResultService;
 import com.auta.server.common.exception.BusinessException;
 import com.auta.server.common.exception.ErrorCode;
@@ -11,6 +14,7 @@ import com.auta.server.domain.page.Page;
 import com.auta.server.domain.project.Project;
 import com.auta.server.domain.project.ProjectStatus;
 import com.auta.server.domain.test.Test;
+import com.auta.server.domain.ui.UITest;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
@@ -28,7 +32,9 @@ public class TestExecutor {
     private final FastApiPort fastApiPort;
     private final PagePort pagePort;
     private final TestPort testPort;
+    private final UITestPort uiTestPort;
     private final ProjectResultService projectResultService;
+    private final S3Adapter s3Adapter;
 
     public void executeAsyncTest(Long projectId) {
         try {
@@ -57,6 +63,25 @@ public class TestExecutor {
             Page saved = pageMap.get(original.getPageName());
             test.reassignPage(saved);
         }
+    }
+
+    public void executeUITest(Long projectId) {
+        Project project = projectPort.findById(projectId)
+                .orElseThrow(() -> new BusinessException(ErrorCode.PROJECT_NOT_FOUND));
+        UITestResponse response = fastApiPort.requestUITest(project.getFigmaJson());
+
+        List<UITest> uiTests = response.getEvaluations().stream()
+                .map(dto -> UITest.builder()
+                        .UIPageUrl(s3Adapter.upload(dto.getHighlightImageUrl()))
+                        .UIDescription(dto.getFrameSummary())
+                        .project(project)
+                        .build())
+                .toList();
+
+        uiTestPort.saveAll(uiTests);
+
+        project.updateScore(response.getUsabilityScore());
+        projectPort.update(project);
     }
 }
 

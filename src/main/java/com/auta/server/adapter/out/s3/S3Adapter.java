@@ -4,6 +4,8 @@ import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.auta.server.application.port.out.s3.S3Port;
 import java.io.IOException;
+import java.net.URL;
+import java.net.URLConnection;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -20,7 +22,6 @@ public class S3Adapter implements S3Port {
 
     @Value("${cloud.aws.s3.bucket}")
     private String bucket;
-
 
     @Override
     public String upload(MultipartFile jsonFile) {
@@ -48,6 +49,46 @@ public class S3Adapter implements S3Port {
             return amazonS3Client.getUrl(bucket, fileName).toString();
         } catch (IOException e) {
             throw new RuntimeException("S3 업로드 중 오류 발생", e);
+        }
+    }
+
+    @Override
+    public String upload(String staticUrl) {
+        try {
+            if (!staticUrl.startsWith("http")) {
+                String baseUrl = "http://localhost:8000";  // 여기에 실제 정적 리소스 서버 도메인 입력
+                staticUrl = baseUrl + staticUrl;
+            }
+            // 1. static URL로부터 파일 다운로드
+            URL url = new URL(staticUrl);
+            URLConnection connection = url.openConnection();
+
+            String extension = "";
+            String contentType = connection.getContentType();
+            long contentLength = connection.getContentLengthLong();
+
+            // 간단한 확장자 유추 (필요 시 더 정확한 처리 가능)
+            if (contentType != null && contentType.contains("/")) {
+                extension = "." + contentType.split("/")[1];
+            }
+
+            String fileName = UUID.randomUUID() + extension;
+
+            ObjectMetadata metadata = new ObjectMetadata();
+            metadata.setContentType(contentType);
+            metadata.setContentLength(contentLength);
+
+            // 2. S3에 업로드
+            amazonS3Client.putObject(
+                    bucket,
+                    fileName,
+                    connection.getInputStream(),
+                    metadata
+            );
+
+            return amazonS3Client.getUrl(bucket, fileName).toString();
+        } catch (IOException e) {
+            throw new RuntimeException("Static URL로부터 S3 업로드 중 오류 발생", e);
         }
     }
 

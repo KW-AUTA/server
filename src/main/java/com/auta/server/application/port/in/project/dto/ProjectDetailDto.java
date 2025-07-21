@@ -4,6 +4,7 @@ import com.auta.server.domain.page.Page;
 import com.auta.server.domain.project.Project;
 import com.auta.server.domain.test.TestCountSummary;
 import com.auta.server.domain.test.TestType;
+import com.auta.server.domain.ui.UITest;
 import java.util.List;
 import lombok.Builder;
 import lombok.Getter;
@@ -13,15 +14,18 @@ import lombok.Getter;
 public class ProjectDetailDto {
     private Project project;
     private List<PageInfo> pages;
+    private List<UITest> uiTests;
     private int totalRoutingTest;
     private int totalInteractionTest;
     private int totalMappingTest;
 
-    public static ProjectDetailDto of(Project project, List<Page> pages, TestCountSummary testCountSummary) {
+    public static ProjectDetailDto of(Project project, List<Page> pages, List<UITest> uiTests,
+                                      TestCountSummary testCountSummary) {
         return ProjectDetailDto.builder()
                 .project(project)
-                .pages(pages.stream().map(page -> ProjectDetailDto.PageInfo.builder().pageName(page.getPageName())
+                .pages(pages.stream().map(page -> PageInfo.builder().pageName(page.getPageName())
                         .pageBaseUrl(page.getPageBaseUrl()).build()).toList())
+                .uiTests(uiTests)
                 .totalRoutingTest(testCountSummary.typeTotal(TestType.ROUTING))
                 .totalInteractionTest(testCountSummary.typeTotal(TestType.INTERACTION))
                 .totalMappingTest(testCountSummary.typeTotal(TestType.MAPPING))

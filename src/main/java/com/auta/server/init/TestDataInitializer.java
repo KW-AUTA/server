@@ -78,7 +78,7 @@ public class TestDataInitializer implements CommandLineRunner {
                 .projectName("광운대 홈페이지")
                 .description("광운대 홈페이지 프로젝트입니다.")
                 .figmaUrl("https://figma.com/proj2")
-                .figmaJson("https://auta-json-s3.s3.ap-northeast-2.amazonaws.com/framesData.json")
+                .figmaJson("https://auta-json-s3.s3.ap-northeast-2.amazonaws.com/framesData+(6).json")
                 .rootFigmaPage("home")
                 .serviceUrl("https://www.kw.ac.kr/ko/index.jsp")
                 .projectCreatedDate(LocalDate.now())

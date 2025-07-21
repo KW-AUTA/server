@@ -34,6 +34,7 @@ public class ProjectServiceImpl implements ProjectUseCase {
     @Override
     public void runTest(Long projectId) {
         projectResultService.updateStatus(projectId, ProjectStatus.IN_PROGRESS);
+        testExecutor.executeUITest(projectId);
         testExecutor.executeAsyncTest(projectId);
     }
 

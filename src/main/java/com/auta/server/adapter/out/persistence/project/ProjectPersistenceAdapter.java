@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 @Component
 @RequiredArgsConstructor
@@ -33,10 +34,12 @@ public class ProjectPersistenceAdapter implements ProjectPort {
     }
 
     @Override
+    @Transactional
     public Project update(Project project) {
         ProjectEntity projectEntity = projectRepository.findById(project.getId())
                 .orElseThrow(() -> new BusinessException(ErrorCode.PROJECT_NOT_FOUND));
         projectEntity.updateFromDomain(project);
+        projectRepository.save(projectEntity);
         return projectMapper.toDomain(projectEntity);
     }
 

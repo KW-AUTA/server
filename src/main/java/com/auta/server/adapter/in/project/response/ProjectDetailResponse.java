@@ -45,7 +45,7 @@ public class ProjectDetailResponse {
                 )
                 .uiInfo(UIInfo.builder()
                         .score(project.getScore())
-                        .uiTests(project.getUiTests().stream().map(uiTest -> UITest.builder()
+                        .uiTests(projectDetailDto.getUiTests().stream().map(uiTest -> UITest.builder()
                                         .UIPageUrl(uiTest.getUIPageUrl()).UIDescription(uiTest.getUIDescription()).build())
                                 .toList())
                         .build())

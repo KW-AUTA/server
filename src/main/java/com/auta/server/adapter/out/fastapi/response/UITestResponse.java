@@ -14,18 +14,8 @@ public class UITestResponse {
     @Getter
     @Builder
     public static class Evaluation {
-        private String frameName;
-        private List<ProblemComponent> problemComponents;
+        private String frameSummary;
         private String highlightImageUrl;
-    }
-
-    @Getter
-    @Builder
-    public static class ProblemComponent {
-        private String id;
-        private String name;
-        private String issueType;
-        private String reason;
     }
 }
 
