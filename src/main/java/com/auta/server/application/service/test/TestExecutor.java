@@ -1,6 +1,5 @@
 package com.auta.server.application.service.test;
 
-import com.auta.server.adapter.out.fastapi.response.UITestResponse;
 import com.auta.server.adapter.out.s3.S3Adapter;
 import com.auta.server.application.port.out.fastapi.FastApiPort;
 import com.auta.server.application.port.out.persistence.page.PagePort;
@@ -20,10 +19,8 @@ import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 
-@Async
 @RequiredArgsConstructor
 @Component
 public class TestExecutor {
@@ -48,7 +45,10 @@ public class TestExecutor {
             reassignPages(tests, savedPages);
             testPort.saveAll(tests);
 
-            projectResultService.applyTestResult(projectId, tests);
+            project.updateTestRate(tests);
+            projectPort.update(project);
+
+            projectResultService.applyTestResult(projectId);
         } catch (Exception e) {
             projectResultService.updateStatus(projectId, ProjectStatus.ERROR);
         }
@@ -68,20 +68,25 @@ public class TestExecutor {
     public void executeUITest(Long projectId) {
         Project project = projectPort.findById(projectId)
                 .orElseThrow(() -> new BusinessException(ErrorCode.PROJECT_NOT_FOUND));
-        UITestResponse response = fastApiPort.requestUITest(project.getFigmaJson());
 
-        List<UITest> uiTests = response.getEvaluations().stream()
-                .map(dto -> UITest.builder()
-                        .UIPageUrl(s3Adapter.upload(dto.getHighlightImageUrl()))
-                        .UIDescription(dto.getFrameSummary())
-                        .project(project)
-                        .build())
-                .toList();
+        fastApiPort.requestUITest(project.getFigmaJson())
+                .subscribe(response -> {
+                    List<UITest> uiTests = response.getEvaluations().stream()
+                            .map(dto -> UITest.builder()
+                                    .UIPageUrl(s3Adapter.upload(dto.getHighlightImageUrl()))
+                                    .UIDescription(dto.getFrameSummary())
+                                    .project(project)
+                                    .build())
+                            .toList();
 
-        uiTestPort.saveAll(uiTests);
+                    uiTestPort.saveAll(uiTests);
 
-        project.updateScore(response.getUsabilityScore());
-        projectPort.update(project);
+                    project.updateScore(response.getUsabilityScore());
+                    projectPort.update(project);
+                    projectResultService.applyUITestResult(projectId);
+                }, error -> {
+                    projectResultService.updateStatus(projectId, ProjectStatus.ERROR);
+                });
     }
 }
 

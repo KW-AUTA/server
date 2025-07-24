@@ -69,12 +69,15 @@ public class ProjectEntity extends BaseEntity {
         this.projectName = project.getProjectName();
         this.expectedTestExecution = project.getExpectedTestExecution();
         this.projectEnd = project.getProjectEnd();
-        this.projectStatus = project.getProjectStatus();
         this.description = project.getDescription();
         this.fileName = project.getFileName();
         this.figmaUrl = project.getFigmaUrl();
         this.serviceUrl = project.getServiceUrl();
         this.rootFigmaPage = project.getRootFigmaPage();
         this.score = project.getScore();
+    }
+
+    public void updateProjectStatus(ProjectStatus projectStatus) {
+        this.projectStatus = projectStatus;
     }
 }

@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 @Component
 @RequiredArgsConstructor
@@ -28,5 +29,11 @@ public class PagePersistenceAdapter implements PagePort {
     public List<Page> saveAll(List<Page> pages) {
         List<PageEntity> pageEntities = pageRepository.saveAll(pages.stream().map(pageMapper::toEntity).toList());
         return pageEntities.stream().map(pageMapper::toDomain).toList();
+    }
+
+    @Override
+    @Transactional
+    public void deleteAllByProjectId(Long projectId) {
+        pageRepository.deleteAllByProjectId(projectId);
     }
 }

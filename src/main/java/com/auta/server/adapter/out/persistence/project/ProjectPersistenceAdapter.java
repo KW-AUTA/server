@@ -39,7 +39,6 @@ public class ProjectPersistenceAdapter implements ProjectPort {
         ProjectEntity projectEntity = projectRepository.findById(project.getId())
                 .orElseThrow(() -> new BusinessException(ErrorCode.PROJECT_NOT_FOUND));
         projectEntity.updateFromDomain(project);
-        projectRepository.save(projectEntity);
         return projectMapper.toDomain(projectEntity);
     }
 
@@ -62,5 +61,13 @@ public class ProjectPersistenceAdapter implements ProjectPort {
     public List<Project> findAllByUserId(Long userId) {
         List<ProjectEntity> projectEntities = projectRepository.findAllByUserId(userId);
         return projectEntities.stream().map(projectMapper::toDomain).toList();
+    }
+
+    @Override
+    @Transactional
+    public void updateProjectStatus(Project project) {
+        ProjectEntity projectEntity = projectRepository.findById(project.getId())
+                .orElseThrow(() -> new BusinessException(ErrorCode.PROJECT_NOT_FOUND));
+        projectEntity.updateProjectStatus(project.getProjectStatus());
     }
 }

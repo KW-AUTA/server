@@ -5,6 +5,7 @@ import com.auta.server.domain.test.Test;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 @Component
 @RequiredArgsConstructor
@@ -31,6 +32,7 @@ public class TestPersistenceAdapter implements TestPort {
     }
 
     @Override
+    @Transactional
     public void deleteAllByProjectId(Long projectId) {
         testRepository.deleteAllByProjectId(projectId);
     }

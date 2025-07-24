@@ -2,6 +2,7 @@ package com.auta.server.application.service.project;
 
 import com.auta.server.application.port.in.project.ProjectCommand;
 import com.auta.server.application.port.in.project.ProjectUseCase;
+import com.auta.server.application.port.out.persistence.page.PagePort;
 import com.auta.server.application.port.out.persistence.project.ProjectPort;
 import com.auta.server.application.port.out.persistence.test.TestPort;
 import com.auta.server.application.port.out.persistence.user.UserPort;
@@ -26,6 +27,7 @@ public class ProjectServiceImpl implements ProjectUseCase {
 
     private final ProjectPort projectPort;
     private final UserPort userPort;
+    private final PagePort pagePort;
     private final TestPort testPort;
     private final S3Port s3Port;
     private final ProjectResultService projectResultService;
@@ -33,6 +35,9 @@ public class ProjectServiceImpl implements ProjectUseCase {
 
     @Override
     public void runTest(Long projectId) {
+        testPort.deleteAllByProjectId(projectId);
+        pagePort.deleteAllByProjectId(projectId);
+
         projectResultService.updateStatus(projectId, ProjectStatus.IN_PROGRESS);
         testExecutor.executeUITest(projectId);
         testExecutor.executeAsyncTest(projectId);
