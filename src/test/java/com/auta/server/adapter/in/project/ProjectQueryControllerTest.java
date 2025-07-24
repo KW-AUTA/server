@@ -58,6 +58,7 @@ class ProjectQueryControllerTest extends ControllerTestSupport {
                                                 .builder().pageName("로그인 페이지").pageBaseUrl("/login")
                                                 .build()
                                 ))
+                        .uiTests(List.of())
                         .totalRoutingTest(3)
                         .totalInteractionTest(1)
                         .totalMappingTest(2)

@@ -34,6 +34,7 @@ import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.restdocs.payload.JsonFieldType;
@@ -42,9 +43,11 @@ public class ProjectControllerDocsTest extends RestDocsSupport {
 
     private final ProjectUseCase projectUseCase = mock(ProjectUseCase.class);
 
+    private final ApplicationEventPublisher applicationEventPublisher = mock(ApplicationEventPublisher.class);
+
     @Override
     protected Object initController() {
-        return new ProjectController(projectUseCase);
+        return new ProjectController(projectUseCase, applicationEventPublisher);
     }
 
 
