@@ -155,26 +155,36 @@ public class ProjectQueryControllerDocsTest extends RestDocsSupport {
                                 fieldWithPath("message").type(JsonFieldType.STRING).description("메시지"),
                                 fieldWithPath("data").type(JsonFieldType.OBJECT).description("프로젝트 상세 응답 데이터"),
 
-                                fieldWithPath("data.projectName").type(JsonFieldType.STRING).description("프로젝트 이름"),
-                                fieldWithPath("data.projectAdmin").type(JsonFieldType.STRING)
+                                // projectInfo
+                                fieldWithPath("data.projectInfo").type(JsonFieldType.OBJECT).description("프로젝트 정보"),
+                                fieldWithPath("data.projectInfo.projectName").type(JsonFieldType.STRING)
+                                        .description("프로젝트 이름"),
+                                fieldWithPath("data.projectInfo.projectAdmin").type(JsonFieldType.STRING)
                                         .description("프로젝트 관리자 (username)"),
-                                fieldWithPath("data.projectStatus").type(JsonFieldType.STRING)
+                                fieldWithPath("data.projectInfo.projectStatus").type(JsonFieldType.STRING)
                                         .description("프로젝트 상태 (NOT_STARTED, IN_PROGRESS, COMPLETED, ERROR)"),
-                                fieldWithPath("data.projectCreatedDate").type(JsonFieldType.STRING)
+                                fieldWithPath("data.projectInfo.description").type(JsonFieldType.STRING)
+                                        .description("프로젝트 설명"),
+                                fieldWithPath("data.projectInfo.projectCreatedDate").type(JsonFieldType.STRING)
                                         .description("프로젝트 생성일 (yyyy-MM-dd)"),
-                                fieldWithPath("data.projectEnd").type(JsonFieldType.STRING)
+                                fieldWithPath("data.projectInfo.projectEnd").type(JsonFieldType.STRING)
                                         .description("프로젝트 종료 예정일 (yyyy-MM-dd)"),
-                                fieldWithPath("data.testExecutionTime").type(JsonFieldType.STRING)
-                                        .description("테스트 실행DateTime (yyyy-MM-dd)"),
-                                fieldWithPath("data.rootFigmaPage").type(JsonFieldType.STRING)
-                                        .description("피그마 루트 페이지 이름"),
-                                fieldWithPath("data.description").type(JsonFieldType.STRING).description("프로젝트 설명"),
-                                fieldWithPath("data.fileName").type(JsonFieldType.STRING).description("피그마 파일 이름"),
-                                fieldWithPath("data.figmaUrl").type(JsonFieldType.STRING).description("피그마 URL"),
-                                fieldWithPath("data.serviceUrl").type(JsonFieldType.STRING).description("서비스 URL"),
-                                fieldWithPath("data.reportSummary").type(JsonFieldType.NULL)
-                                        .description("리포트 요약(구현 아)"),
+                                fieldWithPath("data.projectInfo.testExecutionTime").type(JsonFieldType.STRING)
+                                        .description("테스트 실행일시 (yyyy-MM-dd HH:mm:ss)"),
 
+                                // figmaInfo
+                                fieldWithPath("data.figmaInfo").type(JsonFieldType.OBJECT).description("피그마 정보"),
+                                fieldWithPath("data.figmaInfo.rootFigmaPage").type(JsonFieldType.STRING)
+                                        .description("피그마 루트 페이지 이름"),
+                                fieldWithPath("data.figmaInfo.fileName").type(JsonFieldType.STRING)
+                                        .description("피그마 파일 이름"),
+                                fieldWithPath("data.figmaInfo.figmaUrl").type(JsonFieldType.STRING)
+                                        .description("피그마 URL"),
+                                fieldWithPath("data.figmaInfo.serviceUrl").type(JsonFieldType.STRING)
+                                        .description("서비스 URL"),
+
+                                // testSummary
+                                fieldWithPath("data.testSummary").type(JsonFieldType.OBJECT).description("테스트 요약"),
                                 fieldWithPath("data.testSummary.totalRoutingTest").type(JsonFieldType.NUMBER)
                                         .description("라우팅 테스트 총 개수"),
                                 fieldWithPath("data.testSummary.totalInteractionTest").type(JsonFieldType.NUMBER)
@@ -182,10 +192,23 @@ public class ProjectQueryControllerDocsTest extends RestDocsSupport {
                                 fieldWithPath("data.testSummary.totalMappingTest").type(JsonFieldType.NUMBER)
                                         .description("매핑 테스트 총 개수"),
 
+                                // pages
                                 fieldWithPath("data.pages").type(JsonFieldType.ARRAY).description("페이지 목록"),
                                 fieldWithPath("data.pages[].pageName").type(JsonFieldType.STRING).description("페이지 이름"),
                                 fieldWithPath("data.pages[].pageBaseUrl").type(JsonFieldType.STRING)
-                                        .description("페이지 URL")
+                                        .description("페이지 URL"),
+
+                                // uiInfo (선택적으로 null일 수 있음)
+                                fieldWithPath("data.uiInfo").type(JsonFieldType.OBJECT).optional()
+                                        .description("UI 평가 정보"),
+                                fieldWithPath("data.uiInfo.score").type(JsonFieldType.NUMBER).optional()
+                                        .description("UI 평가 점수"),
+                                fieldWithPath("data.uiInfo.uiTests").type(JsonFieldType.ARRAY).optional()
+                                        .description("UI 테스트 항목 목록"),
+                                fieldWithPath("data.uiInfo.uiTests[].UIPageUrl").type(JsonFieldType.STRING).optional()
+                                        .description("UI 테스트 화면 URL"),
+                                fieldWithPath("data.uiInfo.uiTests[].UIDescription").type(JsonFieldType.STRING)
+                                        .optional().description("UI 문제 설명")
                         )
                 ));
     }

@@ -22,6 +22,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mock.web.MockMultipartFile;
+import org.springframework.web.multipart.MultipartFile;
 
 class ProjectServiceImplTest extends IntegrationTestSupport {
     @Autowired
@@ -65,7 +66,7 @@ class ProjectServiceImplTest extends IntegrationTestSupport {
                 "file", "sample.json", "application/json", "{ \"key\": \"value\" }".getBytes()
         );
 
-        given(s3Port.upload(any())).willReturn("https://s3.mock/sample.json");
+        given(s3Port.upload((MultipartFile) any())).willReturn("https://s3.mock/sample.json");
 
         //when
         Project project = projectService.createProject(command, multipartFile, email, registeredDate);
@@ -121,7 +122,7 @@ class ProjectServiceImplTest extends IntegrationTestSupport {
         Long projectId = saved.getId();
 
         doNothing().when(s3Port).delete(any());
-        given(s3Port.upload(any())).willReturn("https://s3.mock/sample.json");
+        given(s3Port.upload((MultipartFile) any())).willReturn("https://s3.mock/sample.json");
         //when
         Project project = projectService.updateProject(command, multipartFile, projectId);
 
@@ -177,7 +178,7 @@ class ProjectServiceImplTest extends IntegrationTestSupport {
         Long projectId = saved.getId();
 
         doNothing().when(s3Port).delete(any());
-        given(s3Port.upload(any())).willReturn("https://s3.mock/sample.json");
+        given(s3Port.upload((MultipartFile) any())).willReturn("https://s3.mock/sample.json");
         //when
         Project project = projectService.updateProject(command, multipartFile, projectId);
 

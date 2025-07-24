@@ -10,8 +10,6 @@ public interface ProjectUseCase {
 
     Project updateProject(ProjectCommand command, MultipartFile jsonFile, Long projectId);
 
-    void runTest(Long projectId);
-
     void deleteProject(Long projectId);
 
     List<Project> findAllByUserId(Long userId);

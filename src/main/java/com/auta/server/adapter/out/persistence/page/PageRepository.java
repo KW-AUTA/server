@@ -4,6 +4,7 @@ import io.lettuce.core.dynamic.annotation.Param;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
@@ -16,4 +17,11 @@ public interface PageRepository extends JpaRepository<PageEntity, Long> {
                 where p.projectEntity.id = :projectId
             """)
     List<PageEntity> findAllByProjectId(@Param("projectId") Long projectId);
+
+    @Modifying
+    @Query("""
+                delete from PageEntity as p
+                where p.projectEntity.id = :projectId
+            """)
+    void deleteAllByProjectId(Long projectId);
 }

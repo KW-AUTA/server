@@ -8,12 +8,14 @@ import com.auta.server.application.port.in.project.dto.ProjectTestSummaryDto;
 import com.auta.server.application.port.out.persistence.page.PagePort;
 import com.auta.server.application.port.out.persistence.project.ProjectPort;
 import com.auta.server.application.port.out.persistence.test.TestPort;
+import com.auta.server.application.port.out.persistence.ui.UITestPort;
 import com.auta.server.common.exception.BusinessException;
 import com.auta.server.common.exception.ErrorCode;
 import com.auta.server.domain.page.Page;
 import com.auta.server.domain.project.Project;
 import com.auta.server.domain.test.Test;
 import com.auta.server.domain.test.TestCountSummary;
+import com.auta.server.domain.ui.UITest;
 import java.util.List;
 import java.util.Map;
 import lombok.RequiredArgsConstructor;
@@ -26,6 +28,7 @@ public class ProjectQueryServiceImpl implements ProjectQueryUseCase {
     private final ProjectPort projectPort;
     private final PagePort pagePort;
     private final TestPort testPort;
+    private final UITestPort uiTestPort;
 
     @Override
     public List<ProjectSummaryDto> getProjectSummaryList(String email, String projectName, String sortBy, Long cursor) {
@@ -39,10 +42,10 @@ public class ProjectQueryServiceImpl implements ProjectQueryUseCase {
                 .orElseThrow(() -> new BusinessException(ErrorCode.PROJECT_NOT_FOUND));
         List<Page> pages = pagePort.findAllByProjectId(projectId);
         List<Test> tests = testPort.findAllByProjectId(projectId);
-
+        List<UITest> uiTests = uiTestPort.findAllByProjectId(projectId);
         TestCountSummary testCountSummary = TestCountSummary.from(tests);
 
-        return ProjectDetailDto.of(project, pages, testCountSummary);
+        return ProjectDetailDto.of(project, pages, uiTests, testCountSummary);
     }
 
     @Override

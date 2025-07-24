@@ -1,6 +1,5 @@
 package com.auta.server.application.service.test;
 
-import com.auta.server.adapter.out.fastapi.response.MappingResponse;
 import com.auta.server.adapter.out.fastapi.response.MappingResponse.MappingInfo;
 import com.auta.server.application.port.out.fastapi.FastApiPort;
 import com.auta.server.domain.page.Page;
@@ -12,7 +11,9 @@ import java.util.List;
 import java.util.Set;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @Getter
 @RequiredArgsConstructor
 public class TestCollector {
@@ -32,20 +33,24 @@ public class TestCollector {
         Page page = Page.of(project, currentPage, currentUrl);
         pages.add(page);
 
-        MappingResponse response = fastApiPort.requestComponentMapping(currentUrl, currentPage,
-                project.getFigmaJson());
+        fastApiPort.requestComponentMapping(currentUrl, currentPage, project.getFigmaJson())
+                .subscribe(response -> {
+                    List<MappingInfo> mappings = response.getMappings();
 
-        List<MappingInfo> mappings = response.getMappings();
-        tests.addAll(mappings.stream()
-                .map(info -> Test.ofMappingResult(project, page, info))
-                .toList());
+                    tests.addAll(mappings.stream()
+                            .map(info -> Test.ofMappingResult(project, page, info))
+                            .toList());
 
-        for (MappingInfo routing : mappings.stream().filter(MappingInfo::isRouting).toList()) {
-            tests.add(Test.ofRoutingResult(project, page, routing));
+                    for (MappingInfo routing : mappings.stream().filter(MappingInfo::isRouting).toList()) {
+                        tests.add(Test.ofRoutingResult(project, page, routing));
 
-            if (routing.isSuccess()) {
-                collect(routing.getDestinationFigmaPage(), routing.getDestinationUrl());
-            }
-        }
+                        if (routing.isSuccess()) {
+                            collect(routing.getDestinationFigmaPage(), routing.getDestinationUrl());
+                        }
+                    }
+                }, error -> {
+                    log.error("FastAPI 매핑 오류", error);
+                });
     }
+
 }

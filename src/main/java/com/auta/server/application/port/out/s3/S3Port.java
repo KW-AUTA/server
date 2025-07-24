@@ -6,5 +6,7 @@ public interface S3Port {
 
     String upload(MultipartFile jsonFile);
 
+    String upload(String staticUrl);
+
     void delete(String oldFigmaJsonUrl);
 }

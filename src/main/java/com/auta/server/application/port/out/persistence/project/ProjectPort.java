@@ -17,4 +17,6 @@ public interface ProjectPort {
                                               int pageSize);
 
     List<Project> findAllByUserId(Long userId);
+
+    void updateProjectStatus(Project project);
 }

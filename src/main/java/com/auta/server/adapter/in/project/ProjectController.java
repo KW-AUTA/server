@@ -5,9 +5,11 @@ import com.auta.server.adapter.in.project.request.ProjectRequest;
 import com.auta.server.adapter.in.project.response.ProjectResponse;
 import com.auta.server.adapter.in.security.SecurityUtil;
 import com.auta.server.application.port.in.project.ProjectUseCase;
+import com.auta.server.domain.project.ProjectTestEvent;
 import jakarta.validation.Valid;
 import java.time.LocalDate;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -21,10 +23,17 @@ import org.springframework.web.multipart.MultipartFile;
 public class ProjectController {
 
     private final ProjectUseCase projectUseCase;
+    private final ApplicationEventPublisher eventPublisher;
+
+//    @PostMapping("/api/v1/projects/{projectId}/run-test")
+//    public ApiResponse<String> executeTest(@PathVariable Long projectId) {
+//        projectUseCase.runTest(projectId);
+//        return ApiResponse.ok("프로젝트 테스트가 요청이 완료 되었습니다.");
+//    }
 
     @PostMapping("/api/v1/projects/{projectId}/run-test")
     public ApiResponse<String> executeTest(@PathVariable Long projectId) {
-        projectUseCase.runTest(projectId);
+        eventPublisher.publishEvent(new ProjectTestEvent(projectId));
         return ApiResponse.ok("프로젝트 테스트가 요청이 완료 되었습니다.");
     }
 

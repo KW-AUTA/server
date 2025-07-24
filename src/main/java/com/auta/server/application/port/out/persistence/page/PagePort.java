@@ -10,4 +10,6 @@ public interface PagePort {
     List<Page> findAllByProjectId(Long projectId);
 
     List<Page> saveAll(List<Page> pages);
+
+    void deleteAllByProjectId(Long projectId);
 }

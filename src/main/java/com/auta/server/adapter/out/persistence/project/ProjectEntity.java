@@ -2,6 +2,7 @@ package com.auta.server.adapter.out.persistence.project;
 
 import com.auta.server.adapter.out.BaseEntity;
 import com.auta.server.adapter.out.persistence.page.PageEntity;
+import com.auta.server.adapter.out.persistence.ui.UITestEntity;
 import com.auta.server.adapter.out.persistence.user.UserEntity;
 import com.auta.server.domain.project.Project;
 import com.auta.server.domain.project.ProjectStatus;
@@ -43,6 +44,9 @@ public class ProjectEntity extends BaseEntity {
     @OneToMany(mappedBy = "projectEntity", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<PageEntity> pageEntities;
 
+    @OneToMany(mappedBy = "projectEntity", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<UITestEntity> uiTestEntities;
+
     private String figmaUrl;
     private String figmaJson;
     private String rootFigmaPage;
@@ -59,16 +63,21 @@ public class ProjectEntity extends BaseEntity {
 
     private LocalDateTime testExecuteTime;
     private Integer testRate;
+    private Integer score;
 
     public void updateFromDomain(Project project) {
         this.projectName = project.getProjectName();
         this.expectedTestExecution = project.getExpectedTestExecution();
         this.projectEnd = project.getProjectEnd();
-        this.projectStatus = project.getProjectStatus();
         this.description = project.getDescription();
         this.fileName = project.getFileName();
         this.figmaUrl = project.getFigmaUrl();
         this.serviceUrl = project.getServiceUrl();
         this.rootFigmaPage = project.getRootFigmaPage();
+        this.score = project.getScore();
+    }
+
+    public void updateProjectStatus(ProjectStatus projectStatus) {
+        this.projectStatus = projectStatus;
     }
 }

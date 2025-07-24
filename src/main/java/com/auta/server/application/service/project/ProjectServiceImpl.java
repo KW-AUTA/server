@@ -6,7 +6,6 @@ import com.auta.server.application.port.out.persistence.project.ProjectPort;
 import com.auta.server.application.port.out.persistence.test.TestPort;
 import com.auta.server.application.port.out.persistence.user.UserPort;
 import com.auta.server.application.port.out.s3.S3Port;
-import com.auta.server.application.service.test.TestExecutor;
 import com.auta.server.common.exception.BusinessException;
 import com.auta.server.common.exception.ErrorCode;
 import com.auta.server.domain.project.Project;
@@ -28,14 +27,6 @@ public class ProjectServiceImpl implements ProjectUseCase {
     private final UserPort userPort;
     private final TestPort testPort;
     private final S3Port s3Port;
-    private final ProjectResultService projectResultService;
-    private final TestExecutor testExecutor;
-
-    @Override
-    public void runTest(Long projectId) {
-        projectResultService.updateStatus(projectId, ProjectStatus.IN_PROGRESS);
-        testExecutor.executeAsyncTest(projectId);
-    }
 
     @Override
     public Project createProject(ProjectCommand command, MultipartFile jsonFile, String email,
