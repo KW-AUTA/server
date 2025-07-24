@@ -5,6 +5,7 @@ import io.netty.handler.timeout.ReadTimeoutHandler;
 import io.netty.handler.timeout.WriteTimeoutHandler;
 import java.time.Duration;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.client.reactive.ReactorClientHttpConnector;
@@ -15,7 +16,9 @@ import reactor.netty.http.client.HttpClient;
 @Slf4j
 @Configuration
 public class WebClientConfig {
-    private final static String BASE_URL = "http://127.0.0.1:8000";
+    
+    @Value("${webclient.base-url}")
+    private String baseUrl;
 
     @Bean
     public WebClient webClient() {
@@ -30,7 +33,7 @@ public class WebClientConfig {
                         HttpClient.create()
                                 .responseTimeout(Duration.ofSeconds(300))
                 ))
-                .baseUrl(BASE_URL)
+                .baseUrl(baseUrl)
                 .filter(logRequest())
                 .filter(logResponse())
                 .build();

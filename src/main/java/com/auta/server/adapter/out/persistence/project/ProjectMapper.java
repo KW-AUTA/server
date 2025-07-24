@@ -10,18 +10,21 @@ import org.mapstruct.Mapping;
 @Mapper(componentModel = "spring",
         uses = {UserMapper.class, PageMapper.class})
 public interface ProjectMapper {
-
     @Mapping(target = "pages", ignore = true)
+    @Mapping(target = "uiTests", ignore = true)
     @Mapping(source = "projectEntity.userEntity", target = "user")
     Project toDomain(ProjectEntity projectEntity);
 
     @Mapping(target = "pageEntities", ignore = true)
+    @Mapping(target = "uiTestEntities", ignore = true)
+
     @Mapping(source = "project.user", target = "userEntity")
     ProjectEntity toEntity(Project project);
 
     @Mapping(source = "project.id", target = "id")
     @Mapping(source = "user", target = "userEntity")
     @Mapping(target = "pageEntities", ignore = true)
+    @Mapping(target = "uiTestEntities", ignore = true)
     ProjectEntity toEntityWithUser(Project project, User user);
 
 //    public static Project toDomain(ProjectEntity entity) {

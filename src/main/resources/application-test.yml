@@ -26,3 +26,6 @@ cloud:
       bucket: dummy-bucket
     region:
       static: ap-northeast-2
+
+webclient:
+  base-url: http://localhost:8000
