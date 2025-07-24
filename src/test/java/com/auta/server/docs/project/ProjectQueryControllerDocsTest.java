@@ -136,6 +136,7 @@ public class ProjectQueryControllerDocsTest extends RestDocsSupport {
                                                 .builder().pageName("로그인 페이지").pageBaseUrl("/login")
                                                 .build()
                                 ))
+                        .uiTests(List.of())
                         .totalRoutingTest(3)
                         .totalInteractionTest(1)
                         .totalMappingTest(2)
@@ -196,19 +197,19 @@ public class ProjectQueryControllerDocsTest extends RestDocsSupport {
                                 fieldWithPath("data.pages").type(JsonFieldType.ARRAY).description("페이지 목록"),
                                 fieldWithPath("data.pages[].pageName").type(JsonFieldType.STRING).description("페이지 이름"),
                                 fieldWithPath("data.pages[].pageBaseUrl").type(JsonFieldType.STRING)
-                                        .description("페이지 URL"),
+                                        .description("페이지 베이스 URL"),
 
-                                // uiInfo (선택적으로 null일 수 있음)
-                                fieldWithPath("data.uiInfo").type(JsonFieldType.OBJECT).optional()
-                                        .description("UI 평가 정보"),
-                                fieldWithPath("data.uiInfo.score").type(JsonFieldType.NUMBER).optional()
-                                        .description("UI 평가 점수"),
-                                fieldWithPath("data.uiInfo.uiTests").type(JsonFieldType.ARRAY).optional()
-                                        .description("UI 테스트 항목 목록"),
-                                fieldWithPath("data.uiInfo.uiTests[].UIPageUrl").type(JsonFieldType.STRING).optional()
-                                        .description("UI 테스트 화면 URL"),
+                                // uiInfo
+                                fieldWithPath("data.uiInfo").type(JsonFieldType.OBJECT).description("UI 평가 정보")
+                                        .optional(),
+                                fieldWithPath("data.uiInfo.score").type(JsonFieldType.NUMBER).description("UI 평가 점수")
+                                        .optional(),
+                                fieldWithPath("data.uiInfo.uiTests").type(JsonFieldType.ARRAY).description("UI 테스트 목록")
+                                        .optional(),
+                                fieldWithPath("data.uiInfo.uiTests[].UIPageUrl").type(JsonFieldType.STRING)
+                                        .description("UI 테스트 대상 페이지 URL").optional(),
                                 fieldWithPath("data.uiInfo.uiTests[].UIDescription").type(JsonFieldType.STRING)
-                                        .optional().description("UI 문제 설명")
+                                        .description("UI 테스트 문제 설명").optional()
                         )
                 ));
     }
