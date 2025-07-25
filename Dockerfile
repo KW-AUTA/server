@@ -1,5 +1,5 @@
 # 빌드 단계
-FROM gradle:7.5.1-jdk17 AS build
+FROM gradle:8.13-jdk17 AS build
 
 WORKDIR /app
 

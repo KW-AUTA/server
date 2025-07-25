@@ -19,8 +19,10 @@ import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
+@Slf4j
 @RequiredArgsConstructor
 @Component
 public class TestExecutor {
@@ -51,6 +53,7 @@ public class TestExecutor {
             projectResultService.applyTestResult(projectId);
         } catch (Exception e) {
             projectResultService.updateStatus(projectId, ProjectStatus.ERROR);
+            log.info("기능 테스트 오류");
         }
     }
 
@@ -86,6 +89,8 @@ public class TestExecutor {
                     projectResultService.applyUITestResult(projectId);
                 }, error -> {
                     projectResultService.updateStatus(projectId, ProjectStatus.ERROR);
+                    log.error("UI/UX 테스트 중 오류 발생: {}", error.getMessage(), error);
+
                 });
     }
 }

@@ -51,12 +51,15 @@ public class FastApiClient implements FastApiPort {
     @Override
     public Mono<UITestResponse> requestUITest(String figmaJson) {
         UITestRequest request = UITestRequest.builder().figmaJsonUrl(figmaJson).build();
-
+        log.info("uiux 테스트");
         return webClient.post()
                 .uri("/evaluate-ui-with-highlight")
                 .contentType(MediaType.APPLICATION_JSON)
                 .bodyValue(request)
-                .retrieve()
-                .bodyToMono(UITestResponse.class);
+                .exchangeToMono(response -> {
+                    log.info("Status: {}", response.statusCode());
+                    return response.bodyToMono(UITestResponse.class);
+                })
+                .doOnError(e -> log.error("요청 실패", e));
     }
 }
