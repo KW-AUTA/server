@@ -23,6 +23,9 @@ public class S3Adapter implements S3Port {
     @Value("${cloud.aws.s3.bucket}")
     private String bucket;
 
+    @Value("${webclient.base-url}")
+    private String baseUrl;
+
     @Override
     public String upload(MultipartFile jsonFile) {
         try {
@@ -56,7 +59,6 @@ public class S3Adapter implements S3Port {
     public String upload(String staticUrl) {
         try {
             if (!staticUrl.startsWith("http")) {
-                String baseUrl = "http://localhost:8000";  // 여기에 실제 정적 리소스 서버 도메인 입력
                 staticUrl = baseUrl + staticUrl;
             }
             // 1. static URL로부터 파일 다운로드
