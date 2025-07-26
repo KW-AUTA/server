@@ -4,6 +4,7 @@ import com.auta.server.application.port.in.project.dto.ProjectDetailDto;
 import com.auta.server.domain.project.Project;
 import com.auta.server.domain.project.ProjectStatus;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -98,7 +99,9 @@ public class ProjectDetailResponse {
     @NoArgsConstructor
     @AllArgsConstructor
     private static class UITest {
+        @JsonProperty("UIPageUrl")
         private String UIPageUrl;
+        @JsonProperty("UIDescription")
         private String UIDescription;
 
     }
