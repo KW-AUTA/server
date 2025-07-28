@@ -8,11 +8,13 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
+@Slf4j
 @Component
 @RequiredArgsConstructor
 @Profile({"local", "prod"})
@@ -90,7 +92,8 @@ public class S3Adapter implements S3Port {
 
             return amazonS3Client.getUrl(bucket, fileName).toString();
         } catch (IOException e) {
-            throw new RuntimeException("Static URL로부터 S3 업로드 중 오류 발생", e);
+            log.error("Static URL로부터 S3 업로드 중 오류 발생" + e);
+            return "error to upload";
         }
     }
 

@@ -40,17 +40,24 @@ public class TestExecutor {
             Project project = projectPort.findById(projectId)
                     .orElseThrow(() -> new BusinessException(ErrorCode.PROJECT_NOT_FOUND));
             TestCollector collector = new TestCollector(fastApiPort, project);
-            collector.collect(project.getRootFigmaPage(), project.getServiceUrl());
+            collector.collect(project.getRootFigmaPage(), project.getServiceUrl())
+                    .doOnSuccess(ignored -> {
+                        List<Page> savedPages = pagePort.saveAll(collector.getPages());
+                        List<Test> tests = collector.getTests();
+                        reassignPages(tests, savedPages);
+                        testPort.saveAll(tests);
 
-            List<Page> savedPages = pagePort.saveAll(collector.getPages());
-            List<Test> tests = collector.getTests();
-            reassignPages(tests, savedPages);
-            testPort.saveAll(tests);
-
-            project.updateTestRate(tests);
-            projectPort.update(project);
-
-            projectResultService.applyTestResult(projectId);
+                        projectPort.findById(projectId).ifPresent(freshProject -> {
+                            freshProject.updateTestRate(tests);
+                            projectPort.update(freshProject);
+                            projectResultService.applyTestResult(projectId);
+                        });
+                    })
+                    .doOnError(e -> {
+                        projectResultService.updateStatus(projectId, ProjectStatus.ERROR);
+                        log.error("기능 테스트 실패", e);
+                    })
+                    .subscribe();
         } catch (Exception e) {
             projectResultService.updateStatus(projectId, ProjectStatus.ERROR);
             log.info("기능 테스트 오류");
@@ -84,9 +91,11 @@ public class TestExecutor {
 
                     uiTestPort.saveAll(uiTests);
 
-                    project.updateScore(response.getUsabilityScore());
-                    projectPort.update(project);
-                    projectResultService.applyUITestResult(projectId);
+                    projectPort.findById(projectId).ifPresent(freshProject -> {
+                        freshProject.updateScore(response.getUsabilityScore());
+                        projectPort.update(freshProject);
+                        projectResultService.applyUITestResult(projectId);
+                    });
                 }, error -> {
                     projectResultService.updateStatus(projectId, ProjectStatus.ERROR);
                     log.error("UI/UX 테스트 중 오류 발생: {}", error.getMessage(), error);

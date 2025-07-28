@@ -14,6 +14,7 @@ import java.util.Set;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import reactor.core.publisher.Mono;
 
 @Slf4j
 @Getter
@@ -26,17 +27,17 @@ public class TestCollector {
     private final List<Page> pages = new ArrayList<>();
     private final List<Test> tests = new ArrayList<>();
 
-    public void collect(String currentPage, String currentUrl) {
+    public Mono<Void> collect(String currentPage, String currentUrl) {
         if (visited.contains(currentPage)) {
-            return;
+            return Mono.empty();
         }
         visited.add(currentPage);
 
         Page page = Page.of(project, currentPage, currentUrl);
         pages.add(page);
 
-        fastApiPort.requestComponentMapping(currentUrl, currentPage, project.getFigmaJson())
-                .subscribe(response -> {
+        return fastApiPort.requestComponentMapping(currentUrl, currentPage, project.getFigmaJson())
+                .flatMap(response -> {
                     List<MappingInfo> mappings = response.getMappings();
 
                     tests.addAll(
@@ -59,15 +60,16 @@ public class TestCollector {
                             .map(mapping -> (RoutingMappingInfo) mapping)
                             .toList();
 
-                    for (RoutingMappingInfo routing : routings) {
-                        tests.add(Test.ofRoutingResult(project, page, routing));
+                    List<Mono<Void>> recursive = routings.stream()
+                            .filter(RoutingMappingInfo::isSuccess)
+                            .map(r -> collect(r.getDestinationFigmaPage(), r.getDestinationUrl()))
+                            .toList();
 
-                        if (routing.isSuccess()) {
-                            collect(routing.getDestinationFigmaPage(), routing.getDestinationUrl());
-                        }
-                    }
-                }, error -> {
-                    log.error("FastAPI 오류", error);
+                    return Mono.when(recursive);
+                })
+                .onErrorResume(e -> {
+                    log.error("FastAPI 오류", e);
+                    return Mono.empty();
                 });
     }
 }

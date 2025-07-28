@@ -75,6 +75,7 @@ public class ProjectEntity extends BaseEntity {
         this.serviceUrl = project.getServiceUrl();
         this.rootFigmaPage = project.getRootFigmaPage();
         this.score = project.getScore();
+        this.testRate = project.getTestRate();
     }
 
     public void updateProjectStatus(ProjectStatus projectStatus) {

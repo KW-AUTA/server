@@ -1,18 +1,17 @@
 package com.auta.server.adapter.out.fastapi;
 
-import com.auta.server.adapter.out.fastapi.request.UITestRequest;
 import com.auta.server.adapter.out.fastapi.response.MappingResponse;
 import com.auta.server.adapter.out.fastapi.response.MappingResponse.GeneralMappingInfo;
 import com.auta.server.adapter.out.fastapi.response.MappingResponse.InteractionMappingInfo;
 import com.auta.server.adapter.out.fastapi.response.MappingResponse.MappingInfo;
 import com.auta.server.adapter.out.fastapi.response.MappingResponse.RoutingMappingInfo;
 import com.auta.server.adapter.out.fastapi.response.UITestResponse;
+import com.auta.server.adapter.out.fastapi.response.UITestResponse.Evaluation;
 import com.auta.server.application.port.out.fastapi.FastApiPort;
 import java.time.Duration;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Profile;
-import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
@@ -58,20 +57,16 @@ public class FastApiDummyClient implements FastApiPort {
 
         // 5. 15초 후 리턴
         return Mono.just(response)
-                .delayElement(Duration.ofSeconds(15));
+                .delayElement(Duration.ofSeconds(10));
     }
 
 
     @Override
     public Mono<UITestResponse> requestUITest(String figmaJson) {
-        UITestRequest request = UITestRequest.builder().figmaJsonUrl(figmaJson).build();
-
-        return webClient.post()
-                .uri("/evaluate-ui-with-highlight")
-                .contentType(MediaType.APPLICATION_JSON)
-                .bodyValue(request)
-                .retrieve()
-                .bodyToMono(UITestResponse.class);
+        UITestResponse response = UITestResponse.builder().usabilityScore(85)
+                .evaluations(List.of(Evaluation.builder().frameSummary("요약").highlightImageUrl("www").build())).build();
+        return Mono.just(response)
+                .delayElement(Duration.ofSeconds(10));
     }
 }
 
