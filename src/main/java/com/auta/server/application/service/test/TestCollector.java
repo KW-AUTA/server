@@ -1,6 +1,8 @@
 package com.auta.server.application.service.test;
 
+import com.auta.server.adapter.out.fastapi.response.MappingResponse.InteractionMappingInfo;
 import com.auta.server.adapter.out.fastapi.response.MappingResponse.MappingInfo;
+import com.auta.server.adapter.out.fastapi.response.MappingResponse.RoutingMappingInfo;
 import com.auta.server.application.port.out.fastapi.FastApiPort;
 import com.auta.server.domain.page.Page;
 import com.auta.server.domain.project.Project;
@@ -37,11 +39,27 @@ public class TestCollector {
                 .subscribe(response -> {
                     List<MappingInfo> mappings = response.getMappings();
 
-                    tests.addAll(mappings.stream()
-                            .map(info -> Test.ofMappingResult(project, page, info))
-                            .toList());
+                    tests.addAll(
+                            mappings.stream()
+                                    .map(info -> Test.ofMappingResult(project, page, info))
+                                    .toList()
+                    );
 
-                    for (MappingInfo routing : mappings.stream().filter(MappingInfo::isRouting).toList()) {
+                    List<InteractionMappingInfo> interactions = mappings.stream()
+                            .filter(mapping -> mapping instanceof InteractionMappingInfo)
+                            .map(mapping -> (InteractionMappingInfo) mapping)
+                            .toList();
+
+                    for (InteractionMappingInfo interaction : interactions) {
+                        tests.add(Test.ofInteractionResult(project, page, interaction));
+                    }
+
+                    List<RoutingMappingInfo> routings = mappings.stream()
+                            .filter(mapping -> mapping instanceof RoutingMappingInfo)
+                            .map(mapping -> (RoutingMappingInfo) mapping)
+                            .toList();
+
+                    for (RoutingMappingInfo routing : routings) {
                         tests.add(Test.ofRoutingResult(project, page, routing));
 
                         if (routing.isSuccess()) {
@@ -49,8 +67,7 @@ public class TestCollector {
                         }
                     }
                 }, error -> {
-                    log.error("FastAPI 매핑 오류", error);
+                    log.error("FastAPI 오류", error);
                 });
     }
-
 }

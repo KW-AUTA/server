@@ -63,13 +63,11 @@ public class PageTestResponse {
     @Getter
     @Builder
     public static class RoutingSuccess {
-        private String triggerSelector;
         private String expectedDestination;
         private String actualDestination;
 
         public static RoutingSuccess from(Test test) {
             return RoutingSuccess.builder()
-                    .triggerSelector(test.getTriggerSelector())
                     .expectedDestination(test.getExpectedDestination())
                     .actualDestination(test.getActualDestination())
                     .build();
@@ -79,14 +77,12 @@ public class PageTestResponse {
     @Getter
     @Builder
     public static class RoutingFail {
-        private String triggerSelector;
         private String expectedDestination;
         private String actualDestination;
         private String failReason;
 
         public static RoutingFail from(Test test) {
             return RoutingFail.builder()
-                    .triggerSelector(test.getTriggerSelector())
                     .expectedDestination(test.getExpectedDestination())
                     .actualDestination(test.getActualDestination())
                     .failReason(test.getFailReason())
@@ -111,12 +107,10 @@ public class PageTestResponse {
     @Getter
     @Builder
     public static class InteractionSuccess {
-        private String trigger;
         private String actualAction;
 
         public static InteractionSuccess from(Test test) {
             return InteractionSuccess.builder()
-                    .trigger(test.getTrigger())
                     .actualAction(test.getActualAction())
                     .build();
         }
@@ -125,14 +119,12 @@ public class PageTestResponse {
     @Getter
     @Builder
     public static class InteractionFail {
-        private String trigger;
         private String expectedAction;
         private String actualAction;
         private String failReason;
 
         public static InteractionFail from(Test test) {
             return InteractionFail.builder()
-                    .trigger(test.getTrigger())
                     .expectedAction(test.getExpectedAction())
                     .actualAction(test.getActualAction())
                     .failReason(test.getFailReason())
