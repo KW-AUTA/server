@@ -14,14 +14,15 @@ public class MappingResponse {
     @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "type")
     @JsonSubTypes({
             @JsonSubTypes.Type(value = RoutingMappingInfo.class, name = "ROUTING"),
-            @JsonSubTypes.Type(value = InteractionMappingInfo.class, name = "INTERACTION")
+            @JsonSubTypes.Type(value = InteractionMappingInfo.class, name = "INTERACTION"),
+            @JsonSubTypes.Type(value = InteractionMappingInfo.class, name = "GENERAL")
     })
     @Getter
     public static abstract class MappingInfo {
         private final String componentName;
         private final boolean isSuccess;
         private final String failReason;
-        
+
         protected MappingInfo(String componentName, boolean isSuccess, String failReason) {
             this.componentName = componentName;
             this.isSuccess = isSuccess;

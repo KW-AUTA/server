@@ -60,6 +60,20 @@ public class FastApiDummyClient implements FastApiPort {
                 .delayElement(Duration.ofSeconds(10));
     }
 
+//    @Override
+//    public Mono<MappingResponse> requestComponentMapping(String currentUrl, String currentPage, String figmaJson) {
+//        MappingRequest request = MappingRequest.builder().currentUrl(currentUrl)
+//                .currentPage(currentPage)
+//                .figmaUrl(figmaJson)
+//                .build();
+//
+//        return webClient.post()
+//                .uri("/mapping")
+//                .contentType(MediaType.APPLICATION_JSON)
+//                .bodyValue(request)
+//                .retrieve()
+//                .bodyToMono(MappingResponse.class);
+//    }
 
     @Override
     public Mono<UITestResponse> requestUITest(String figmaJson) {
