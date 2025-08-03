@@ -47,6 +47,8 @@ include::api/project/project-detail.adoc[]
 include::api/project/project-test-summaries-read.adoc[]
 include::api/project/project-test-detail.adoc[]
 
+include::api/project/project-status-stream.adoc[]
+
 [[Page-API]]
 == Page API
 

@@ -3,6 +3,7 @@ plugins {
     id 'org.springframework.boot' version '3.4.4'
     id 'io.spring.dependency-management' version '1.1.7'
     id "org.asciidoctor.jvm.convert" version "3.3.2"
+    id 'jacoco'
 }
 
 group = 'com.auta'
@@ -76,7 +77,7 @@ dependencies {
 
     // WebFlux
     implementation 'org.springframework.boot:spring-boot-starter-webflux'
-    
+
     //s3
     implementation 'org.springframework.cloud:spring-cloud-starter-aws:2.2.6.RELEASE'
 }
@@ -100,6 +101,8 @@ ext { // 전역 변수
 }
 
 test {
+    useJUnitPlatform()
+    finalizedBy jacocoTestReport
     outputs.dir snippetsDir
 }
 
@@ -118,5 +121,19 @@ bootJar {
     dependsOn asciidoctor
     from("${asciidoctor.outputDir}") {
         into 'static/docs'
+    }
+}
+
+jacoco {
+    toolVersion = "0.8.11" // 최신 버전 사용
+}
+
+jacocoTestReport {
+    dependsOn test
+    reports {
+        xml.required = true
+        csv.required = false
+        html.required = true
+        html.outputLocation = layout.buildDirectory.dir('jacocoHtml')
     }
 }

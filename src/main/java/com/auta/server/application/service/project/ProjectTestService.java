@@ -5,7 +5,6 @@ import com.auta.server.adapter.out.persistence.projectprogress.ProjectTestProgre
 import com.auta.server.application.port.out.persistence.page.PagePort;
 import com.auta.server.application.port.out.persistence.test.TestPort;
 import com.auta.server.application.service.test.TestExecutor;
-import com.auta.server.domain.project.ProjectStatus;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -30,7 +29,7 @@ public class ProjectTestService {
 
         // 2. 상태 업데이트
         log.info("상태 in_progress");
-        projectResultService.updateStatus(projectId, ProjectStatus.IN_PROGRESS);
+        projectResultService.markTestAsProgress(projectId);
         projectTestProgressRepository.save(
                 new ProjectTestProgressEntity(projectId, false, false)
         );
