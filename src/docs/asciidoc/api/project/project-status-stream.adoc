@@ -1,0 +1,20 @@
+[[project-status-stream]]
+=== 프로젝트 상태 SSE
+
+==== HTTP Request
+
+include::{snippets}/project-status-stream/http-request.adoc[]
+
+==== HTTP Response
+
+include::{snippets}/project-status-stream/http-response.adoc[]
+
+==== SSE 메시지 형식
+
+다음과 같은 형식의 이벤트가 실시간으로 전송됩니다:
+
+[source,text]
+----
+event: projectStatus
+data: "IN_PROGRESS"
+----
