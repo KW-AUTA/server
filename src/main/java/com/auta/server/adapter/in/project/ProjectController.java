@@ -25,12 +25,6 @@ public class ProjectController {
     private final ProjectUseCase projectUseCase;
     private final ApplicationEventPublisher eventPublisher;
 
-//    @PostMapping("/api/v1/projects/{projectId}/run-test")
-//    public ApiResponse<String> executeTest(@PathVariable Long projectId) {
-//        projectUseCase.runTest(projectId);
-//        return ApiResponse.ok("프로젝트 테스트가 요청이 완료 되었습니다.");
-//    }
-
     @PostMapping("/api/v1/projects/{projectId}/run-test")
     public ApiResponse<String> executeTest(@PathVariable Long projectId) {
         eventPublisher.publishEvent(new ProjectTestEvent(projectId));
