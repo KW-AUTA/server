@@ -2,6 +2,7 @@ package com.auta.server.application.service.project;
 
 import com.auta.server.adapter.out.persistence.projectprogress.ProjectTestProgressEntity;
 import com.auta.server.adapter.out.persistence.projectprogress.ProjectTestProgressRepository;
+import com.auta.server.application.port.in.project.ProjectStatusUseCase;
 import com.auta.server.application.port.out.persistence.project.ProjectPort;
 import com.auta.server.common.exception.BusinessException;
 import com.auta.server.common.exception.ErrorCode;
@@ -21,6 +22,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class ProjectResultService {
     private final ProjectPort projectPort;
     private final ProjectTestProgressRepository projectTestProgressRepository;
+    private final ProjectStatusUseCase projectStatusUseCase;
 
     @Transactional(propagation = Propagation.REQUIRES_NEW)
     public void applyTestResult(Long projectId, List<Test> tests) {
@@ -73,6 +75,7 @@ public class ProjectResultService {
                 .orElseThrow(() -> new BusinessException(ErrorCode.PROJECT_NOT_FOUND));
         project.changeStatus(status);
         projectPort.updateProjectStatus(project);
+        projectStatusUseCase.sendStatus(projectId, status);
     }
 }
 
