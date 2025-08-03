@@ -42,7 +42,6 @@ public class PageControllerDocsTest extends RestDocsSupport {
                                 .id(1L)
                                 .testType(TestType.ROUTING)
                                 .testStatus(TestStatus.PASSED)
-                                .triggerSelector("#submit-button")
                                 .expectedDestination("/home")
                                 .actualDestination("/login")
                                 .build(),
@@ -52,7 +51,6 @@ public class PageControllerDocsTest extends RestDocsSupport {
                                 .id(2L)
                                 .testType(TestType.INTERACTION)
                                 .testStatus(TestStatus.PASSED)
-                                .trigger("click")
                                 .expectedAction("open-modal")
                                 .actualAction("reload")
                                 .build(),
@@ -71,7 +69,6 @@ public class PageControllerDocsTest extends RestDocsSupport {
                                 .id(4L)
                                 .testType(TestType.ROUTING)
                                 .testStatus(TestStatus.FAILED)
-                                .triggerSelector(".nav-link")
                                 .expectedDestination("/dashboard")
                                 .actualDestination("/error")
                                 .failReason("라우팅 누락")
@@ -82,7 +79,6 @@ public class PageControllerDocsTest extends RestDocsSupport {
                                 .id(5L)
                                 .testType(TestType.ROUTING)
                                 .testStatus(TestStatus.PASSED)
-                                .triggerSelector(".menu-item")
                                 .expectedDestination("/settings")
                                 .actualDestination("/settings")
                                 .build(),
@@ -92,7 +88,6 @@ public class PageControllerDocsTest extends RestDocsSupport {
                                 .id(6L)
                                 .testType(TestType.INTERACTION)
                                 .testStatus(TestStatus.FAILED)
-                                .trigger("hover")
                                 .expectedAction("show-tooltip")
                                 .actualAction("nothing")
                                 .failReason("이벤트 리스너 미작동")
@@ -132,8 +127,6 @@ public class PageControllerDocsTest extends RestDocsSupport {
                                 fieldWithPath("data.routingTest").type(JsonFieldType.OBJECT).description("라우팅 테스트 결과"),
                                 fieldWithPath("data.routingTest.success").type(JsonFieldType.ARRAY)
                                         .description("성공한 라우팅 테스트 목록"),
-                                fieldWithPath("data.routingTest.success[].triggerSelector").type(JsonFieldType.STRING)
-                                        .description("트리거 셀렉터"),
                                 fieldWithPath("data.routingTest.success[].expectedDestination").type(
                                         JsonFieldType.STRING).description("예상 이동 경로"),
                                 fieldWithPath("data.routingTest.success[].actualDestination").type(JsonFieldType.STRING)
@@ -141,8 +134,6 @@ public class PageControllerDocsTest extends RestDocsSupport {
 
                                 fieldWithPath("data.routingTest.fail").type(JsonFieldType.ARRAY)
                                         .description("실패한 라우팅 테스트 목록"),
-                                fieldWithPath("data.routingTest.fail[].triggerSelector").type(JsonFieldType.STRING)
-                                        .description("트리거 셀렉터"),
                                 fieldWithPath("data.routingTest.fail[].expectedDestination").type(JsonFieldType.STRING)
                                         .description("예상 이동 경로"),
                                 fieldWithPath("data.routingTest.fail[].actualDestination").type(JsonFieldType.STRING)
@@ -172,15 +163,11 @@ public class PageControllerDocsTest extends RestDocsSupport {
                                         .description("인터랙션 테스트 결과"),
                                 fieldWithPath("data.interactionTest.success").type(JsonFieldType.ARRAY)
                                         .description("성공한 인터랙션 테스트 목록"),
-                                fieldWithPath("data.interactionTest.success[].trigger").type(JsonFieldType.STRING)
-                                        .description("트리거 동작"),
                                 fieldWithPath("data.interactionTest.success[].actualAction").type(JsonFieldType.STRING)
                                         .description("실제 실행된 액션"),
 
                                 fieldWithPath("data.interactionTest.fail").type(JsonFieldType.ARRAY)
                                         .description("실패한 인터랙션 테스트 목록"),
-                                fieldWithPath("data.interactionTest.fail[].trigger").type(JsonFieldType.STRING)
-                                        .description("트리거 동작"),
                                 fieldWithPath("data.interactionTest.fail[].expectedAction").type(JsonFieldType.STRING)
                                         .description("기대한 액션"),
                                 fieldWithPath("data.interactionTest.fail[].actualAction").type(JsonFieldType.STRING)

@@ -1,6 +1,8 @@
 package com.auta.server.domain.test;
 
+import com.auta.server.adapter.out.fastapi.response.MappingResponse.InteractionMappingInfo;
 import com.auta.server.adapter.out.fastapi.response.MappingResponse.MappingInfo;
+import com.auta.server.adapter.out.fastapi.response.MappingResponse.RoutingMappingInfo;
 import com.auta.server.domain.page.Page;
 import com.auta.server.domain.project.Project;
 import lombok.Builder;
@@ -16,11 +18,9 @@ public class Test {
     private TestStatus testStatus;
     private String failReason;
 
-    private String triggerSelector;
     private String expectedDestination;
     private String actualDestination;
 
-    private String trigger;
     private String expectedAction;
     private String actualAction;
 
@@ -34,6 +34,18 @@ public class Test {
         return testStatus.equals(TestStatus.FAILED);
     }
 
+    public static Test ofInteractionResult(Project project, Page page, InteractionMappingInfo info) {
+        return Test.builder()
+                .project(project)
+                .page(page)
+                .testType(TestType.ROUTING)
+                .testStatus(info.isSuccess() ? TestStatus.PASSED : TestStatus.FAILED)
+                .failReason(info.getFailReason())
+                .expectedAction(info.getExpectedAction())
+                .actualAction(info.getActualAction())
+                .build();
+    }
+
     public static Test ofMappingResult(Project project, Page page, MappingInfo info) {
         return Test.builder()
                 .project(project)
@@ -45,14 +57,13 @@ public class Test {
                 .build();
     }
 
-    public static Test ofRoutingResult(Project project, Page page, MappingInfo info) {
+    public static Test ofRoutingResult(Project project, Page page, RoutingMappingInfo info) {
         return Test.builder()
                 .project(project)
                 .page(page)
                 .testType(TestType.ROUTING)
                 .testStatus(info.isSuccess() ? TestStatus.PASSED : TestStatus.FAILED)
                 .failReason(info.getFailReason())
-                .trigger(info.getComponentName())
                 .expectedDestination(info.getDestinationUrl())
                 .actualDestination(info.getActualUrl())
                 .build();
