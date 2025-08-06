@@ -3,9 +3,9 @@
 
 ==== HTTP Request
 
-include::{snippets}/auth-reissue/http-request.adoc[]
+include::{snippets}/auth-reIssue/http-request.adoc[]
 
 ==== HTTP Response
 
-include::{snippets}/auth-reissue/http-response.adoc[]
-include::{snippets}/auth-reissue/response-fields.adoc[]
+include::{snippets}/auth-reIssue/http-response.adoc[]
+include::{snippets}/auth-reIssue/response-fields.adoc[]
