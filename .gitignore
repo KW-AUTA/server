@@ -46,7 +46,7 @@ src/main/java/com/auta/server/security/CurrentUserType.java
 
 
 src/test/java/com/auta/server/learning
-
+src/main/java/com/auta/server/adapter/out/fastapi/FastApiDummyClient.java
 
 auta.pem
 5jun99_accessKeys.csv
