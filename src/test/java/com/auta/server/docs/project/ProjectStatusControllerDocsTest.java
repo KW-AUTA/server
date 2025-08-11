@@ -1,5 +1,6 @@
 package com.auta.server.docs.project;
 
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
@@ -29,12 +30,12 @@ public class ProjectStatusControllerDocsTest extends RestDocsSupport {
     @Test
     void streamStatus() throws Exception {
         //given
+        setMockSecurityContext();
         SseEmitter dummyEmitter = new SseEmitter();
-        given(projectStatusUseCase.stream(1L)).willReturn(dummyEmitter);
-
+        given(projectStatusUseCase.stream(anyString())).willReturn(dummyEmitter);
         // when & then
         mockMvc.perform(
-                        get("/api/v1/projects/{projectId}/status/stream", 1)
+                        get("/api/v1/projects/status/stream")
                 ).andDo(print())
                 .andExpect(status().isOk())
                 .andDo(document("project-status-stream",

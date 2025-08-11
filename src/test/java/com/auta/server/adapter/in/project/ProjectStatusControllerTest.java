@@ -14,13 +14,13 @@ class ProjectStatusControllerTest extends ControllerTestSupport {
     @Test
     void streamStatus() throws Exception {
         //given
-
+        setMockSecurityContext();
         //when
 
         //then
 
         mockMvc.perform(
-                        get("/api/v1/projects/{projectId}/status/stream", 1)
+                        get("/api/v1/projects/status/stream")
                 ).andDo(print())
                 .andExpect(status().isOk());
     }
