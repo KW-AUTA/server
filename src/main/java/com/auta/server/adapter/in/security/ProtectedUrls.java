@@ -16,6 +16,7 @@ public class ProtectedUrls {
                 new AntPathRequestMatcher("/api/v1/auth/logout", HttpMethod.POST.name()),
                 new AntPathRequestMatcher("/api/v1/home", HttpMethod.GET.name()),
                 new AntPathRequestMatcher("/api/v1/projects", HttpMethod.POST.name()),
+                new AntPathRequestMatcher("/api/v1/projects/status/stream", HttpMethod.GET.name()),
                 new AntPathRequestMatcher("/api/v1/projects/*", HttpMethod.PUT.name()),
                 new AntPathRequestMatcher("/api/v1/projects/*", HttpMethod.DELETE.name()),
                 new AntPathRequestMatcher("/api/v1/projects", HttpMethod.GET.name()),
