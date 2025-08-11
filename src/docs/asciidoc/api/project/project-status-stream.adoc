@@ -15,6 +15,26 @@ include::{snippets}/project-status-stream/http-response.adoc[]
 
 [source,text]
 ----
-event: projectStatus
-data: "IN_PROGRESS"
+[
+    {
+        "projectId": 1,
+        "projectName": "AUTA 테스트 프로젝트",
+        "projectStatus": "COMPLETED"
+    },
+    {
+        "projectId": 2,
+        "projectName": "Jane의 프로젝트",
+        "projectStatus": "COMPLETED"
+    },
+    {
+        "projectId": 3,
+        "projectName": "광운대 홈페이지",
+        "projectStatus": "NOT_STARTED"
+    },
+    {
+        "projectId": 4,
+        "projectName": "test test",
+        "projectStatus": "COMPLETED"
+    }
+]
 ----
