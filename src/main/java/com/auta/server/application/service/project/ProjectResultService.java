@@ -9,6 +9,7 @@ import com.auta.server.common.exception.ErrorCode;
 import com.auta.server.domain.project.Project;
 import com.auta.server.domain.project.ProjectStatus;
 import com.auta.server.domain.test.Test;
+import com.auta.server.domain.user.User;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -75,7 +76,9 @@ public class ProjectResultService {
                 .orElseThrow(() -> new BusinessException(ErrorCode.PROJECT_NOT_FOUND));
         project.changeStatus(status);
         projectPort.updateProjectStatus(project);
-        projectStatusUseCase.sendStatus(projectId, status);
+        User user = project.getUser();
+        List<Project> allBySameUser = projectPort.findAllByUserId(user.getId());
+        projectStatusUseCase.sendStatus(user.getEmail(), allBySameUser);
     }
 }
 

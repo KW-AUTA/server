@@ -1,10 +1,11 @@
 package com.auta.server.application.port.in.project;
 
-import com.auta.server.domain.project.ProjectStatus;
+import com.auta.server.domain.project.Project;
+import java.util.List;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
 public interface ProjectStatusUseCase {
-    SseEmitter stream(Long projectId);
+    SseEmitter stream(String email);
 
-    void sendStatus(Long projectId, ProjectStatus projectStatus);
+    void sendStatus(String email, List<Project> projects);
 }
