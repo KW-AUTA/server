@@ -94,7 +94,7 @@ public class TestDataInitializer implements CommandLineRunner {
                 .figmaUrl(
                         "https://www.figma.com/design/3kN7qbAYdG9JTRK09G1lQK/Untitled?node-id=19-3&t=JRPrqp33fkv8ukh2-0")
                 .figmaJson(
-                        "https://auta-json-s3.s3.ap-northeast-2.amazonaws.com/7a151100-def3-4b6e-82f5-e27cca4f72c0.json")
+                        "https://auta-json-s3.s3.ap-northeast-2.amazonaws.com/framesData.json")
                 .rootFigmaPage("thirdweb.studio")
                 .serviceUrl("https://thirdweb.studio/")
                 .projectCreatedDate(LocalDate.now())
