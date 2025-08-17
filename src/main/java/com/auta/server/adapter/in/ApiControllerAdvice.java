@@ -9,7 +9,7 @@ import org.springframework.validation.BindException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
-@RestControllerAdvice(basePackages = "com.auta.server.adapter.in.api")
+@RestControllerAdvice
 public class ApiControllerAdvice {
 
     @ExceptionHandler(BindException.class)
@@ -30,12 +30,6 @@ public class ApiControllerAdvice {
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ApiResponse<Object>> exception(Exception e, HttpServletRequest request) {
-        String accept = request.getHeader("Accept");
-
-        // SSE 요청일 때는 JSON ApiResponse 내려주지 않고, 그냥 NO_CONTENT 반환
-        if (accept != null && accept.contains("text/event-stream")) {
-            return ResponseEntity.noContent().build();
-        }
         String message = e.getMessage();
         return ResponseEntity
                 .status(HttpStatus.INTERNAL_SERVER_ERROR)
