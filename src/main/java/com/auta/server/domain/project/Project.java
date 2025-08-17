@@ -37,6 +37,8 @@ public class Project {
     private Integer testRate;
     private Integer score;
 
+    private LocalDateTime modifiedDateTime;
+
     public void update(ProjectCommand command, String fileName, String figmaJson) {
         updateWithoutJson(command);
         this.fileName = fileName;
