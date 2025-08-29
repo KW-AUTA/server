@@ -59,6 +59,10 @@ public class TestCollector {
                             .filter(mapping -> mapping instanceof RoutingMappingInfo)
                             .map(mapping -> (RoutingMappingInfo) mapping)
                             .toList();
+                    
+                    for (RoutingMappingInfo routing : routings) {
+                        tests.add(Test.ofRoutingResult(project, page, routing));
+                    }
 
                     List<Mono<Void>> recursive = routings.stream()
                             .filter(RoutingMappingInfo::isSuccess)

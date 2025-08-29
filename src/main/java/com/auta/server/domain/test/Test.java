@@ -38,9 +38,10 @@ public class Test {
         return Test.builder()
                 .project(project)
                 .page(page)
-                .testType(TestType.ROUTING)
+                .testType(TestType.INTERACTION)
                 .testStatus(info.isSuccess() ? TestStatus.PASSED : TestStatus.FAILED)
                 .failReason(info.getFailReason())
+                .componentName(info.getComponentName())
                 .expectedAction(info.getExpectedAction())
                 .actualAction(info.getActualAction())
                 .build();
@@ -64,6 +65,7 @@ public class Test {
                 .testType(TestType.ROUTING)
                 .testStatus(info.isSuccess() ? TestStatus.PASSED : TestStatus.FAILED)
                 .failReason(info.getFailReason())
+                .componentName(info.getComponentName())
                 .expectedDestination(info.getDestinationUrl())
                 .actualDestination(info.getActualUrl())
                 .build();

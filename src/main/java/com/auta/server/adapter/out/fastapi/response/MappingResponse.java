@@ -15,7 +15,7 @@ public class MappingResponse {
     @JsonSubTypes({
             @JsonSubTypes.Type(value = RoutingMappingInfo.class, name = "ROUTING"),
             @JsonSubTypes.Type(value = InteractionMappingInfo.class, name = "INTERACTION"),
-            @JsonSubTypes.Type(value = InteractionMappingInfo.class, name = "GENERAL")
+            @JsonSubTypes.Type(value = GeneralMappingInfo.class, name = "GENERAL")
     })
     @Getter
     public static abstract class MappingInfo {
