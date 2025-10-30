@@ -23,7 +23,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Component
 @RequiredArgsConstructor
-@Profile({"local", "prod"})
+@Profile({"local"})
 public class TestDataInitializer implements CommandLineRunner {
 
     private final UserRepository userRepository;
