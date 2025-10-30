@@ -31,7 +31,7 @@ public class WebClientConfig {
         return WebClient.builder()
                 .clientConnector(new ReactorClientHttpConnector(
                         HttpClient.create()
-                                .responseTimeout(Duration.ofSeconds(300))
+                                .responseTimeout(Duration.ofSeconds(600))
                 ))
                 .baseUrl(baseUrl)
                 .filter(logRequest())
