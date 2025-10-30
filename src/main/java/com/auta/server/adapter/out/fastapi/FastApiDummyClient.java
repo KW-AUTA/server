@@ -1,18 +1,18 @@
 package com.auta.server.adapter.out.fastapi;
 
 import com.auta.server.adapter.out.fastapi.response.MappingResponse;
-import com.auta.server.adapter.out.fastapi.response.MappingResponse.GeneralMappingInfo;
-import com.auta.server.adapter.out.fastapi.response.MappingResponse.InteractionMappingInfo;
-import com.auta.server.adapter.out.fastapi.response.MappingResponse.MappingInfo;
-import com.auta.server.adapter.out.fastapi.response.MappingResponse.RoutingMappingInfo;
 import com.auta.server.adapter.out.fastapi.response.UITestResponse;
 import com.auta.server.adapter.out.fastapi.response.UITestResponse.Evaluation;
 import com.auta.server.application.port.out.fastapi.FastApiPort;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import java.io.IOException;
+import java.io.InputStream;
 import java.time.Duration;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Profile;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
@@ -24,53 +24,25 @@ import reactor.core.publisher.Mono;
 public class FastApiDummyClient implements FastApiPort {
 
     private final WebClient webClient;
+    private final ObjectMapper objectMapper;
 
     @Override
     public Mono<MappingResponse> requestComponentMapping(String currentUrl, String currentPage, String figmaJson) {
-//        MappingRequest request = MappingRequest.builder().currentUrl(currentUrl)
-//                .currentPage(currentPage)
-//                .figmaUrl(figmaJson)
-//                .build();
-//
-//        return webClient.post()
-//                .uri("/mapping")
-//                .contentType(MediaType.APPLICATION_JSON)
-//                .bodyValue(request)
-//                .retrieve()
-//                .bodyToMono(MappingResponse.class);
-        MappingInfo routing = RoutingMappingInfo.builder()
-                .componentName("로그인 버튼")
-                .isSuccess(true)
-                .failReason(null)
-                .destinationFigmaPage("LoginPage")
-                .destinationUrl("https://service.com/login")
-                .actualUrl("https://service.com/login")
-                .build();
+        log.info("Dummy Client - 매핑 요청: currentUrl={}, currentPage={}", currentUrl, currentPage);
 
-        // 2. Interaction 타입 mock
-        MappingInfo interaction = InteractionMappingInfo.builder()
-                .componentName("제출 버튼")
-                .isSuccess(false)
-                .failReason("기대한 액션과 실제 액션 불일치")
-                .expectedAction("팝업 표시")
-                .actualAction("페이지 이동")
-                .build();
+        try {
+            ClassPathResource resource = new ClassPathResource("mock/mapping-response.json");
+            InputStream inputStream = resource.getInputStream();
+            MappingResponse response = objectMapper.readValue(inputStream, MappingResponse.class);
 
-        // 3. General 타입 mock
-        MappingInfo general = GeneralMappingInfo.builder()
-                .componentName("광고 배너")
-                .isSuccess(false)
-                .failReason("테스트 대상 아님")
-                .build();
+            log.info("Dummy Client - JSON 파일 로드 성공: 총 {} 개 매핑", response.getMappings().size());
 
-        // 4. 전체 Response 생성
-        MappingResponse response = MappingResponse.builder()
-                .mappings(List.of(routing, interaction, general))
-                .build();
-
-        // 5. 15초 후 리턴
-        return Mono.just(response)
-                .delayElement(Duration.ofSeconds(15));
+            return Mono.just(response)
+                    .delayElement(Duration.ofSeconds(3));
+        } catch (IOException e) {
+            log.error("Dummy Client - JSON 파일 로드 실패", e);
+            return Mono.error(new RuntimeException("Mock 데이터 로드 실패", e));
+        }
     }
 
     @Override

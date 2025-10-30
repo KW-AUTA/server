@@ -28,12 +28,18 @@ public class FastApiClient implements FastApiPort {
                 .figmaUrl(figmaJson)
                 .build();
 
+        log.info("컴포넌트 매핑 요청 - URL: {}, Page: {}", currentUrl, currentPage);
+
         return webClient.post()
                 .uri("/mapping")
                 .contentType(MediaType.APPLICATION_JSON)
                 .bodyValue(request)
                 .retrieve()
-                .bodyToMono(MappingResponse.class);
+                .bodyToMono(MappingResponse.class)
+                .doOnSuccess(response -> log.info("컴포넌트 매핑 응답 성공 - Page: {}, 매핑 수: {}",
+                        currentPage, response.getMappings().size()))
+                .doOnError(e -> log.error("컴포넌트 매핑 요청 실패 - URL: {}, Page: {}, Error: {}",
+                        currentUrl, currentPage, e.getMessage(), e));
     }
 
     @Override

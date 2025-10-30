@@ -29,6 +29,7 @@ public class TestCollector {
 
     public Mono<Void> collect(String currentPage, String currentUrl) {
         if (visited.contains(currentPage)) {
+            log.debug("이미 방문한 페이지 스킵 - Page: {}", currentPage);
             return Mono.empty();
         }
         visited.add(currentPage);
@@ -36,9 +37,12 @@ public class TestCollector {
         Page page = Page.of(project, currentPage, currentUrl);
         pages.add(page);
 
+        log.info("테스트 수집 시작 - Project: {}, Page: {}, URL: {}", project.getId(), currentPage, currentUrl);
+
         return fastApiPort.requestComponentMapping(currentUrl, currentPage, project.getFigmaJson())
                 .flatMap(response -> {
                     List<MappingInfo> mappings = response.getMappings();
+                    log.info("매핑 응답 수신 - Page: {}, 전체 매핑 수: {}", currentPage, mappings.size());
 
                     tests.addAll(
                             mappings.stream()
@@ -55,24 +59,35 @@ public class TestCollector {
                         tests.add(Test.ofInteractionResult(project, page, interaction));
                     }
 
+                    log.info("인터랙션 테스트 수집 완료 - Page: {}, 인터랙션 수: {}", currentPage, interactions.size());
+
                     List<RoutingMappingInfo> routings = mappings.stream()
                             .filter(mapping -> mapping instanceof RoutingMappingInfo)
                             .map(mapping -> (RoutingMappingInfo) mapping)
                             .toList();
-                    
+
                     for (RoutingMappingInfo routing : routings) {
                         tests.add(Test.ofRoutingResult(project, page, routing));
                     }
 
+                    long successRoutings = routings.stream().filter(RoutingMappingInfo::isSuccess).count();
+                    log.info("라우팅 테스트 수집 완료 - Page: {}, 전체 라우팅: {}, 성공: {}",
+                            currentPage, routings.size(), successRoutings);
+
                     List<Mono<Void>> recursive = routings.stream()
                             .filter(RoutingMappingInfo::isSuccess)
-                            .map(r -> collect(r.getDestinationFigmaPage(), r.getDestinationUrl()))
+                            .map(r -> {
+                                log.info("재귀 수집 시작 - From: {} -> To: {}", currentPage, r.getDestinationFigmaPage());
+                                return collect(r.getDestinationFigmaPage(), r.getDestinationUrl());
+                            })
                             .toList();
 
                     return Mono.when(recursive);
                 })
+                .doOnSuccess(ignored -> log.info("테스트 수집 완료 - Page: {}, 현재까지 총 테스트 수: {}",
+                        currentPage, tests.size()))
                 .onErrorResume(e -> {
-                    log.error("FastAPI 오류", e);
+                    log.error("테스트 수집 중 FastAPI 오류 발생 - Page: {}, URL: {}", currentPage, currentUrl, e);
                     return Mono.empty();
                 });
     }
