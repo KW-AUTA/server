@@ -1,0 +1,155 @@
+{
+  "mappings": [
+    {
+      "type": "ROUTING",
+      "componentName": "kw출첵",
+      "isSuccess": true,
+      "failReason": "정상",
+      "destinationFigmaPage": "kw출첵",
+      "destinationUrl": "https://klas.kw.ac.kr/?redirectUrl=/ext/out/KwAttendExtPage.do",
+      "actualUrl": "https://klas.kw.ac.kr/?redirectUrl=/ext/out/KwAttendExtPage.do"
+    },
+    {
+      "type": "ROUTING",
+      "componentName": "연구/산학",
+      "isSuccess": true,
+      "failReason": "정상",
+      "destinationFigmaPage": "산학협력단",
+      "destinationUrl": "https://iacf.kw.ac.kr/",
+      "actualUrl": "https://iacf.kw.ac.kr/"
+    },
+    {
+      "type": "GENERAL",
+      "componentName": "협력기관1",
+      "isSuccess": true
+    },
+    {
+      "type": "GENERAL",
+      "componentName": "협력기관2",
+      "isSuccess": false,
+      "failReason": "X 좌표 오차, Y좌표 오차, 크기 오차, 가로세로 비율 오차"
+    },
+    {
+      "type": "GENERAL",
+      "componentName": "산학협력단",
+      "isSuccess": true
+    },
+    {
+      "type": "GENERAL",
+      "componentName": "연구비",
+      "isSuccess": true
+    },
+    {
+      "type": "GENERAL",
+      "componentName": "수행과제",
+      "isSuccess": true
+    },
+    {
+      "type": "GENERAL",
+      "componentName": "특허",
+      "isSuccess": true
+    },
+    {
+      "type": "GENERAL",
+      "componentName": "논문",
+      "isSuccess": true
+    },
+    {
+      "type": "GENERAL",
+      "componentName": "제안서 접수",
+      "isSuccess": true
+    },
+    {
+      "type": "GENERAL",
+      "componentName": "체크리스트",
+      "isSuccess": false,
+      "failReason": "매칭 안됨"
+    },
+    {
+      "type": "GENERAL",
+      "componentName": "카드신청",
+      "isSuccess": true
+    },
+    {
+      "type": "GENERAL",
+      "componentName": "중앙구매",
+      "isSuccess": true
+    },
+    {
+      "type": "GENERAL",
+      "componentName": "기타",
+      "isSuccess": true
+    },
+    {
+      "type": "GENERAL",
+      "componentName": "산학협력1",
+      "isSuccess": true
+    },
+    {
+      "type": "GENERAL",
+      "componentName": "산학협력",
+      "isSuccess": true
+    },
+    {
+      "type": "GENERAL",
+      "componentName": "n-KURIS",
+      "isSuccess": true
+    },
+    {
+      "type": "GENERAL",
+      "componentName": "지적재산권",
+      "isSuccess": true
+    },
+    {
+      "type": "GENERAL",
+      "componentName": "구매업무 규정",
+      "isSuccess": true
+    },
+    {
+      "type": "GENERAL",
+      "componentName": "연규 규정 및 지침",
+      "isSuccess": true
+    },
+    {
+      "type": "GENERAL",
+      "componentName": "연구 지원제도",
+      "isSuccess": true
+    },
+    {
+      "type": "GENERAL",
+      "componentName": "담당자 소개",
+      "isSuccess": false,
+      "failReason": "매칭 안됨"
+    },
+    {
+      "type": "GENERAL",
+      "componentName": "협력기관",
+      "isSuccess": true
+    },
+    {
+      "type": "GENERAL",
+      "componentName": "협력기관3",
+      "isSuccess": true
+    },
+    {
+      "type": "GENERAL",
+      "componentName": "협력기관4",
+      "isSuccess": true
+    },
+    {
+      "type": "GENERAL",
+      "componentName": "기타1",
+      "isSuccess": true
+    },
+    {
+      "type": "GENERAL",
+      "componentName": "기타3",
+      "isSuccess": true
+    },
+    {
+      "type": "GENERAL",
+      "componentName": "기타2",
+      "isSuccess": true
+    }
+  ]
+}

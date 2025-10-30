@@ -31,7 +31,7 @@ public class FastApiDummyClient implements FastApiPort {
         log.info("Dummy Client - 매핑 요청: currentUrl={}, currentPage={}", currentUrl, currentPage);
 
         try {
-            ClassPathResource resource = new ClassPathResource("mock/mapping-response.json");
+            ClassPathResource resource = new ClassPathResource("mock/home.json");
             InputStream inputStream = resource.getInputStream();
             MappingResponse response = objectMapper.readValue(inputStream, MappingResponse.class);
 
