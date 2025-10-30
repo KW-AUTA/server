@@ -1,0 +1,58 @@
+{
+  "mappings": [
+    {
+      "type": "GENERAL",
+      "componentName": "로그인 제한",
+      "isSuccess": false,
+      "failReason": "X 좌표 오차, Y좌표 오차, 크기 오차, 가로세로 비율 오차, 상대 좌표 오차"
+    },
+    {
+      "type": "GENERAL",
+      "componentName": "개인번호 조희",
+      "isSuccess": true,
+      "failReason": "정상"
+    },
+    {
+      "type": "GENERAL",
+      "componentName": "패스워드",
+      "isSuccess": true,
+      "failReason": "정상"
+    },
+    {
+      "type": "GENERAL",
+      "componentName": "로그인",
+      "isSuccess": true,
+      "failReason": "정상"
+    },
+    {
+      "type": "GENERAL",
+      "componentName": "비밀번호 최초 등록",
+      "isSuccess": true,
+      "failReason": "정상"
+    },
+    {
+      "type": "GENERAL",
+      "componentName": "로고",
+      "isSuccess": true,
+      "failReason": "정상"
+    },
+    {
+      "type": "GENERAL",
+      "componentName": "비밀번호 찾기",
+      "isSuccess": true,
+      "failReason": "정상"
+    },
+    {
+      "type": "GENERAL",
+      "componentName": "개인정보처리방침",
+      "isSuccess": true,
+      "failReason": "정상"
+    },
+    {
+      "type": "GENERAL",
+      "componentName": "ID",
+      "isSuccess": true,
+      "failReason": "정상"
+    }
+  ]
+}
