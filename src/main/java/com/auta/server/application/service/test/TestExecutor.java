@@ -28,37 +28,61 @@ public class TestExecutor {
     private final UITestSaver uiTestSaver;
 
     public void executeAsyncTest(Long projectId) {
+        log.info("비동기 기능 테스트 시작 - Project ID: {}", projectId);
+
         Project project = projectPort.findById(projectId)
                 .orElseThrow(() -> new BusinessException(ErrorCode.PROJECT_NOT_FOUND));
+
+        log.info("프로젝트 조회 완료 - Project ID: {}, Root Page: {}, Service URL: {}",
+                projectId, project.getRootFigmaPage(), project.getServiceUrl());
+
         TestCollector collector = new TestCollector(fastApiPort, project);
         collector.collect(project.getRootFigmaPage(), project.getServiceUrl())
                 .publishOn(Schedulers.boundedElastic())
                 .doOnSuccess(ignored -> {
                     List<Page> pages = collector.getPages();
                     List<Test> tests = collector.getTests();
+
+                    log.info("테스트 수집 완료 - Project ID: {}, 페이지 수: {}, 테스트 수: {}",
+                            projectId, pages.size(), tests.size());
+
                     testSaver.saveAll(pages, tests);
+                    log.info("테스트 저장 완료 - Project ID: {}", projectId);
+
                     projectResultService.applyTestResult(projectId, tests);
+                    log.info("기능 테스트 성공 - Project ID: {}", projectId);
                 })
                 .doOnError(e -> {
                     projectResultService.markTestAsFailed(projectId);
-                    log.error("기능 테스트 실패", e);
+                    log.error("기능 테스트 실패 - Project ID: {}", projectId, e);
                 })
                 .subscribe();
     }
 
     public void executeUITest(Long projectId) {
+        log.info("UI/UX 테스트 시작 - Project ID: {}", projectId);
+
         Project project = projectPort.findById(projectId)
                 .orElseThrow(() -> new BusinessException(ErrorCode.PROJECT_NOT_FOUND));
 
+        log.info("프로젝트 조회 완료 - Project ID: {}, Figma JSON: {}", projectId, project.getFigmaJson());
+
         fastApiPort.requestUITest(project.getFigmaJson())
                 .subscribe(response -> {
+                    log.info("UI/UX 테스트 응답 수신 - Project ID: {}, Usability Score: {}, 평가 항목 수: {}",
+                            projectId, response.getUsabilityScore(), response.getEvaluations().size());
+
                     Project latest = projectPort.findById(projectId)
                             .orElseThrow(() -> new BusinessException(ErrorCode.PROJECT_NOT_FOUND));
+
                     uiTestSaver.saveAll(latest, response.getEvaluations());
+                    log.info("UI 테스트 결과 저장 완료 - Project ID: {}", projectId);
+
                     projectResultService.applyUITestResult(projectId, response.getUsabilityScore());
+                    log.info("UI/UX 테스트 성공 - Project ID: {}", projectId);
                 }, error -> {
                     projectResultService.markTestAsFailed(projectId);
-                    log.error("UI/UX 테스트 중 오류 발생: {}", error.getMessage(), error);
+                    log.error("UI/UX 테스트 실패 - Project ID: {}, Error: {}", projectId, error.getMessage(), error);
                 });
     }
 }

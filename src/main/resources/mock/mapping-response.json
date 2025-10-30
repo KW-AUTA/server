@@ -1,0 +1,271 @@
+{
+  "mappings": [
+    {
+      "type": "ROUTING",
+      "componentName": "kw출첵",
+      "isSuccess": true,
+      "failReason": "정상",
+      "destinationFigmaPage": "56:11",
+      "destinationUrl": "https://klas.kw.ac.kr/?redirectUrl=/ext/out/KwAttendExtPage.do",
+      "actualUrl": "https://klas.kw.ac.kr/?redirectUrl=/ext/out/KwAttendExtPage.do"
+    },
+    {
+      "type": "ROUTING",
+      "componentName": "발전기금",
+      "isSuccess": true,
+      "failReason": "정상",
+      "destinationFigmaPage": "56:18",
+      "destinationUrl": "https://fund.kw.ac.kr/",
+      "actualUrl": "https://fund.kw.ac.kr/"
+    },
+    {
+      "type": "ROUTING",
+      "componentName": "연구/산학",
+      "isSuccess": true,
+      "failReason": "정상",
+      "destinationFigmaPage": "56:10",
+      "destinationUrl": "https://iacf.kw.ac.kr/",
+      "actualUrl": "https://iacf.kw.ac.kr/"
+    },
+    {
+      "type": "ROUTING",
+      "componentName": "중앙도서관",
+      "isSuccess": true,
+      "failReason": "정상",
+      "destinationFigmaPage": "1:14",
+      "destinationUrl": "",
+      "actualUrl": ""
+    },
+    {
+      "type": "ROUTING",
+      "componentName": "교육혁신원",
+      "isSuccess": true,
+      "failReason": "정상",
+      "destinationFigmaPage": "56:11",
+      "destinationUrl": "https://itplusinfo.kw.ac.kr/main.do",
+      "actualUrl": "https://itplusinfo.kw.ac.kr/main.do"
+    },
+    {
+      "type": "GENERAL",
+      "componentName": "kw출첵",
+      "isSuccess": false,
+      "failReason": "X 좌표 오차, Y좌표 오차, 상대 좌표 오차"
+    },
+    {
+      "type": "GENERAL",
+      "componentName": "발전기금",
+      "isSuccess": false,
+      "failReason": "X 좌표 오차, Y좌표 오차, 상대 좌표 오차"
+    },
+    {
+      "type": "GENERAL",
+      "componentName": "연구/산학",
+      "isSuccess": false,
+      "failReason": "X 좌표 오차, 텍스트 오차"
+    },
+    {
+      "type": "GENERAL",
+      "componentName": "중앙도서관",
+      "isSuccess": false,
+      "failReason": "X 좌표 오차, Y좌표 오차, 텍스트 오차, 상대 좌표 오차"
+    },
+    {
+      "type": "GENERAL",
+      "componentName": "교육혁신원",
+      "isSuccess": false,
+      "failReason": "Y좌표 오차, 크기 오차, 가로세로 비율 오차"
+    },
+    {
+      "type": "GENERAL",
+      "componentName": "notice",
+      "isSuccess": false,
+      "failReason": "Y좌표 오차, 크기 오차"
+    },
+    {
+      "type": "GENERAL",
+      "componentName": "notice봉사",
+      "isSuccess": false,
+      "failReason": "X 좌표 오차, Y좌표 오차"
+    },
+    {
+      "type": "GENERAL",
+      "componentName": "notice등록/장학",
+      "isSuccess": false,
+      "failReason": "X 좌표 오차, Y좌표 오차"
+    },
+    {
+      "type": "GENERAL",
+      "componentName": "광운서비스",
+      "isSuccess": false,
+      "failReason": "X 좌표 오차, Y좌표 오차"
+    },
+    {
+      "type": "GENERAL",
+      "componentName": "notice국제",
+      "isSuccess": false,
+      "failReason": "X 좌표 오차, Y좌표 오차"
+    },
+    {
+      "type": "GENERAL",
+      "componentName": "notice일반",
+      "isSuccess": false,
+      "failReason": "Y좌표 오차"
+    },
+    {
+      "type": "GENERAL",
+      "componentName": "notice학사",
+      "isSuccess": false,
+      "failReason": "Y좌표 오차"
+    },
+    {
+      "type": "GENERAL",
+      "componentName": "notice전체",
+      "isSuccess": false,
+      "failReason": "Y좌표 오차"
+    },
+    {
+      "type": "GENERAL",
+      "componentName": "notice학사",
+      "isSuccess": false,
+      "failReason": "X 좌표 오차, Y좌표 오차, 텍스트 오차, 상대 좌표 오차"
+    },
+    {
+      "type": "GENERAL",
+      "componentName": "교육",
+      "isSuccess": false,
+      "failReason": "X 좌표 오차"
+    },
+    {
+      "type": "GENERAL",
+      "componentName": "최근 연구성과",
+      "isSuccess": false,
+      "failReason": "X 좌표 오차, Y좌표 오차, 크기 오차, 텍스트 오차, 가로세로 비율 오차"
+    },
+    {
+      "type": "GENERAL",
+      "componentName": "중앙도서관",
+      "isSuccess": false,
+      "failReason": "X 좌표 오차, Y좌표 오차, 크기 오차, 텍스트 오차, 가로세로 비율 오차"
+    },
+    {
+      "type": "GENERAL",
+      "componentName": "광운",
+      "isSuccess": false,
+      "failReason": "텍스트 오차"
+    },
+    {
+      "type": "GENERAL",
+      "componentName": "취업",
+      "isSuccess": false,
+      "failReason": "X 좌표 오차, 텍스트 오차"
+    },
+    {
+      "type": "GENERAL",
+      "componentName": "캠퍼스안내",
+      "isSuccess": false,
+      "failReason": "X 좌표 오차, Y좌표 오차, 크기 오차, 텍스트 오차, 가로세로 비율 오차"
+    },
+    {
+      "type": "GENERAL",
+      "componentName": "notice취업",
+      "isSuccess": false,
+      "failReason": "X 좌표 오차, Y좌표 오차, 텍스트 오차"
+    },
+    {
+      "type": "GENERAL",
+      "componentName": "notice학사",
+      "isSuccess": false,
+      "failReason": "X 좌표 오차, Y좌표 오차, 텍스트 오차, 상대 좌표 오차"
+    },
+    {
+      "type": "GENERAL",
+      "componentName": "입학",
+      "isSuccess": false,
+      "failReason": "텍스트 오차"
+    },
+    {
+      "type": "GENERAL",
+      "componentName": "창업",
+      "isSuccess": false,
+      "failReason": "X 좌표 오차, Y좌표 오차, 크기 오차, 텍스트 오차, 가로세로 비율 오차"
+    },
+    {
+      "type": "GENERAL",
+      "componentName": "Klas",
+      "isSuccess": false,
+      "failReason": "크기 오차, 텍스트 오차, 가로세로 비율 오차"
+    },
+    {
+      "type": "GENERAL",
+      "componentName": "home",
+      "isSuccess": false,
+      "failReason": "매칭 안됨"
+    },
+    {
+      "type": "GENERAL",
+      "componentName": "포커스",
+      "isSuccess": false,
+      "failReason": "매칭 안됨"
+    },
+    {
+      "type": "GENERAL",
+      "componentName": "최근연구성과1",
+      "isSuccess": false,
+      "failReason": "매칭 안됨"
+    },
+    {
+      "type": "GENERAL",
+      "componentName": "최근연구성과2",
+      "isSuccess": false,
+      "failReason": "매칭 안됨"
+    },
+    {
+      "type": "GENERAL",
+      "componentName": "최근연구성과3",
+      "isSuccess": false,
+      "failReason": "매칭 안됨"
+    },
+    {
+      "type": "GENERAL",
+      "componentName": "포커스1",
+      "isSuccess": false,
+      "failReason": "매칭 안됨"
+    },
+    {
+      "type": "GENERAL",
+      "componentName": "포커스2",
+      "isSuccess": false,
+      "failReason": "매칭 안됨"
+    },
+    {
+      "type": "GENERAL",
+      "componentName": "포커스3",
+      "isSuccess": false,
+      "failReason": "매칭 안됨"
+    },
+    {
+      "type": "GENERAL",
+      "componentName": "포커스4",
+      "isSuccess": false,
+      "failReason": "매칭 안됨"
+    },
+    {
+      "type": "GENERAL",
+      "componentName": "중앙도서관",
+      "isSuccess": false,
+      "failReason": "매칭 안됨"
+    },
+    {
+      "type": "GENERAL",
+      "componentName": "학생/학부모",
+      "isSuccess": false,
+      "failReason": "매칭 안됨"
+    },
+    {
+      "type": "GENERAL",
+      "componentName": "취업",
+      "isSuccess": false,
+      "failReason": "매칭 안됨"
+    }
+  ]
+}
