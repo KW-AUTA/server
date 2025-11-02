@@ -46,6 +46,7 @@ public class TestEntity extends BaseEntity {
     private TestType testType;
 
     private String failReason;
+    private String detailInfo;
 
     @Column(length = 50000)
     private String componentName;

@@ -17,6 +17,7 @@ public class Test {
     private TestType testType;
     private TestStatus testStatus;
     private String failReason;
+    private String detailInfo;
 
     private String expectedDestination;
     private String actualDestination;
@@ -41,6 +42,7 @@ public class Test {
                 .testType(TestType.INTERACTION)
                 .testStatus(info.isSuccess() ? TestStatus.PASSED : TestStatus.FAILED)
                 .failReason(info.getFailReason())
+                .detailInfo((info.getDetailInfo()))
                 .componentName(info.getComponentName())
                 .expectedAction(info.getExpectedAction())
                 .actualAction(info.getActualAction())
@@ -54,6 +56,7 @@ public class Test {
                 .testType(TestType.MAPPING)
                 .testStatus(info.isSuccess() ? TestStatus.PASSED : TestStatus.FAILED)
                 .failReason(info.getFailReason())
+                .detailInfo((info.getDetailInfo()))
                 .componentName(info.getComponentName())
                 .build();
     }
@@ -65,6 +68,7 @@ public class Test {
                 .testType(TestType.ROUTING)
                 .testStatus(info.isSuccess() ? TestStatus.PASSED : TestStatus.FAILED)
                 .failReason(info.getFailReason())
+                .detailInfo((info.getDetailInfo()))
                 .componentName(info.getComponentName())
                 .expectedDestination(info.getDestinationUrl())
                 .actualDestination(info.getActualUrl())
