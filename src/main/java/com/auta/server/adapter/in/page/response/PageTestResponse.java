@@ -80,12 +80,14 @@ public class PageTestResponse {
         private String expectedDestination;
         private String actualDestination;
         private String failReason;
+        private String detailInfo;
 
         public static RoutingFail from(Test test) {
             return RoutingFail.builder()
                     .expectedDestination(test.getExpectedDestination())
                     .actualDestination(test.getActualDestination())
                     .failReason(test.getFailReason())
+                    .detailInfo(test.getDetailInfo())
                     .build();
         }
     }
@@ -122,12 +124,14 @@ public class PageTestResponse {
         private String expectedAction;
         private String actualAction;
         private String failReason;
+        private String detailInfo;
 
         public static InteractionFail from(Test test) {
             return InteractionFail.builder()
                     .expectedAction(test.getExpectedAction())
                     .actualAction(test.getActualAction())
                     .failReason(test.getFailReason())
+                    .detailInfo(test.getDetailInfo())
                     .build();
         }
     }
@@ -167,10 +171,12 @@ public class PageTestResponse {
     public static class FailComponent {
         private String componentName;
         private String failReason;
+        private String detailInfo;
 
         public static FailComponent from(Test test) {
             return FailComponent.builder().componentName(test.getComponentName())
                     .failReason(test.getFailReason())
+                    .detailInfo(test.getDetailInfo())
                     .build();
         }
     }
