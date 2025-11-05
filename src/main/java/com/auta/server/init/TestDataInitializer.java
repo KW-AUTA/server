@@ -116,35 +116,35 @@ public class TestDataInitializer implements CommandLineRunner {
         // 4. 테스트들
         testRepository.saveAll(List.of(
                 new TestEntity(null, project1, p1, TestStatus.PASSED, TestType.ROUTING,
-                        null, "#start-btn", "/signup", "/signup", "이동", "이동"),
+                        null, null, "#start-btn", "/signup", "/signup", "이동", "이동"),
 
                 new TestEntity(null, project1, p1, TestStatus.PASSED, TestType.INTERACTION,
-                        null, "#submit", null, null, "회원가입 제출", "서버 호출"),
+                        null, null, "#submit", null, null, "회원가입 제출", "서버 호출"),
 
                 new TestEntity(null, project1, p1, TestStatus.FAILED, TestType.ROUTING,
-                        "잘못된 경로로 이동", "#login-btn", "/dashboard", "/error", "이동", "에러"),
+                        "잘못된 경로로 이동", "세부 정보", "#login-btn", "/dashboard", "/error", "이동", "에러"),
 
                 new TestEntity(null, project1, p2, TestStatus.PASSED, TestType.MAPPING,
-                        null, null, null, null, null, null),
+                        null, "세부 정보", null, null, null, null, null),
 
                 new TestEntity(null, project1, p3, TestStatus.FAILED, TestType.INTERACTION,
-                        "서버 오류", "#join", null, null, "회원가입 클릭", "500에러"),
+                        "서버 오류", "세부 정보", "#join", null, null, "회원가입 클릭", "500에러"),
 
                 // 프로젝트 2
                 new TestEntity(null, project2, p5, TestStatus.PASSED, TestType.ROUTING,
-                        null, "#go-stats", "/stats", "/stats", "이동", "이동"),
+                        null, "세부 정보", "#go-stats", "/stats", "/stats", "이동", "이동"),
 
                 new TestEntity(null, project2, p5, TestStatus.FAILED, TestType.ROUTING,
-                        "404 Not Found", "#invalid", "/unknown", "/404", "이동", "에러"),
+                        "404 Not Found", "세부 정보", "#invalid", "/unknown", "/404", "이동", "에러"),
 
                 new TestEntity(null, project2, p6, TestStatus.PASSED, TestType.INTERACTION,
-                        null, "#save-btn", null, null, "설정 저장", "서버 호출"),
+                        null, "세부 정보", "#save-btn", null, null, "설정 저장", "서버 호출"),
 
                 new TestEntity(null, project2, p6, TestStatus.FAILED, TestType.MAPPING,
-                        "컴포넌트 미노출", null, null, null, null, null),
+                        "컴포넌트 미노출", "세부 정보", null, null, null, null, null),
 
                 new TestEntity(null, project2, p7, TestStatus.FAILED, TestType.ROUTING,
-                        null, "#home", "/dashboard/home", "/dashboard/home", "이동", "이동")
+                        null, "세부 정보", "#home", "/dashboard/home", "/dashboard/home", "이동", "이동")
         ));
     }
 }

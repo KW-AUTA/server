@@ -62,6 +62,7 @@ public class PageControllerDocsTest extends RestDocsSupport {
                                 .testStatus(TestStatus.FAILED)
                                 .componentName("LoginForm")
                                 .failReason("존재하지 않음")
+                                .detailInfo("세부 설명")
                                 .build(),
 
                         // destination test - failed
@@ -72,6 +73,7 @@ public class PageControllerDocsTest extends RestDocsSupport {
                                 .expectedDestination("/dashboard")
                                 .actualDestination("/error")
                                 .failReason("라우팅 누락")
+                                .detailInfo("세부 설명")
                                 .build(),
 
                         // destination test - pending
@@ -91,6 +93,7 @@ public class PageControllerDocsTest extends RestDocsSupport {
                                 .expectedAction("show-tooltip")
                                 .actualAction("nothing")
                                 .failReason("이벤트 리스너 미작동")
+                                .detailInfo("세부 설명")
                                 .build(),
 
                         // mapping test - passed
@@ -140,7 +143,8 @@ public class PageControllerDocsTest extends RestDocsSupport {
                                         .description("실제 이동 경로"),
                                 fieldWithPath("data.routingTest.fail[].failReason").type(JsonFieldType.STRING)
                                         .description("실패 사유"),
-
+                                fieldWithPath("data.routingTest.fail[].detailInfo").type(JsonFieldType.STRING)
+                                        .description("실패 사유 세부 설명"),
                                 // 2. 매핑 테스트
                                 fieldWithPath("data.mappingTest").type(JsonFieldType.OBJECT)
                                         .description("컴포넌트 매핑 테스트 결과"),
@@ -157,6 +161,8 @@ public class PageControllerDocsTest extends RestDocsSupport {
                                         JsonFieldType.STRING).description("컴포넌트 이름"),
                                 fieldWithPath("data.mappingTest.failComponents[].failReason").type(JsonFieldType.STRING)
                                         .description("실패 사유"),
+                                fieldWithPath("data.mappingTest.failComponents[].detailInfo").type(JsonFieldType.STRING)
+                                        .description("실패 사유 세부 설명"),
 
                                 // 3. 인터랙션 테스트
                                 fieldWithPath("data.interactionTest").type(JsonFieldType.OBJECT)
@@ -173,7 +179,9 @@ public class PageControllerDocsTest extends RestDocsSupport {
                                 fieldWithPath("data.interactionTest.fail[].actualAction").type(JsonFieldType.STRING)
                                         .description("실제 실행된 액션"),
                                 fieldWithPath("data.interactionTest.fail[].failReason").type(JsonFieldType.STRING)
-                                        .description("실패 사유")
+                                        .description("실패 사유"),
+                                fieldWithPath("data.interactionTest.fail[].detailInfo").type(JsonFieldType.STRING)
+                                        .description("실패 사유 세부 설명")
                         )));
     }
 }

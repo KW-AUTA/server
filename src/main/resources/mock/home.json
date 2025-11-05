@@ -5,6 +5,7 @@
       "componentName": "kw출첵",
       "isSuccess": true,
       "failReason": "정상",
+      "detailInfo": "정상",
       "destinationFigmaPage": "kw출첵",
       "destinationUrl": "https://klas.kw.ac.kr/?redirectUrl=/ext/out/KwAttendExtPage.do",
       "actualUrl": "https://klas.kw.ac.kr/?redirectUrl=/ext/out/KwAttendExtPage.do"
@@ -14,6 +15,7 @@
       "componentName": "연구/산학",
       "isSuccess": true,
       "failReason": "정상",
+      "detailInfo": "정상",
       "destinationFigmaPage": "산학협력단",
       "destinationUrl": "https://iacf.kw.ac.kr/",
       "actualUrl": "https://iacf.kw.ac.kr/"
@@ -23,6 +25,7 @@
       "componentName": "notice학사",
       "isSuccess": true,
       "failReason": "정상",
+      "detailInfo": "정상",
       "expectedAction": "change to",
       "actualAction": "change to"
     },
@@ -31,6 +34,7 @@
       "componentName": "notice일반",
       "isSuccess": true,
       "failReason": "정상",
+      "detailInfo": "정상",
       "expectedAction": "change to",
       "actualAction": "change to"
     },
@@ -39,6 +43,7 @@
       "componentName": "notice취업",
       "isSuccess": true,
       "failReason": "정상",
+      "detailInfo": "정상",
       "expectedAction": "change to",
       "actualAction": "change to"
     },
@@ -47,6 +52,7 @@
       "componentName": "notice등록/장학",
       "isSuccess": true,
       "failReason": "정상",
+      "detailInfo": "정상",
       "expectedAction": "change to",
       "actualAction": "change to"
     },
@@ -55,6 +61,7 @@
       "componentName": "notice봉사",
       "isSuccess": false,
       "failReason": "interaction 작동 안됨",
+      "detailInfo": "인터랙션 작동 안됨",
       "expectedAction": "change to",
       "actualAction": "interaction 작동 안됨"
     },
@@ -67,7 +74,8 @@
       "type": "GENERAL",
       "componentName": "협력기관2",
       "isSuccess": false,
-      "failReason": "X 좌표 오차, Y좌표 오차, 크기 오차, 가로세로 비율 오차"
+      "failReason": "X 좌표 오차, Y좌표 오차, 크기 오차, 가로세로 비율 오차",
+      "detailInfo": "x 얼만큼 y 얼만큼"
     },
     {
       "type": "GENERAL",
@@ -103,7 +111,8 @@
       "type": "GENERAL",
       "componentName": "체크리스트",
       "isSuccess": false,
-      "failReason": "매칭 안됨"
+      "failReason": "매칭 안됨",
+      "detailInfo": "x 얼만큼 y 얼만큼"
     },
     {
       "type": "GENERAL",
