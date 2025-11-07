@@ -22,11 +22,13 @@ public class MappingResponse {
         private final String componentName;
         private final boolean isSuccess;
         private final String failReason;
+        private final String detailInfo;
 
-        protected MappingInfo(String componentName, boolean isSuccess, String failReason) {
+        protected MappingInfo(String componentName, boolean isSuccess, String failReason, String detailInfo) {
             this.componentName = componentName;
             this.isSuccess = isSuccess;
             this.failReason = failReason;
+            this.detailInfo = detailInfo;
         }
     }
 
@@ -37,9 +39,9 @@ public class MappingResponse {
         private final String actualUrl;
 
         @Builder
-        public RoutingMappingInfo(String componentName, boolean isSuccess, String failReason,
+        public RoutingMappingInfo(String componentName, boolean isSuccess, String failReason, String detailInfo,
                                   String destinationFigmaPage, String destinationUrl, String actualUrl) {
-            super(componentName, isSuccess, failReason);
+            super(componentName, isSuccess, failReason, detailInfo);
             this.destinationFigmaPage = destinationFigmaPage;
             this.destinationUrl = destinationUrl;
             this.actualUrl = actualUrl;
@@ -52,9 +54,9 @@ public class MappingResponse {
         private final String actualAction;
 
         @Builder
-        public InteractionMappingInfo(String componentName, boolean isSuccess, String failReason,
+        public InteractionMappingInfo(String componentName, boolean isSuccess, String failReason, String detailInfo,
                                       String expectedAction, String actualAction) {
-            super(componentName, isSuccess, failReason);
+            super(componentName, isSuccess, failReason, detailInfo);
             this.expectedAction = expectedAction;
             this.actualAction = actualAction;
         }
@@ -64,8 +66,8 @@ public class MappingResponse {
     public static class GeneralMappingInfo extends MappingInfo {
 
         @Builder
-        public GeneralMappingInfo(String componentName, boolean isSuccess, String failReason) {
-            super(componentName, isSuccess, failReason);
+        public GeneralMappingInfo(String componentName, boolean isSuccess, String failReason, String detailInfo) {
+            super(componentName, isSuccess, failReason, detailInfo);
         }
     }
 }
