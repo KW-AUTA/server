@@ -16,7 +16,8 @@ RUN chmod +x gradlew
 RUN ./gradlew clean test asciidoctor bootJar --no-daemon
 
 # 실행 단계
-FROM openjdk:17-jdk-slim
+#FROM openjdk:17-jdk-slim
+FROM eclipse-temurin:17-jdk-jammy
 
 WORKDIR /app
 
